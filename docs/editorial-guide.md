@@ -1,20 +1,23 @@
 # Question deck editorial guide
 
-The deck is for a Russian-speaking Zoom evening among young Jehovah's Witnesses who live or have lived in Ukraine.
+The deck is for a Russian-speaking Zoom evening among young Jehovah's Witnesses
+from different places and with different levels of life and ministry experience.
 
 ## Every card must
 
 - sound natural when one friend reads it aloud to another;
 - address any player naturally without assuming gender; prefer present tense, infinitives, or impersonal phrasing over forms such as "ты хотел" or "ты сделала";
-- give a concrete memory, choice, scene, or action instead of asking for self-analysis;
+- give a concrete choice, scene, opinion, or action instead of asking for self-analysis;
 - work through a webcam and microphone with only two participants;
 - be understandable without explaining the author's intention;
-- leave room for people who now live in another city or country;
+- work without assuming a shared country, city, cuisine, language, or travel history;
 - keep spiritual questions warm, respectful, and grounded in familiar Bible accounts or ministry experience.
 
-## Ukraine context
+## Universal context
 
-Use recognisable details such as cities, food, languages, roads, hospitality, congregations, and ministry in different places. Do not assume that everyone currently lives in Ukraine, has a stable home, drives a car, travels safely, or wants to discuss war, displacement, or loss.
+Do not assume a shared country, city, cuisine, native language, home situation,
+travel history, job, family structure, or form of ministry. A question may ask
+about another language or place, but any language or place must work.
 
 ## Theme progression
 
@@ -22,6 +25,11 @@ Use recognisable details such as cities, food, languages, roads, hospitality, co
 - Move later into how the truth entered someone's life, what helped them love Jehovah, gratitude to Jehovah, and moments when they felt the love of the brotherhood.
 - Use the new world for warm personal imagination: a home, a hobby, animals, places, and things friends would enjoy doing together. Make it clear that these are personal hopes, not Bible facts.
 - Phrase spiritual-history questions so that both someone raised in the truth and someone who learned it later can answer naturally.
+- Avoid making a specific memory the price of entry. Prefer a current opinion,
+  preference, ordinary example, or imagined situation.
+- Ministry questions should also work for someone with little experience. Do
+  not assume pioneering, public witnessing, speaking with children, travel, or
+  a large collection of memorable calls.
 - Keep deeper cards personal but voluntary. They should invite a real story without demanding details about trauma, loss, family conflict, or past wrongdoing.
 
 The internal stage and category tags are editorial tools, not visible game

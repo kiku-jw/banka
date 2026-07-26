@@ -37,88 +37,34 @@ test("captures a revealed game card", async ({ page }, testInfo) => {
   await page.screenshot({ path: testInfo.outputPath("finish.png"), fullPage: true });
 });
 
-test("captures an illustrated note at the real game cadence", async ({ page }, testInfo) => {
-  await page.addInitScript(() => {
-    Math.random = () => 0;
-  });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("./");
-  await page.getByRole("button", { name: "Собрать компанию" }).click();
-  const names = ["Аня", "Борис", "Вера", "Глеб", "Даша", "Егор"];
-  await page.getByLabel("Имена по порядку ходов").fill(names.join("\n"));
-  await page.getByRole("button", { name: "Начать игру" }).click();
-
-  for (let turn = 0; turn < 5; turn += 1) {
-    await page.getByRole("button", { name: "ВЫТЯНУТЬ", exact: true }).click();
-    await expect(page.locator(".question-card")).toBeVisible();
-    await page.getByRole("button", { name: "ДАЛЬШЕ", exact: true }).click();
-  }
-
-  await page.getByRole("button", { name: "ВЫТЯНУТЬ", exact: true }).click();
-  await expect(page.locator("[data-card-visual]")).toBeVisible();
-  await expect.poll(async () =>
-    page.locator("[data-card-visual]").evaluate((image) => image instanceof HTMLImageElement ? image.naturalWidth : 0)
-  ).toBeGreaterThan(0);
-  await expect(page.locator(".question-card p")).toBeVisible();
-  await expect(page.getByRole("button", { name: "ДАЛЬШЕ", exact: true })).toBeInViewport();
-  await expect(page.getByText("Если вопрос не подходит", { exact: true })).toBeInViewport();
-  await page.screenshot({ path: testInfo.outputPath("illustrated-note.png"), fullPage: true });
-});
-
-test("the longest illustrated prompt fits the mobile game viewport", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "mobile", "The compact layout is the limiting viewport.");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.addInitScript(() => {
-    localStorage.setItem("teply-krug:v1", JSON.stringify({
-      version: 2,
-      preferences: {
-        timerSeconds: 75,
-        soundEnabled: false,
-        musicEnabled: false,
-        musicVolume: 28,
-        motionEnabled: false,
-        savedNames: ["Аня", "Борис"],
-        seenCardIds: ["together-creative-7"],
-        disabledBuiltInCardIds: [],
-      },
-      session: {
-        players: [
-          { id: "player-1", name: "Аня" },
-          { id: "player-2", name: "Борис" },
-        ],
-        currentPlayerIndex: 0,
-        round: 3,
-        currentCardId: "together-creative-7",
-        partnerPlayerId: null,
-        mode: "open",
-        turnsCompleted: 11,
-        targetTurns: null,
-        recentCardIds: ["together-creative-7"],
-      },
-      customCards: [],
-    }));
-  });
-
-  await page.goto("./");
-  await page.getByRole("button", { name: "Продолжить" }).click();
-  await page.getByRole("button", { name: "ВЫТЯНУТЬ", exact: true }).click();
-  await expect(page.locator(".question-card p")).toContainText("Угадайте четыре предмета");
-  await expect(page.getByRole("button", { name: "ДАЛЬШЕ", exact: true })).toBeInViewport();
-  await expect(page.getByText("Если вопрос не подходит", { exact: true })).toBeInViewport();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
-  await page.screenshot({ path: testInfo.outputPath("illustrated-note-longest.png"), fullPage: true });
-});
-
 test("captures the music settings without horizontal overflow", async ({ page }, testInfo) => {
   await page.goto("./");
   await page.getByRole("button", { name: "Настройки" }).click();
   await expect(page.getByRole("heading", { name: "Настройте темп" })).toBeVisible();
   await expect(page.getByLabel("Фоновая музыка")).toBeChecked();
-  await expect(page.getByLabel("Громкость музыки")).toHaveValue("28");
+  await expect(page.getByLabel("Громкость музыки")).toHaveValue("50");
   const viewportWidth = await page.evaluate(() => window.innerWidth);
   const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(documentWidth).toBe(viewportWidth);
   await page.screenshot({ path: testInfo.outputPath("music-settings.png"), fullPage: true });
+});
+
+test("captures question feedback and the finish handoff", async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./");
+  await page.getByRole("button", { name: "Собрать компанию" }).click();
+  await page.getByLabel("Имена по порядку ходов").fill("Аня\nБорис");
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await page.getByRole("button", { name: "ВЫТЯНУТЬ", exact: true }).click();
+  await page.getByRole("button", { name: "Отметить вопрос" }).click();
+  await expect(page.getByRole("heading", { name: "Что здесь не так?" })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("feedback-dialog.png"), fullPage: true });
+  await page.getByLabel(/Комментарий/).fill("Слишком узкий вопрос");
+  await page.getByRole("button", { name: "Сохранить" }).click();
+  await page.getByText("Если вопрос не подходит", { exact: true }).click();
+  await page.getByRole("button", { name: /Закончить вечер/ }).click();
+  await expect(page.getByRole("link", { name: "Отправить замечания" })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("feedback-finish.png"), fullPage: true });
 });
 
 test("captures the 1440 by 900 presentation viewport", async ({ page }, testInfo) => {

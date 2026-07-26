@@ -34,22 +34,8 @@ describe("built-in deck", () => {
     }
   });
 
-  it("keeps exactly twelve local visual prompts with safe descriptive text", () => {
-    const visualCards = builtInCards.filter((card) => card.visual !== undefined);
-    const bannedVisualTerms = /крест|храм|церк|собор|купол|икон|нимб|алтар|чётки|священ|военн|флаг|герб|войн/iu;
-
-    expect(visualCards).toHaveLength(12);
-    visualCards.forEach((card) => {
-      expect(card.visual?.src).toMatch(/^\.\/media\/visual-cards\/[a-z-]+\.webp$/u);
-      expect(card.visual?.alt.length).toBeGreaterThanOrEqual(24);
-      expect(card.visual?.alt).not.toMatch(bannedVisualTerms);
-      expect(card.text).not.toMatch(/[—–]/u);
-    });
-
-    const protectedSpiritualCards = builtInCards.filter((card) =>
-      /истина появилась|полюбить Иегову|благодарить Иегову|любовь братства/iu.test(card.text),
-    );
-    protectedSpiritualCards.forEach((card) => expect(card.visual).toBeUndefined());
+  it("keeps every built-in card text-only", () => {
+    builtInCards.forEach((card) => expect(Object.hasOwn(card, "visual")).toBe(false));
   });
 
   it("varies the spoken opening instead of leaning on two generated templates", () => {
@@ -88,6 +74,20 @@ describe("built-in deck", () => {
       "Когда одной короткой фразы оказалось достаточно, чтобы поддержать человека?",
       "Вспомни историю, которая всегда вызывает улыбку у твоих друзей.",
       "Дай смешное название кадру, который сейчас видят все.",
+      "Какой предмет на картинке мог бы остаться после твоей детской выходки? Что тогда случилось?",
+      "Какой трудный выбор библейского персонажа хотелось бы обсудить с группой?",
+      "Выберите по одному дереву для дома в новом мире. Почему именно это?",
+      "Покажи без слов, что ты уже минуту говоришь с выключенным микрофоном.",
+      "Какой обычный вопрос помог человеку разговориться?",
+      "Куда из этих мест вся компания отправилась бы на выходной? Что бы вы там делали?",
+      "Какая встреча в Zoom оказалась веселее, чем ожидалось?",
+      "Что из детских лакомств и сейчас вызывает аппетит?",
+      "Расскажи о неожиданном госте или видеозвонке, который тебя порадовал.",
+      "Какую вещь в детстве получилось спрятать так хорошо, что потом пришлось долго искать?",
+      "Как прошёл твой первый день в непривычном для тебя виде служения?",
+      "Позови кого-нибудь и разыграйте сцену без слов с живой озвучкой.",
+      "Какой небольшой сувенир из знакомого места хотелось бы показать этой компании?",
+      "Если доводилось служить в другом городе или стране, что там оказалось неожиданным?",
     ];
 
     rejected.forEach((prompt) => expect(deck).not.toContain(prompt));
@@ -113,10 +113,13 @@ describe("built-in deck", () => {
     roomOnlyFragments.forEach((fragment) => expect(groupDeck).not.toContain(fragment));
   });
 
-  it("includes Ukraine as lived context without making every card about it", () => {
-    const contextualCards = builtInCards.filter((card) => /украин|україн|киев|київ|львов|львів|одесс|одес|карпат/i.test(card.text));
-    expect(contextualCards.length).toBeGreaterThanOrEqual(12);
-    expect(contextualCards.length).toBeLessThanOrEqual(36);
+  it("does not assume a shared country, language, city, or ministry experience", () => {
+    const deck = builtInCards.map((card) => card.text).join("\n");
+    expect(deck).not.toMatch(/украин|україн|киев|київ|львов|львів|одесс|одес|карпат/iu);
+    expect(deck).not.toMatch(/с друзьями, которых знаешь сейчас/iu);
+    expect(deck).not.toMatch(/\b(?:вспомни|вспомните|помнишь)\b/iu);
+    expect(deck).not.toMatch(/в другом городе|в другой стране|за границей|общественное свидетельствование|пионер/iu);
+    expect(deck).not.toMatch(/вопрос ребёнка|ребёнок спросил/iu);
   });
 
   it("keeps the approved childhood and spiritual themes present without taking over the deck", () => {
@@ -149,9 +152,11 @@ describe("built-in deck", () => {
         "Расскажи, как истина появилась в твоей жизни.",
         "Что помогло тебе по-настоящему полюбить Иегову?",
         "За что тебе сейчас особенно хочется благодарить Иегову?",
-        "В какой момент любовь братства ощущалась особенно сильно?",
+        "Как любовь братства ощущается в обычных делах?",
         "Какое ремесло или хобби хочется освоить в новом мире?",
-        "Где из этих мест тебе хотелось бы жить в новом мире? Что было бы рядом с домом?",
+        "Каким будет твой дом в новом мире? Что будет рядом?",
+        "На каких работах тебе доводилось работать?",
+        "Какой библейский рассказ или стих открылся тебе по-новому на другом языке?",
       ]),
     );
   });

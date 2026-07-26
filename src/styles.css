@@ -988,45 +988,6 @@ textarea:hover {
   text-wrap: balance;
 }
 
-.question-card-has-visual {
-  min-height: 0;
-  padding: clamp(18px, 3vw, 32px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: clamp(16px, 2.4vh, 24px);
-}
-
-.question-visual {
-  width: min(620px, 100%, 50vh);
-  margin: 0;
-  overflow: hidden;
-  border: 1px solid rgb(60 44 30 / 0.18);
-  border-radius: 14px;
-  background: #0a2340;
-  box-shadow: 0 18px 46px rgb(38 29 20 / 0.2);
-  line-height: 0;
-}
-
-.question-visual img {
-  width: 100%;
-  height: auto;
-  display: block;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  animation: visual-note-in 480ms 140ms var(--ease) both;
-}
-
-.question-card-has-visual p {
-  align-self: auto;
-  max-width: 760px;
-  margin: 0;
-  font-size: clamp(24px, 3vw, 40px);
-  line-height: 1.12;
-  text-align: center;
-}
-
 .question-card-perform {
   border-color: rgb(154 94 40 / 0.34);
   background:
@@ -1090,6 +1051,22 @@ textarea:hover {
 .button-next {
   min-width: 152px;
   letter-spacing: 0.08em;
+}
+
+.question-actions {
+  min-height: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.question-actions .text-button {
+  color: var(--faint);
+  font-size: 12px;
+}
+
+.question-actions .feedback-marked {
+  color: var(--amber-soft);
 }
 
 .turn-options {
@@ -1203,6 +1180,56 @@ textarea:hover {
   line-height: 1.5;
 }
 
+.feedback-form {
+  display: grid;
+  gap: 16px;
+}
+
+.feedback-form .section-kicker {
+  margin: 0;
+}
+
+.feedback-form .feedback-question {
+  padding-right: 28px;
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.feedback-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.feedback-form .feedback-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.feedback-form .feedback-label small {
+  color: var(--faint);
+  font-weight: 400;
+}
+
+.feedback-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.feedback-form > small {
+  color: var(--faint);
+  line-height: 1.45;
+}
+
 .dialog-options {
   margin-top: 22px;
   display: grid;
@@ -1252,6 +1279,10 @@ textarea:hover {
 .finish-actions {
   margin-top: 28px;
   justify-content: center;
+}
+
+.checkpoint-back {
+  width: 100%;
 }
 
 .checkpoint-orbit {
@@ -1363,6 +1394,25 @@ textarea:hover {
   color: var(--muted);
   font-size: 16px;
   line-height: 1.5;
+}
+
+.feedback-summary {
+  margin-top: 28px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgb(245 240 230 / 0.04);
+}
+
+.feedback-summary p {
+  margin: 7px 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.feedback-summary .button {
+  text-decoration: none;
 }
 
 .finish-people {
@@ -1686,11 +1736,6 @@ textarea:hover {
   to { opacity: 0; transform: translateX(760px) rotate(12deg); }
 }
 
-@keyframes visual-note-in {
-  from { opacity: 0; transform: scale(0.97) translateY(12px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
 @keyframes soft-pulse {
   50% { opacity: 0.55; transform: scale(1.04); }
 }
@@ -2004,21 +2049,6 @@ textarea:hover {
 
   .question-card p {
     font-size: 31px;
-  }
-
-  .question-card-has-visual {
-    min-height: 390px;
-    padding: 18px;
-    gap: 14px;
-  }
-
-  .question-card-has-visual p {
-    font-size: clamp(22px, 6.2vw, 27px);
-    line-height: 1.14;
-  }
-
-  .question-visual {
-    border-radius: 10px;
   }
 
   .card-context {

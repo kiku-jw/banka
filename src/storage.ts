@@ -7,7 +7,7 @@ const defaultPreferences: Preferences = {
   timerSeconds: 75,
   soundEnabled: true,
   musicEnabled: true,
-  musicVolume: 28,
+  musicVolume: 50,
   motionEnabled: true,
   savedNames: [],
   seenCardIds: [],

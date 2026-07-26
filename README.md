@@ -22,7 +22,7 @@
 </p>
 
 The game and its 360 hand-written prompts are in Russian. They are designed for
-a friendly group with a shared Ukrainian context.
+a friendly group with different backgrounds and levels of ministry experience.
 
 ## How a session works
 
@@ -77,6 +77,9 @@ group. There is no final ranking.
 - A full introduction for the first note and three quicker reveal patterns after it.
 - 15- and 30-minute modes that suggest finishing only after a complete round.
 - Independent controls for sound effects, background music, and animation, plus a separate music volume.
+- Music starts at 50% volume on a new browser and keeps any later host setting.
+- A one-step Back control recovers the previous turn after an accidental **ДАЛЬШЕ** press.
+- Per-question editorial notes can be reviewed in a prefilled email draft at the end.
 - A browser-based editor for custom cards.
 - The ability to hide any built-in card and restore it later.
 - Automatic recovery of an active session after a page reload.
@@ -85,8 +88,9 @@ group. There is no final ranking.
 ## Privacy and status
 
 This is a fully static application with no accounts, server, or analytics.
-Answers are never entered or stored. Names, settings, and custom cards remain
-in the browser running the game.
+Answers are never entered or stored. Names, settings, custom cards, and optional
+editorial notes about questions remain in the browser running the game. Notes
+leave the browser only if the host reviews and sends the prepared email.
 
 This is an independent project and is not an official product of Jehovah's
 Witnesses.
@@ -118,7 +122,7 @@ service during play. A push to `main` verifies the project and publishes
 Built-in cards live in [`src/content/cards.ts`](src/content/cards.ts). Every
 “stage × category” pair contains exactly 24 explicitly written questions. The
 Russian-language [`editorial guide`](docs/editorial-guide.md) records the
-spoken-language, Ukrainian-context, and Zoom-compatibility rules used for the
+spoken-language, universal-context, and Zoom-compatibility rules used for the
 localized deck. Custom cards are validated at the `localStorage` boundary and
 are never sent to the repository.
 

@@ -14,9 +14,20 @@ import {
   STAGES,
   targetTurnsForMode,
 } from "./game";
+import {
+  clearCardFeedback,
+  feedbackMailto,
+  loadCardFeedback,
+  MAX_FEEDBACK_COMMENT_LENGTH,
+  removeCardFeedback,
+  saveCardFeedback,
+  upsertCardFeedback,
+} from "./feedback";
 import { shuffledMusicQueue } from "./music";
 import { clearStoredData, loadStoredData, saveStoredData } from "./storage";
 import type { Card, CardMode, Category, Screen, SessionMode, Stage } from "./types";
+import { copySnapshotSession, createTurnSnapshot } from "./turn-undo";
+import type { TurnSnapshot } from "./turn-undo";
 
 const rootElement = document.querySelector<HTMLDivElement>("#app");
 const liveRegionElement = document.querySelector<HTMLDivElement>("#live-region");
@@ -29,6 +40,8 @@ const root: HTMLDivElement = rootElement;
 const liveRegion: HTMLDivElement = liveRegionElement;
 
 let data = loadStoredData();
+let cardFeedback = loadCardFeedback();
+let previousTurn: TurnSnapshot | null = null;
 let screen: Screen = "welcome";
 let returnScreen: Screen = "welcome";
 let editorReturnScreen: Screen = "welcome";
@@ -48,7 +61,6 @@ let jarRevealMode: "idle" | "intro" | "shuffle" | "pop" | "unfold" = "idle";
 let jarRevealCount = 0;
 let jarRevealRun = 0;
 let jarRevealFallbackHandle: number | null = null;
-const preloadedVisualUrls = new Set<string>();
 
 type SoundCue = "paper" | "turn" | "glass" | "timer";
 
@@ -148,16 +160,6 @@ function stopBackgroundMusic(): void {
 
 backgroundMusic.addEventListener("ended", playNextBackgroundMusicTrack);
 
-function preloadCardVisual(card: Card): void {
-  const src = card.visual?.src;
-  if (src === undefined || preloadedVisualUrls.has(src)) {
-    return;
-  }
-  const image = new Image();
-  image.src = src;
-  preloadedVisualUrls.add(src);
-}
-
 function escapeHtml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
@@ -233,11 +235,6 @@ function drawForCurrent(category?: Category, excludedCardIds: string[] = []): Ca
     return null;
   }
   const previousCardId = session.recentCardIds.at(-1) ?? null;
-  const visualRecentlyDrawn = session.recentCardIds.some((id) => cardById(id)?.visual !== undefined);
-  const preferVisual = category === undefined
-    && session.turnsCompleted > 0
-    && (session.turnsCompleted + 1) % 6 === 0
-    && !visualRecentlyDrawn;
   const result = drawCard(
     enabledCards(),
     session.round,
@@ -246,14 +243,12 @@ function drawForCurrent(category?: Category, excludedCardIds: string[] = []): Ca
     category,
     excludedCardIds,
     previousCardId,
-    preferVisual,
   );
   data.preferences.seenCardIds = result.seenCardIds;
   session.currentCardId = result.card?.id ?? null;
   session.partnerPlayerId = null;
   if (result.card !== null) {
     session.recentCardIds = [...session.recentCardIds, result.card.id].slice(-4);
-    preloadCardVisual(result.card);
   }
   cancelJarReveal();
   cardRevealed = false;
@@ -356,6 +351,7 @@ function renderWelcome(): void {
 
   root.querySelector<HTMLElement>("[data-action='new-game']")?.addEventListener("click", () => {
     data.session = null;
+    previousTurn = null;
     draftNames = data.preferences.savedNames.length >= 2
       ? [...data.preferences.savedNames]
       : ["", ""];
@@ -482,6 +478,7 @@ function renderSetup(): void {
       targetTurns: targetTurnsForMode(draftMode, names.length, data.preferences.timerSeconds),
       recentCardIds: [],
     };
+    previousTurn = null;
     drawForCurrent("bible");
     screen = "game";
     persist();
@@ -721,16 +718,74 @@ function renderQuestionCard(card: Card): string {
       : "",
   ].filter((context) => context.length > 0);
   return `
-    <article class="question-card ${card.mode === "perform" ? "question-card-perform" : ""} ${card.visual === undefined ? "" : "question-card-has-visual"}">
-      ${card.visual === undefined
-        ? ""
-        : `<figure class="question-visual">
-            <img data-card-visual src="${escapeHtml(card.visual.src)}" alt="${escapeHtml(card.visual.alt)}" width="900" height="600" decoding="async" />
-          </figure>`}
+    <article class="question-card ${card.mode === "perform" ? "question-card-perform" : ""}">
       <p>${escapeHtml(card.text)}</p>
       ${contexts.length > 0 ? `<div class="card-context">${contexts.map((context) => `<span>${context}</span>`).join("")}</div>` : ""}
     </article>
   `;
+}
+
+function feedbackFor(cardId: string) {
+  return cardFeedback.find((item) => item.cardId === cardId) ?? null;
+}
+
+function openFeedbackDialog(card: Card): void {
+  const existing = feedbackFor(card.id);
+  const dialog = openDialog(`
+    <form class="dialog-panel feedback-form" id="feedback-form">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Закрыть">×</button>
+      <p class="section-kicker">Этот вопрос</p>
+      <h2>${existing === null ? "Что здесь не так?" : "Изменить замечание"}</h2>
+      <p class="feedback-question">${escapeHtml(card.text)}</p>
+      <label><span class="feedback-label">Комментарий <small>(необязательно)</small></span>
+        <textarea name="comment" maxlength="${MAX_FEEDBACK_COMMENT_LENGTH}" placeholder="Например: непонятно, слишком узко или требует особого опыта">${escapeHtml(existing?.comment ?? "")}</textarea>
+      </label>
+      <div class="dialog-actions">
+        <button class="button button-primary" type="submit">Сохранить</button>
+        ${existing === null ? "" : '<button class="button button-secondary" type="button" data-remove-feedback>Убрать отметку</button>'}
+      </div>
+      <small>Замечание останется только в этом браузере. В конце игры можно открыть готовое письмо.</small>
+    </form>
+  `);
+  const form = dialog?.querySelector<HTMLFormElement>("#feedback-form");
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const value = new FormData(form).get("comment");
+    const comment = typeof value === "string" ? value.trim() : "";
+    cardFeedback = upsertCardFeedback(cardFeedback, {
+      cardId: card.id,
+      cardText: card.text,
+      comment,
+    });
+    saveCardFeedback(cardFeedback);
+    dialog?.close();
+    render();
+    showToast("Вопрос отмечен.");
+  });
+  dialog?.querySelector<HTMLElement>("[data-remove-feedback]")?.addEventListener("click", () => {
+    cardFeedback = removeCardFeedback(cardFeedback, card.id);
+    saveCardFeedback(cardFeedback);
+    dialog.close();
+    render();
+    showToast("Отметка убрана.");
+  });
+}
+
+function undoPreviousTurn(): void {
+  if (previousTurn === null) {
+    return;
+  }
+  cancelJarReveal();
+  stopTimer();
+  data.session = copySnapshotSession(previousTurn);
+  data.preferences.seenCardIds = [...previousTurn.seenCardIds];
+  cardRevealed = previousTurn.cardRevealed;
+  timerRemaining = previousTurn.timerRemaining;
+  previousTurn = null;
+  screen = "game";
+  persist();
+  render();
+  showToast("Вернулись к прошлому ходу.");
 }
 
 function renderGame(): void {
@@ -757,8 +812,6 @@ function renderGame(): void {
     renderGame();
     return;
   }
-  preloadCardVisual(card);
-
   renderShell(`
     <section class="game-layout" aria-labelledby="turn-title">
       <div class="game-stage">
@@ -783,6 +836,12 @@ function renderGame(): void {
           </div>
           <button class="button button-primary button-next" data-action="complete-turn" ${cardRevealed ? "" : "disabled"}>ДАЛЬШЕ</button>
         </div>
+        <div class="question-actions">
+          ${previousTurn === null ? "" : '<button class="text-button" data-action="undo-turn">← Назад</button>'}
+          <button class="text-button ${feedbackFor(card.id) === null ? "" : "feedback-marked"}" data-action="feedback" ${cardRevealed ? "" : "disabled"}>
+            ${feedbackFor(card.id) === null ? "Отметить вопрос" : "Вопрос отмечен ✓"}
+          </button>
+        </div>
         <details class="turn-options">
           <summary>Если вопрос не подходит</summary>
           <div class="turn-options-panel">
@@ -797,13 +856,6 @@ function renderGame(): void {
     <dialog class="game-dialog" id="game-dialog"></dialog>
   `, { compactHeader: true, gameHeader: true });
 
-  const cardVisual = root.querySelector<HTMLImageElement>("[data-card-visual]");
-  cardVisual?.addEventListener("error", () => {
-    const cardElement = cardVisual.closest(".question-card");
-    cardVisual.closest(".question-visual")?.remove();
-    cardElement?.classList.remove("question-card-has-visual");
-  });
-
   root.querySelector<HTMLElement>("[data-action='leave-game']")?.addEventListener("click", () => {
     if (window.confirm("Выйти на главную? Текущий круг сохранится.")) {
       cancelJarReveal();
@@ -816,6 +868,8 @@ function renderGame(): void {
     beginJarReveal(player.name, card.text);
   });
   root.querySelector<HTMLElement>("[data-action='complete-turn']")?.addEventListener("click", completeTurn);
+  root.querySelector<HTMLElement>("[data-action='undo-turn']")?.addEventListener("click", undoPreviousTurn);
+  root.querySelector<HTMLElement>("[data-action='feedback']")?.addEventListener("click", () => openFeedbackDialog(card));
   root.querySelector<HTMLElement>("[data-action='reset-timer']")?.addEventListener("click", () => {
     resetTimer();
     updateTimerDisplay();
@@ -948,6 +1002,12 @@ function completeTurn(): void {
     return;
   }
   stopTimer();
+  previousTurn = createTurnSnapshot(
+    session,
+    data.preferences.seenCardIds,
+    cardRevealed,
+    timerRemaining,
+  );
   playSound("turn");
   session.turnsCompleted += 1;
   const nextIndex = session.currentPlayerIndex + 1;
@@ -986,6 +1046,7 @@ function renderCheckpoint(): void {
       <div class="checkpoint-actions">
         <button class="button ${planReached ? "button-secondary" : "button-primary"} button-large" data-action="more-round">Ещё круг</button>
         <button class="button ${planReached ? "button-primary" : "button-secondary"} button-large" data-action="finish-game">Закончить</button>
+        ${previousTurn === null ? "" : '<button class="text-button checkpoint-back" data-action="undo-turn">← Вернуться к прошлому ходу</button>'}
       </div>
     </section>
   `, { compactHeader: true });
@@ -999,6 +1060,7 @@ function renderCheckpoint(): void {
     screen = "finish";
     render();
   });
+  root.querySelector<HTMLElement>("[data-action='undo-turn']")?.addEventListener("click", undoPreviousTurn);
 }
 
 function renderFinish(): void {
@@ -1026,6 +1088,13 @@ function renderFinish(): void {
           <button class="button button-primary button-large" data-action="same-group">Сыграть ещё</button>
           <button class="button button-secondary button-large" data-action="finish-home">На главную</button>
         </div>
+        ${cardFeedback.length === 0 ? "" : `
+          <aside class="feedback-summary">
+            <strong>Отмечено вопросов: ${cardFeedback.length}</strong>
+            <p>Откроется готовое письмо. Перед отправкой его можно проверить.</p>
+            <a class="button button-secondary" href="${escapeHtml(feedbackMailto(cardFeedback))}">Отправить замечания</a>
+          </aside>
+        `}
       </div>
     </section>
   `, { compactHeader: true });
@@ -1033,12 +1102,14 @@ function renderFinish(): void {
     draftNames = session.players.map((player) => player.name);
     draftMode = session.mode;
     data.session = null;
+    previousTurn = null;
     screen = "setup";
     persist();
     render();
   });
   root.querySelector<HTMLElement>("[data-action='finish-home']")?.addEventListener("click", () => {
     data.session = null;
+    previousTurn = null;
     persist();
     screen = "welcome";
     render();
@@ -1093,7 +1164,7 @@ function renderEditor(): void {
             <option value="perform" ${editing?.mode === "perform" ? "selected" : ""}>Показать</option>
             <option value="group" ${editing?.mode === "group" ? "selected" : ""}>Для группы</option>
           </select></label>
-          <label>Текст<textarea name="text" maxlength="220" required placeholder="Например: расскажи о маленьком поступке друга, который ты помнишь до сих пор.">${escapeHtml(editing?.text ?? "")}</textarea></label>
+          <label>Текст<textarea name="text" maxlength="220" required placeholder="Например: какое блюдо всегда улучшает тебе настроение?">${escapeHtml(editing?.text ?? "")}</textarea></label>
           <p class="form-error" id="card-error" aria-live="polite"></p>
           <button class="button button-primary" type="submit">${editing === null ? "Добавить" : "Сохранить"}</button>
         </form>
@@ -1253,7 +1324,7 @@ function renderSettings(): void {
       <div class="data-panel">
         <div><strong>Вопросы</strong><span>Свои карточки и скрытие встроенных</span><button class="button button-secondary" data-action="editor">Открыть колоду</button></div>
         <div><strong>История вопросов</strong><span>${data.preferences.seenCardIds.length} карточек уже использовано</span><button class="button button-secondary" data-action="reset-history">Начать колоду заново</button></div>
-        <div><strong>Все локальные данные</strong><span>Имена, текущая игра, свои карточки и настройки</span><button class="button button-danger" data-action="reset-all">Удалить данные</button></div>
+        <div><strong>Все локальные данные</strong><span>Имена, текущая игра, свои карточки, замечания и настройки</span><button class="button button-danger" data-action="reset-all">Удалить данные</button></div>
       </div>
     </section>
   `, { compactHeader: true });
@@ -1308,6 +1379,9 @@ function renderSettings(): void {
   root.querySelector<HTMLElement>("[data-action='reset-all']")?.addEventListener("click", () => {
     if (window.confirm("Удалить все локальные данные игры? Это действие нельзя отменить.")) {
       data = clearStoredData();
+      clearCardFeedback();
+      cardFeedback = [];
+      previousTurn = null;
       draftNames = ["", ""];
       draftMode = "standard";
       screen = "welcome";

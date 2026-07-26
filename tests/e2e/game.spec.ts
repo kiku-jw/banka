@@ -97,35 +97,50 @@ test("the first question is Bible-based and session state uses the new model", a
   });
 });
 
-test("an illustrated note appears on the hidden cadence without repeating", async ({ page }) => {
-  await startGame(page, 6);
-  for (let turn = 0; turn < 5; turn += 1) {
-    await reveal(page);
-    await page.getByRole("button", { name: "ДАЛЬШЕ", exact: true }).click();
-  }
-
+test("one-step back restores the previous player and revealed question", async ({ page }) => {
+  await startGame(page, 2, false, "open");
   await reveal(page);
-  await expect(page.locator("[data-card-visual]")).toBeVisible();
-  await expect(page.locator("[data-card-visual]")).toHaveAttribute("src", /\/visual-cards\/.+\.webp$/u);
-
+  const question = await page.locator(".question-card p").textContent();
   await page.getByRole("button", { name: "ДАЛЬШЕ", exact: true }).click();
-  await page.getByRole("button", { name: "Ещё круг" }).click();
-  await reveal(page);
-  await expect(page.locator("[data-card-visual]")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Игрок 2" })).toBeVisible();
+  await page.getByRole("button", { name: "← Назад", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Игрок 1" })).toBeVisible();
+  await expect(page.locator(".question-card p")).toHaveText(question ?? "");
+  await expect(page.getByRole("button", { name: "← Назад", exact: true })).toHaveCount(0);
 });
 
-test("a failed visual asset falls back to the complete text question", async ({ page }) => {
-  await page.route("**/media/visual-cards/*.webp", (route) => route.abort());
-  await startGame(page, 6);
-  for (let turn = 0; turn < 5; turn += 1) {
-    await reveal(page);
-    await page.getByRole("button", { name: "ДАЛЬШЕ", exact: true }).click();
-  }
-
+test("a marked question can be commented on and included in a support email", async ({ page }) => {
+  await startGame(page, 2, false, "open");
   await reveal(page);
-  await expect(page.locator("[data-card-visual]")).toHaveCount(0);
-  await expect(page.locator(".question-card p")).toBeVisible();
-  await expect(page.getByRole("button", { name: "ДАЛЬШЕ", exact: true })).toBeEnabled();
+  await page.getByRole("button", { name: "Отметить вопрос" }).click();
+  await page.getByLabel(/Комментарий/).fill("Слишком узкий вопрос");
+  await page.getByRole("button", { name: "Сохранить" }).click();
+  await expect(page.getByRole("button", { name: "Вопрос отмечен ✓" })).toBeVisible();
+  await page.reload();
+  await page.getByRole("button", { name: "Продолжить" }).click();
+  await reveal(page);
+  await expect(page.getByRole("button", { name: "Вопрос отмечен ✓" })).toBeVisible();
+  await page.getByRole("button", { name: "Вопрос отмечен ✓" }).click();
+  await page.getByLabel(/Комментарий/).fill("Понятнее, если сформулировать шире");
+  await page.getByRole("button", { name: "Сохранить" }).click();
+  await openFallbacks(page);
+  await page.getByRole("button", { name: /Закончить вечер/ }).click();
+  const link = page.getByRole("link", { name: "Отправить замечания" });
+  await expect(link).toHaveAttribute("href", /^mailto:support@kikuai\.dev\?/u);
+  await expect(link).toHaveAttribute("href", /%D0%9F%D0%BE%D0%BD%D1%8F%D1%82%D0%BD%D0%B5%D0%B5/u);
+});
+
+test("checkpoint back restores the final turn of the round", async ({ page }) => {
+  await startGame(page, 2, false, "open");
+  await reveal(page);
+  await page.getByRole("button", { name: "ДАЛЬШЕ", exact: true }).click();
+  await reveal(page);
+  const question = await page.locator(".question-card p").textContent();
+  await page.getByRole("button", { name: "ДАЛЬШЕ", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Все ответили" })).toBeVisible();
+  await page.getByRole("button", { name: "← Вернуться к прошлому ходу" }).click();
+  await expect(page.getByRole("heading", { name: "Игрок 2" })).toBeVisible();
+  await expect(page.locator(".question-card p")).toHaveText(question ?? "");
 });
 
 test("a quick twelve-person session reaches a natural finish checkpoint", async ({ page }) => {
@@ -349,7 +364,7 @@ test("background music uses a shuffled cycle and separate persistent controls", 
   await expect(audio).toHaveAttribute("src", /paper-jar-whispers-\d\.mp3$/);
   await expect.poll(async () => audio.evaluate((element) =>
     element instanceof HTMLAudioElement ? element.volume : -1
-  )).toBe(0.28);
+  )).toBe(0.5);
 
   for (let index = 0; index < 4; index += 1) {
     await audio.evaluate((element) => element.dispatchEvent(new Event("ended")));
@@ -364,7 +379,7 @@ test("background music uses a shuffled cycle and separate persistent controls", 
   await page.getByRole("button", { name: "Настройки" }).click();
   await expect(page.getByLabel("Фоновая музыка")).toBeChecked();
   const volume = page.getByLabel("Громкость музыки");
-  await expect(volume).toHaveValue("28");
+  await expect(volume).toHaveValue("50");
   await volume.fill("43");
   await expect(page.locator("#music-volume-value")).toHaveText("43%");
   await page.getByLabel("Фоновая музыка").uncheck();
