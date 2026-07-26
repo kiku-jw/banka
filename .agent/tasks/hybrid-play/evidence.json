@@ -1,0 +1,22 @@
+{
+  "task": "hybrid-play",
+  "issue": "https://github.com/kiku-jw/teply-krug/issues/10",
+  "acceptance": {
+    "AC1": "pass",
+    "AC2": "pass",
+    "AC3": "pass",
+    "AC4": "pass",
+    "AC5": "pass",
+    "AC6": "pass",
+    "AC7": "partial"
+  },
+  "verification": {
+    "unit_content_tests": "38 passed",
+    "production_build": "passed",
+    "browser_tests": "45 passed, 1 skipped",
+    "audit": "0 vulnerabilities",
+    "diff_check": "passed",
+    "visual_inspection": "passed"
+  },
+  "residual_risk": "Subjective prompt quality still benefits from live-play feedback."
+}

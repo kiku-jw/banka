@@ -1,0 +1,5 @@
+{
+  "task": "hybrid-play",
+  "verdict": "pending_publication",
+  "reason": "All local acceptance checks pass; publication and live Pages readback remain."
+}

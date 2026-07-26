@@ -5,8 +5,8 @@
 <h1 align="center">Доставай!</h1>
 
 <p align="center">
-  <strong>A host-controlled question-jar game for small Zoom groups.</strong><br>
-  One person adds the players and shares the screen; everyone takes turns drawing a note.
+  <strong>A host-controlled question-jar game to play in person or over video.</strong><br>
+  One person adds the players and keeps the game visible; everyone takes turns drawing a note.
 </p>
 
 <p align="center">
@@ -28,7 +28,7 @@ a friendly group with different backgrounds and levels of ministry experience.
 
 1. Add 2–12 names in turn order.
 2. Choose a rough duration: 15 minutes, 30 minutes, or no time plan.
-3. Share the game window so everyone sees the same screen.
+3. Put the host screen where everyone can see it, or share it during a video call.
 4. On each turn, press **ВЫТЯНУТЬ** (“Draw”) and respond to the note.
 5. After a complete round, the group decides whether to continue or finish.
 
@@ -69,7 +69,7 @@ after any note.
 Instead of a score summary, the game closes with one question for the whole
 group. There is no final ranking.
 
-## Designed for screen sharing
+## Designed for one room or a video call
 
 - Optional 45-, 75-, or 120-second timer that never advances the turn automatically.
 - Paper and jar sounds while drawing, plus brief cues for a new turn and elapsed time.
@@ -83,7 +83,7 @@ group. There is no final ranking.
 - A browser-based editor for custom cards.
 - The ability to hide any built-in card and restore it later.
 - Automatic recovery of an active session after a page reload.
-- Responsive layouts for a shared Zoom screen, laptop, or phone.
+- Responsive layouts for a television, shared browser window, laptop, or phone.
 
 ## Privacy and status
 
@@ -122,7 +122,7 @@ service during play. A push to `main` verifies the project and publishes
 Built-in cards live in [`src/content/cards.ts`](src/content/cards.ts). Every
 “stage × category” pair contains exactly 24 explicitly written questions. The
 Russian-language [`editorial guide`](docs/editorial-guide.md) records the
-spoken-language, universal-context, and Zoom-compatibility rules used for the
+spoken-language, universal-context, and in-person/video compatibility rules used for the
 localized deck. Custom cards are validated at the `localStorage` boundary and
 are never sent to the repository.
 

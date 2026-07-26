@@ -93,7 +93,7 @@ describe("built-in deck", () => {
     rejected.forEach((prompt) => expect(deck).not.toContain(prompt));
   });
 
-  it("keeps group cards compatible with a two-person Zoom call", () => {
+  it("keeps group cards compatible with two people in one room or over video", () => {
     const groupDeck = builtInCards
       .filter((card) => card.mode !== "answer")
       .map((card) => card.text.toLocaleLowerCase("ru-RU"))
@@ -111,6 +111,18 @@ describe("built-in deck", () => {
     ];
 
     roomOnlyFragments.forEach((fragment) => expect(groupDeck).not.toContain(fragment));
+  });
+
+  it("does not require an online play environment", () => {
+    const deck = builtInCards.map((card) => card.text).join("\n");
+    const nonServiceDeck = builtInCards
+      .filter((card) => card.category !== "service")
+      .map((card) => card.text)
+      .join("\n");
+
+    expect(deck).not.toMatch(/\bZoom\b|(?<![а-яё])зум(?![а-яё])|в кадре|чьём-то кадре|на экране|микрофон|интернет|скриншот|виртуальн[^.?!]{0,30}фон/iu);
+    expect(deck).not.toMatch(/связь наконец восстановилась/iu);
+    expect(nonServiceDeck).not.toMatch(/видеосвяз/iu);
   });
 
   it("does not assume a shared country, language, city, or ministry experience", () => {

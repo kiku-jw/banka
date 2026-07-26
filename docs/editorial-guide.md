@@ -1,14 +1,14 @@
 # Question deck editorial guide
 
-The deck is for a Russian-speaking Zoom evening among young Jehovah's Witnesses
-from different places and with different levels of life and ministry experience.
+The deck is for a Russian-speaking evening among young Jehovah's Witnesses who
+may be in one room or over video, with different life and ministry experience.
 
 ## Every card must
 
 - sound natural when one friend reads it aloud to another;
 - address any player naturally without assuming gender; prefer present tense, infinitives, or impersonal phrasing over forms such as "ты хотел" or "ты сделала";
 - give a concrete choice, scene, opinion, or action instead of asking for self-analysis;
-- work through a webcam and microphone with only two participants;
+- work with two people or a larger group, in one room or over video;
 - be understandable without explaining the author's intention;
 - work without assuming a shared country, city, cuisine, language, or travel history;
 - keep spiritual questions warm, respectful, and grounded in familiar Bible accounts or ministry experience.
@@ -42,7 +42,7 @@ every round.
 
 - therapy language: abstract questions about personal growth, emotional regulation, or hidden qualities;
 - interview language: questions that invite a one-word factual answer;
-- physical-room directions such as “the person on your left”;
+- directions that only work in one room or only through a camera;
 - activities requiring three people, shared objects, touching, or synchronised movement;
 - arbitrary restrictions that make a simple story harder to tell;
 - jokes at the expense of a person met in the ministry;
@@ -64,5 +64,5 @@ Before shipping a card, ask:
 
 1. Would a real host say this exact sentence?
 2. Can someone answer without first translating the question into normal language?
-3. Does it work when every participant is in a separate room?
+3. Does it work both in one room and when everyone joins over video?
 4. Could it start a story or a laugh rather than an oral exam?

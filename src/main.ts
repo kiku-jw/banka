@@ -325,7 +325,7 @@ function renderWelcome(): void {
     <section class="welcome" aria-labelledby="welcome-title">
       <div class="welcome-copy">
         <h1 id="welcome-title">Что сегодня попадётся?</h1>
-        <p class="welcome-lead">Впишите имена, покажите экран в Zoom и тяните записки по очереди.</p>
+        <p class="welcome-lead">Играйте в одной комнате или по видеосвязи: впишите имена и тяните записки по очереди.</p>
         <div class="welcome-actions">
           <button class="button button-primary button-large" data-action="new-game">Собрать компанию</button>
           ${canContinue ? '<button class="button button-secondary button-large" data-action="continue">Продолжить</button>' : ""}

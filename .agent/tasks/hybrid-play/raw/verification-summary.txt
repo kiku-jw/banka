@@ -1,0 +1,18 @@
+npm run check
+PASS: 7 test files, 38 tests, TypeScript, and Vite production build.
+
+npm run test:e2e
+PASS: 45 tests; 1 intentionally skipped.
+
+npm audit --audit-level=high
+PASS: 0 vulnerabilities.
+
+git diff --check
+PASS: no whitespace errors.
+
+Visual inspection
+PASS: mobile welcome and revealed-card captures render without clipping or
+horizontal overflow.
+
+Adversarial review
+PASS: no findings. Residual risk is editorial quality during real group play.
