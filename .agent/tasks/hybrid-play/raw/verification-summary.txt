@@ -16,3 +16,10 @@ horizontal overflow.
 
 Adversarial review
 PASS: no findings. Residual risk is editorial quality during real group play.
+
+GitHub Pages
+PASS: workflow run 30222897097 built and deployed commit d728dcf.
+
+Live readback
+PASS: https://kiku-jw.github.io/teply-krug/ showed the universal welcome copy,
+2-12 player setup, a working jar reveal, and a Bible-based first question.

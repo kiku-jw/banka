@@ -14,8 +14,8 @@
   environments, and desktop/mobile browser scenarios pass.
 - **AC6 — PASS:** The full content suite confirms 360 unique cards and all
   balance, gender-neutrality, readability, and editorial invariants.
-- **AC7 — PARTIAL:** Local verification and visual inspection pass. GitHub
-  publication, Pages deployment, and live readback remain before final verdict.
+- **AC7 — PASS:** Local verification, visual inspection, GitHub Pages
+  deployment, and production readback all pass.
 
 ## Verification
 
@@ -25,6 +25,11 @@
 - `git diff --check` — passed.
 - Secret-shaped string scan of changed artifacts — no matches.
 - Fresh mobile welcome and game captures — visually inspected and passed.
+- GitHub Pages run
+  [`30222897097`](https://github.com/kiku-jw/teply-krug/actions/runs/30222897097)
+  — build and deploy passed for commit `d728dcf`.
+- Live readback at <https://kiku-jw.github.io/teply-krug/> — universal welcome
+  copy, 2–12 player setup, jar reveal, and Bible-based first question confirmed.
 
 ## Review
 
