@@ -40,6 +40,8 @@ export interface SessionState {
 export interface Preferences {
   timerSeconds: number;
   soundEnabled: boolean;
+  musicEnabled: boolean;
+  musicVolume: number;
   motionEnabled: boolean;
   savedNames: string[];
   seenCardIds: string[];
@@ -47,7 +49,7 @@ export interface Preferences {
 }
 
 export interface StoredData {
-  version: 2;
+  version: 3;
   preferences: Preferences;
   session: SessionState | null;
   customCards: Card[];

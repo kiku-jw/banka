@@ -6,6 +6,8 @@ const STORAGE_KEY = "teply-krug:v1";
 const defaultPreferences: Preferences = {
   timerSeconds: 75,
   soundEnabled: true,
+  musicEnabled: true,
+  musicVolume: 28,
   motionEnabled: true,
   savedNames: [],
   seenCardIds: [],
@@ -14,7 +16,7 @@ const defaultPreferences: Preferences = {
 
 export function createDefaultStoredData(): StoredData {
   return {
-    version: 2,
+    version: 3,
     preferences: { ...defaultPreferences },
     session: null,
     customCards: [],
@@ -81,6 +83,11 @@ function isPreferences(value: unknown): value is Preferences {
     && typeof value.timerSeconds === "number"
     && [0, 45, 75, 120].includes(value.timerSeconds)
     && typeof value.soundEnabled === "boolean"
+    && typeof value.musicEnabled === "boolean"
+    && typeof value.musicVolume === "number"
+    && Number.isInteger(value.musicVolume)
+    && value.musicVolume >= 0
+    && value.musicVolume <= 100
     && typeof value.motionEnabled === "boolean"
     && isStringArray(value.savedNames)
     && isStringArray(value.seenCardIds)
@@ -89,7 +96,7 @@ function isPreferences(value: unknown): value is Preferences {
 
 function isStoredData(value: unknown): value is StoredData {
   return isObject(value)
-    && value.version === 2
+    && value.version === 3
     && isPreferences(value.preferences)
     && (value.session === null || isSession(value.session))
     && Array.isArray(value.customCards)
@@ -137,18 +144,73 @@ function migrateSession(value: unknown): SessionState | null {
   };
 }
 
-function migrateVersionOne(value: unknown): StoredData | null {
+function migratePreferences(value: unknown): Preferences | null {
   if (!isObject(value)
-    || value.version !== 1
-    || !isPreferences(value.preferences)
+    || typeof value.timerSeconds !== "number"
+    || ![0, 45, 75, 120].includes(value.timerSeconds)
+    || typeof value.soundEnabled !== "boolean"
+    || typeof value.motionEnabled !== "boolean"
+    || !isStringArray(value.savedNames)
+    || !isStringArray(value.seenCardIds)
+    || !isStringArray(value.disabledBuiltInCardIds)) {
+    return null;
+  }
+  const musicEnabled = typeof value.musicEnabled === "boolean"
+    ? value.musicEnabled
+    : defaultPreferences.musicEnabled;
+  const musicVolume = typeof value.musicVolume === "number"
+    && Number.isInteger(value.musicVolume)
+    && value.musicVolume >= 0
+    && value.musicVolume <= 100
+    ? value.musicVolume
+    : defaultPreferences.musicVolume;
+  return {
+    timerSeconds: value.timerSeconds,
+    soundEnabled: value.soundEnabled,
+    musicEnabled,
+    musicVolume,
+    motionEnabled: value.motionEnabled,
+    savedNames: value.savedNames,
+    seenCardIds: value.seenCardIds,
+    disabledBuiltInCardIds: value.disabledBuiltInCardIds,
+  };
+}
+
+function migrateVersionTwo(value: unknown): StoredData | null {
+  if (!isObject(value)
+    || value.version !== 2
+    || (value.session !== null && !isSession(value.session))
     || !Array.isArray(value.customCards)
     || !value.customCards.every(isCard)) {
     return null;
   }
+  const preferences = migratePreferences(value.preferences);
+  if (preferences === null) {
+    return null;
+  }
+  return {
+    version: 3,
+    preferences,
+    session: value.session,
+    customCards: value.customCards,
+  };
+}
+
+function migrateVersionOne(value: unknown): StoredData | null {
+  if (!isObject(value)
+    || value.version !== 1
+    || !Array.isArray(value.customCards)
+    || !value.customCards.every(isCard)) {
+    return null;
+  }
+  const preferences = migratePreferences(value.preferences);
+  if (preferences === null) {
+    return null;
+  }
   const session = value.session === null ? null : migrateSession(value.session);
   return {
-    version: 2,
-    preferences: value.preferences,
+    version: 3,
+    preferences,
     session,
     customCards: value.customCards,
   };
@@ -163,6 +225,11 @@ export function loadStoredData(storage: Storage = window.localStorage): StoredDa
     const parsed: unknown = JSON.parse(raw);
     if (isStoredData(parsed)) {
       return parsed;
+    }
+    const migratedTwo = migrateVersionTwo(parsed);
+    if (migratedTwo !== null) {
+      storage.setItem(STORAGE_KEY, JSON.stringify(migratedTwo));
+      return migratedTwo;
     }
     const migrated = migrateVersionOne(parsed);
     if (migrated !== null) {

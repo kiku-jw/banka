@@ -74,6 +74,8 @@ test("the longest illustrated prompt fits the mobile game viewport", async ({ pa
       preferences: {
         timerSeconds: 75,
         soundEnabled: false,
+        musicEnabled: false,
+        musicVolume: 28,
         motionEnabled: false,
         savedNames: ["Аня", "Борис"],
         seenCardIds: ["together-creative-7"],
@@ -105,6 +107,18 @@ test("the longest illustrated prompt fits the mobile game viewport", async ({ pa
   await expect(page.getByText("Если вопрос не подходит", { exact: true })).toBeInViewport();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
   await page.screenshot({ path: testInfo.outputPath("illustrated-note-longest.png"), fullPage: true });
+});
+
+test("captures the music settings without horizontal overflow", async ({ page }, testInfo) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: "Настройки" }).click();
+  await expect(page.getByRole("heading", { name: "Настройте темп" })).toBeVisible();
+  await expect(page.getByLabel("Фоновая музыка")).toBeChecked();
+  await expect(page.getByLabel("Громкость музыки")).toHaveValue("28");
+  const viewportWidth = await page.evaluate(() => window.innerWidth);
+  const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+  expect(documentWidth).toBe(viewportWidth);
+  await page.screenshot({ path: testInfo.outputPath("music-settings.png"), fullPage: true });
 });
 
 test("captures the 1440 by 900 presentation viewport", async ({ page }, testInfo) => {

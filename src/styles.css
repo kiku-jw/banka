@@ -1585,6 +1585,33 @@ textarea:hover {
   background: var(--ink);
 }
 
+.volume-control {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) 44px;
+  align-items: center;
+  gap: 12px;
+}
+
+.volume-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--amber);
+  cursor: pointer;
+}
+
+.volume-control input[type="range"]:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.volume-control output {
+  color: var(--amber-soft);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: right;
+}
+
 .settings-panel > .button {
   justify-self: end;
   margin-top: 24px;
@@ -2067,6 +2094,10 @@ textarea:hover {
 
   .setting-row input[type="checkbox"] {
     justify-self: start;
+  }
+
+  .volume-control {
+    max-width: 360px;
   }
 
   .data-panel {

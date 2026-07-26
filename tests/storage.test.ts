@@ -68,13 +68,39 @@ describe("local persistence", () => {
       customCards: [],
     }));
     const migrated = loadStoredData(storage);
-    expect(migrated.version).toBe(2);
+    expect(migrated.version).toBe(3);
+    expect(migrated.preferences.musicEnabled).toBe(true);
+    expect(migrated.preferences.musicVolume).toBe(28);
     expect(migrated.session?.mode).toBe("open");
     expect(migrated.session?.turnsCompleted).toBe(1);
     expect(migrated.session?.players).toEqual([
       { id: "player-1", name: "Аня" },
       { id: "player-2", name: "Борис" },
     ]);
+  });
+
+  it("migrates version two and adds safe music defaults", () => {
+    const storage = new MemoryStorage();
+    storage.setItem("teply-krug:v1", JSON.stringify({
+      version: 2,
+      preferences: {
+        timerSeconds: 45,
+        soundEnabled: false,
+        motionEnabled: false,
+        savedNames: ["Аня", "Борис"],
+        seenCardIds: [],
+        disabledBuiltInCardIds: [],
+      },
+      session: null,
+      customCards: [],
+    }));
+
+    const migrated = loadStoredData(storage);
+
+    expect(migrated.version).toBe(3);
+    expect(migrated.preferences.musicEnabled).toBe(true);
+    expect(migrated.preferences.musicVolume).toBe(28);
+    expect(JSON.parse(storage.getItem("teply-krug:v1") ?? "{}")).toEqual(migrated);
   });
 
   it("fails closed on malformed data", () => {

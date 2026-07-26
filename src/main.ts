@@ -14,6 +14,7 @@ import {
   STAGES,
   targetTurnsForMode,
 } from "./game";
+import { shuffledMusicQueue } from "./music";
 import { clearStoredData, loadStoredData, saveStoredData } from "./storage";
 import type { Card, CardMode, Category, Screen, SessionMode, Stage } from "./types";
 
@@ -54,6 +55,98 @@ type SoundCue = "paper" | "turn" | "glass" | "timer";
 const jarPosterUrl = "./media/question-jar-poster.webp";
 const jarIntroUrl = "./media/question-jar-intro.mp4";
 const jarQuickUrl = "./media/question-jar-quick.mp4";
+const musicTrackUrls: readonly string[] = [
+  "./media/music/paper-jar-whispers-1.mp3",
+  "./media/music/paper-jar-whispers-2.mp3",
+  "./media/music/paper-jar-whispers-3.mp3",
+  "./media/music/paper-jar-whispers-4.mp3",
+];
+const backgroundMusic = document.createElement("audio");
+backgroundMusic.id = "background-music";
+backgroundMusic.hidden = true;
+backgroundMusic.preload = "none";
+document.body.append(backgroundMusic);
+let musicQueue: string[] = [];
+let lastMusicTrack: string | null = null;
+let musicPlaybackRequested = false;
+
+function isActiveMusicScreen(): boolean {
+  return data.session !== null
+    && screen !== "welcome"
+    && screen !== "setup"
+    && screen !== "finish";
+}
+
+function applyBackgroundMusicVolume(): void {
+  backgroundMusic.volume = data.preferences.musicVolume / 100;
+}
+
+function nextBackgroundMusicTrack(): string | null {
+  if (musicQueue.length === 0) {
+    musicQueue = shuffledMusicQueue(musicTrackUrls, lastMusicTrack);
+  }
+  const nextTrack = musicQueue.shift();
+  if (nextTrack === undefined) {
+    return null;
+  }
+  lastMusicTrack = nextTrack;
+  return nextTrack;
+}
+
+function playNextBackgroundMusicTrack(): void {
+  if (!musicPlaybackRequested || !data.preferences.musicEnabled || !isActiveMusicScreen()) {
+    return;
+  }
+  const nextTrack = nextBackgroundMusicTrack();
+  if (nextTrack === null) {
+    return;
+  }
+  applyBackgroundMusicVolume();
+  backgroundMusic.src = nextTrack;
+  void backgroundMusic.play().catch(() => {
+    // A rejected autoplay promise must never interrupt the host's game.
+  });
+}
+
+function startBackgroundMusic(resetPlaylist = false): void {
+  if (resetPlaylist) {
+    backgroundMusic.pause();
+    backgroundMusic.removeAttribute("src");
+    musicQueue = [];
+    lastMusicTrack = null;
+  }
+  musicPlaybackRequested = true;
+  if (!data.preferences.musicEnabled || !isActiveMusicScreen()) {
+    return;
+  }
+  applyBackgroundMusicVolume();
+  if (backgroundMusic.getAttribute("src") === null) {
+    playNextBackgroundMusicTrack();
+  } else {
+    void backgroundMusic.play().catch(() => {
+      // Settings remain usable when the browser refuses playback.
+    });
+  }
+}
+
+function syncBackgroundMusic(): void {
+  applyBackgroundMusicVolume();
+  if (!musicPlaybackRequested || !data.preferences.musicEnabled || !isActiveMusicScreen()) {
+    backgroundMusic.pause();
+    return;
+  }
+  startBackgroundMusic();
+}
+
+function stopBackgroundMusic(): void {
+  musicPlaybackRequested = false;
+  backgroundMusic.pause();
+  backgroundMusic.removeAttribute("src");
+  musicQueue = [];
+  lastMusicTrack = null;
+}
+
+backgroundMusic.addEventListener("ended", playNextBackgroundMusicTrack);
 
 function preloadCardVisual(card: Card): void {
   const src = card.visual?.src;
@@ -276,6 +369,7 @@ function renderWelcome(): void {
     }
     screen = "game";
     render();
+    startBackgroundMusic(true);
   });
 }
 
@@ -392,6 +486,7 @@ function renderSetup(): void {
     screen = "game";
     persist();
     render();
+    startBackgroundMusic(true);
   });
 }
 
@@ -1149,7 +1244,9 @@ function renderSettings(): void {
           <option value="120" ${data.preferences.timerSeconds === 120 ? "selected" : ""}>120 секунд</option>
           <option value="0" ${data.preferences.timerSeconds === 0 ? "selected" : ""}>Выключен</option>
         </select></label>
-        <label class="setting-row"><span><strong>Звуки</strong><small>Шорох бумаги, лёгкий звон стекла и мягкий сигнал таймера.</small></span><input name="sound" type="checkbox" ${data.preferences.soundEnabled ? "checked" : ""} /></label>
+        <label class="setting-row"><span><strong>Звуковые эффекты</strong><small>Шорох бумаги, лёгкий звон стекла и мягкий сигнал таймера.</small></span><input name="sound" type="checkbox" ${data.preferences.soundEnabled ? "checked" : ""} /></label>
+        <label class="setting-row"><span><strong>Фоновая музыка</strong><small>Четыре спокойных трека перемешиваются сами во время игры.</small></span><input name="music" type="checkbox" ${data.preferences.musicEnabled ? "checked" : ""} /></label>
+        <label class="setting-row" for="music-volume"><span><strong>Громкость музыки</strong><small>Отдельно от шороха записок и других эффектов.</small></span><span class="volume-control"><input id="music-volume" name="music-volume" type="range" min="0" max="100" step="1" value="${data.preferences.musicVolume}" ${data.preferences.musicEnabled ? "" : "disabled"} /><output id="music-volume-value" for="music-volume">${data.preferences.musicVolume}%</output></span></label>
         <label class="setting-row"><span><strong>Анимации</strong><small>Банка, записки и переходы между ходами.</small></span><input name="motion" type="checkbox" ${data.preferences.motionEnabled ? "checked" : ""} /></label>
         <button class="button button-primary" type="submit">Сохранить</button>
       </form>
@@ -1162,6 +1259,19 @@ function renderSettings(): void {
   `, { compactHeader: true });
   bindToolBack();
   const settingsForm = root.querySelector<HTMLFormElement>("#settings-form");
+  const musicToggle = root.querySelector<HTMLInputElement>("input[name='music']");
+  const musicVolume = root.querySelector<HTMLInputElement>("#music-volume");
+  const musicVolumeValue = root.querySelector<HTMLOutputElement>("#music-volume-value");
+  musicToggle?.addEventListener("change", () => {
+    if (musicVolume !== null) {
+      musicVolume.disabled = !musicToggle.checked;
+    }
+  });
+  musicVolume?.addEventListener("input", () => {
+    if (musicVolumeValue !== null) {
+      musicVolumeValue.value = `${musicVolume.value}%`;
+    }
+  });
   settingsForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     const formData = new FormData(settingsForm);
@@ -1170,12 +1280,22 @@ function renderSettings(): void {
       data.preferences.timerSeconds = timer;
     }
     data.preferences.soundEnabled = formData.get("sound") === "on";
+    data.preferences.musicEnabled = formData.get("music") === "on";
+    const submittedMusicVolume = musicVolume?.value;
+    const musicVolumeNumber = Number(submittedMusicVolume);
+    if (submittedMusicVolume !== undefined
+      && Number.isInteger(musicVolumeNumber)
+      && musicVolumeNumber >= 0
+      && musicVolumeNumber <= 100) {
+      data.preferences.musicVolume = musicVolumeNumber;
+    }
     data.preferences.motionEnabled = formData.get("motion") === "on";
     resetTimer();
     persist();
     showToast("Настройки сохранены.");
     screen = returnScreen === "settings" ? "welcome" : returnScreen;
     render();
+    syncBackgroundMusic();
   });
   root.querySelector<HTMLElement>("[data-action='reset-history']")?.addEventListener("click", () => {
     if (window.confirm("Вернуть все встроенные и свои вопросы в колоду?")) {
@@ -1198,6 +1318,9 @@ function renderSettings(): void {
 }
 
 function render(): void {
+  if (screen === "welcome" || screen === "setup" || screen === "finish") {
+    stopBackgroundMusic();
+  }
   if (screen === "welcome") {
     renderWelcome();
   } else if (screen === "setup") {

@@ -90,7 +90,7 @@ test("the first question is Bible-based and session state uses the new model", a
     };
   });
   expect(state).toEqual({
-    version: 2,
+    version: 3,
     card: expect.stringContaining("spark-bible-"),
     mode: "standard",
     stage: undefined,
@@ -308,7 +308,7 @@ test("paper and glass cues follow the host sound setting", async ({ page }) => {
   expect(enabledCount).toBeGreaterThan(0);
 
   await page.getByRole("button", { name: "Настройки" }).click();
-  await page.getByLabel("Звуки").uncheck();
+  await page.getByLabel("Звуковые эффекты").uncheck();
   await page.getByRole("button", { name: "Сохранить" }).click();
   await page.getByRole("button", { name: "ДАЛЬШЕ", exact: true }).click();
   const disabledCount = await page.evaluate(() => {
@@ -316,6 +316,122 @@ test("paper and glass cues follow the host sound setting", async ({ page }) => {
     return Array.isArray(values) ? values.length : 0;
   });
   expect(disabledCount).toBe(enabledCount);
+});
+
+test("background music uses a shuffled cycle and separate persistent controls", async ({ page }) => {
+  await page.addInitScript(() => {
+    Math.random = () => 0;
+    const plays: string[] = [];
+    const pauses: number[] = [];
+    Object.defineProperty(window, "__musicPlays", { value: plays });
+    Object.defineProperty(window, "__musicPauses", { value: pauses });
+    Object.defineProperty(HTMLMediaElement.prototype, "play", {
+      configurable: true,
+      value() {
+        if (this instanceof HTMLAudioElement && this.id === "background-music") {
+          plays.push(this.getAttribute("src") ?? "");
+        }
+        return Promise.resolve();
+      },
+    });
+    Object.defineProperty(HTMLMediaElement.prototype, "pause", {
+      configurable: true,
+      value() {
+        if (this instanceof HTMLAudioElement && this.id === "background-music") {
+          pauses.push(1);
+        }
+      },
+    });
+  });
+
+  await startGame(page, 2);
+  const audio = page.locator("#background-music");
+  await expect(audio).toHaveAttribute("src", /paper-jar-whispers-\d\.mp3$/);
+  await expect.poll(async () => audio.evaluate((element) =>
+    element instanceof HTMLAudioElement ? element.volume : -1
+  )).toBe(0.28);
+
+  for (let index = 0; index < 4; index += 1) {
+    await audio.evaluate((element) => element.dispatchEvent(new Event("ended")));
+  }
+  const cycle = await page.evaluate(() => {
+    const values = Reflect.get(window, "__musicPlays");
+    return Array.isArray(values) ? values.filter((value) => typeof value === "string") : [];
+  });
+  expect(new Set(cycle.slice(0, 4)).size).toBe(4);
+  expect(cycle[4]).not.toBe(cycle[3]);
+
+  await page.getByRole("button", { name: "Настройки" }).click();
+  await expect(page.getByLabel("Фоновая музыка")).toBeChecked();
+  const volume = page.getByLabel("Громкость музыки");
+  await expect(volume).toHaveValue("28");
+  await volume.fill("43");
+  await expect(page.locator("#music-volume-value")).toHaveText("43%");
+  await page.getByLabel("Фоновая музыка").uncheck();
+  await expect(volume).toBeDisabled();
+  await page.getByRole("button", { name: "Сохранить" }).click();
+
+  const preferences = await page.evaluate(() => {
+    const raw = localStorage.getItem("teply-krug:v1");
+    if (raw === null) {
+      return null;
+    }
+    const stored: unknown = JSON.parse(raw);
+    if (typeof stored !== "object" || stored === null) {
+      return null;
+    }
+    const value = Reflect.get(stored, "preferences");
+    return typeof value === "object" && value !== null
+      ? {
+          musicEnabled: Reflect.get(value, "musicEnabled"),
+          musicVolume: Reflect.get(value, "musicVolume"),
+          soundEnabled: Reflect.get(value, "soundEnabled"),
+        }
+      : null;
+  });
+  expect(preferences).toEqual({
+    musicEnabled: false,
+    musicVolume: 43,
+    soundEnabled: true,
+  });
+  const pauseCount = await page.evaluate(() => {
+    const values = Reflect.get(window, "__musicPauses");
+    return Array.isArray(values) ? values.length : 0;
+  });
+  expect(pauseCount).toBeGreaterThan(0);
+
+  await page.getByRole("button", { name: "Настройки" }).click();
+  await expect(page.getByLabel("Громкость музыки")).toHaveValue("43");
+  await page.getByLabel("Фоновая музыка").check();
+  await page.getByRole("button", { name: "Сохранить" }).click();
+  await expect.poll(async () => audio.evaluate((element) =>
+    element instanceof HTMLAudioElement ? element.volume : -1
+  )).toBe(0.43);
+  await expect(audio).toHaveAttribute("src", /paper-jar-whispers-\d\.mp3$/);
+
+  await page.reload();
+  await expect(audio).not.toHaveAttribute("src", /paper-jar-whispers-\d\.mp3$/);
+  await page.getByRole("button", { name: "Продолжить" }).click();
+  await expect(audio).toHaveAttribute("src", /paper-jar-whispers-\d\.mp3$/);
+  await expect.poll(async () => audio.evaluate((element) =>
+    element instanceof HTMLAudioElement ? element.volume : -1
+  )).toBe(0.43);
+
+  await reveal(page);
+  await openFallbacks(page);
+  await page.getByRole("button", { name: /Закончить вечер/ }).click();
+  await expect(page.getByRole("heading", { name: "Последняя записка" })).toBeVisible();
+  expect(await audio.getAttribute("src")).toBeNull();
+});
+
+test("the real browser starts background music from the host action", async ({ page }) => {
+  await startGame(page, 2);
+  const audio = page.locator("#background-music");
+
+  await expect(audio).toHaveAttribute("src", /paper-jar-whispers-\d\.mp3$/);
+  await expect.poll(async () => audio.evaluate((element) =>
+    element instanceof HTMLAudioElement && !element.paused
+  )).toBe(true);
 });
 
 test("the host can finish after any revealed question", async ({ page }) => {

@@ -73,9 +73,10 @@ group. There is no final ranking.
 
 - Optional 45-, 75-, or 120-second timer that never advances the turn automatically.
 - Paper and jar sounds while drawing, plus brief cues for a new turn and elapsed time.
+- Four quiet background tracks play in a random cycle without repeating at the cycle boundary.
 - A full introduction for the first note and three quicker reveal patterns after it.
 - 15- and 30-minute modes that suggest finishing only after a complete round.
-- Independent controls for animation and sound.
+- Independent controls for sound effects, background music, and animation, plus a separate music volume.
 - A browser-based editor for custom cards.
 - The ability to hide any built-in card and restore it later.
 - Automatic recovery of an active session after a page reload.
@@ -108,9 +109,9 @@ npm run test:e2e
 ```
 
 The app uses Vite and TypeScript without a UI framework. Its Seedance video
-assets are stored in the repository and do not call an external service during
-play. A push to `main` verifies the project and publishes `dist/` through
-GitHub Actions.
+and music assets are stored in the repository and do not call an external
+service during play. A push to `main` verifies the project and publishes
+`dist/` through GitHub Actions.
 
 ## Work with the deck
 
