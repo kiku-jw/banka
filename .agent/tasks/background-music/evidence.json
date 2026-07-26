@@ -1,0 +1,16 @@
+{
+  "taskId": "background-music",
+  "status": "PASS",
+  "implementationRevision": "a11a2d7bf04f32fcd1b4979f5ad74dc979fcf67b",
+  "pagesRun": "https://github.com/kiku-jw/teply-krug/actions/runs/30206333995",
+  "acceptanceCriteria": [
+    { "id": "AC1", "status": "PASS", "proof": "Four normalized local MP3 files, 13,732,005 bytes total" },
+    { "id": "AC2", "status": "PASS", "proof": "Full shuffled cycle and no immediate boundary repeat covered by unit and browser tests" },
+    { "id": "AC3", "status": "PASS", "proof": "Explicit Start and Continue playback, real Chromium active state, safe rejection, and final-screen stop" },
+    { "id": "AC4", "status": "PASS", "proof": "Independent music toggle, volume slider, percentage, disabled state, save, and restore coverage" },
+    { "id": "AC5", "status": "PASS", "proof": "Version 1 and 2 migration plus browser persistence at schema version 3" },
+    { "id": "AC6", "status": "PASS", "proof": "Native audio and range controls with no package or external service" },
+    { "id": "AC7", "status": "PASS", "proof": "Desktop and 390 x 844 screenshots and overflow assertions" },
+    { "id": "AC8", "status": "PASS", "proof": "Full local suite, successful Pages run 30206333995, live bundle and four-asset readback, and live Chromium smoke" }
+  ]
+}
