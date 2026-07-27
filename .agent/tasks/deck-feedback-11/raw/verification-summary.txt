@@ -18,3 +18,10 @@ PASS: no whitespace errors.
 
 Adversarial editorial review
 PASS after five weak first-draft replacements were tightened.
+
+GitHub Pages
+PASS: workflow run 30241829072 built and deployed commit 14e7a19.
+
+Live asset readback
+PASS: published asset index-r8NzHMfi.js contains 3/3 sampled replacements and
+contains none of the 3 sampled rejected prompts.

@@ -13,8 +13,8 @@
 - **AC5 — PASS:** Gender-neutrality and editorial gates pass.
 - **AC6 — PASS:** The deck remains 360 unique cards with all stage/category
   balance tests passing.
-- **AC7 — PARTIAL:** Local and browser verification pass. Publication, Pages
-  deployment, and live readback remain.
+- **AC7 — PASS:** Local and browser verification, GitHub Pages deployment, and
+  live production asset readback all pass.
 
 ## Verification
 
@@ -24,3 +24,8 @@
 - `npm audit --audit-level=high` — 0 vulnerabilities.
 - `git diff --check` — passed.
 - Adversarial editorial review — passed after five first-draft fixes.
+- GitHub Pages run
+  [`30241829072`](https://github.com/kiku-jw/teply-krug/actions/runs/30241829072)
+  — build and deploy passed for commit `14e7a19`.
+- Live asset readback — 3/3 sampled replacements present and 3/3 sampled
+  rejected prompts absent.

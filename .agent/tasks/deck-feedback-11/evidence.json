@@ -8,7 +8,7 @@
     "AC4": "pass",
     "AC5": "pass",
     "AC6": "pass",
-    "AC7": "partial"
+    "AC7": "pass"
   },
   "verification": {
     "unit_content_tests": "39 passed",
@@ -18,7 +18,9 @@
     "approved_prompts": "11 of 11 preserved",
     "audit": "0 vulnerabilities",
     "diff_check": "passed",
-    "adversarial_review": "passed"
+    "adversarial_review": "passed",
+    "pages_run": "30241829072 passed",
+    "live_readback": "3 of 3 new present, 3 of 3 old absent"
   },
   "residual_risk": "Subjective prompt quality still benefits from live-play feedback."
 }
