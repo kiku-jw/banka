@@ -1,0 +1,20 @@
+npm run check
+PASS: 7 test files, 39 tests, TypeScript, and Vite production build.
+
+npm run test:e2e
+PASS: 45 tests; 1 intentionally skipped.
+
+Deck scope check
+PASS: exactly 56 prompt lines removed and 56 prompt lines added.
+
+Deck invariants
+PASS: 360 unique prompts and all 11 approved prompts preserved.
+
+npm audit --audit-level=high
+PASS: 0 vulnerabilities.
+
+git diff --check
+PASS: no whitespace errors.
+
+Adversarial editorial review
+PASS after five weak first-draft replacements were tightened.
