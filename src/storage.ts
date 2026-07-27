@@ -9,6 +9,8 @@ const defaultPreferences: Preferences = {
   musicEnabled: true,
   musicVolume: 50,
   motionEnabled: true,
+  bibleQuestionsEnabled: true,
+  ministryQuestionsEnabled: true,
   savedNames: [],
   seenCardIds: [],
   disabledBuiltInCardIds: [],
@@ -16,7 +18,7 @@ const defaultPreferences: Preferences = {
 
 export function createDefaultStoredData(): StoredData {
   return {
-    version: 3,
+    version: 4,
     preferences: { ...defaultPreferences },
     session: null,
     customCards: [],
@@ -89,6 +91,8 @@ function isPreferences(value: unknown): value is Preferences {
     && value.musicVolume >= 0
     && value.musicVolume <= 100
     && typeof value.motionEnabled === "boolean"
+    && typeof value.bibleQuestionsEnabled === "boolean"
+    && typeof value.ministryQuestionsEnabled === "boolean"
     && isStringArray(value.savedNames)
     && isStringArray(value.seenCardIds)
     && isStringArray(value.disabledBuiltInCardIds);
@@ -96,7 +100,7 @@ function isPreferences(value: unknown): value is Preferences {
 
 function isStoredData(value: unknown): value is StoredData {
   return isObject(value)
-    && value.version === 3
+    && value.version === 4
     && isPreferences(value.preferences)
     && (value.session === null || isSession(value.session))
     && Array.isArray(value.customCards)
@@ -164,15 +168,43 @@ function migratePreferences(value: unknown): Preferences | null {
     && value.musicVolume <= 100
     ? value.musicVolume
     : defaultPreferences.musicVolume;
+  const bibleQuestionsEnabled = typeof value.bibleQuestionsEnabled === "boolean"
+    ? value.bibleQuestionsEnabled
+    : defaultPreferences.bibleQuestionsEnabled;
+  const ministryQuestionsEnabled = typeof value.ministryQuestionsEnabled === "boolean"
+    ? value.ministryQuestionsEnabled
+    : defaultPreferences.ministryQuestionsEnabled;
   return {
     timerSeconds: value.timerSeconds,
     soundEnabled: value.soundEnabled,
     musicEnabled,
     musicVolume,
     motionEnabled: value.motionEnabled,
+    bibleQuestionsEnabled,
+    ministryQuestionsEnabled,
     savedNames: value.savedNames,
     seenCardIds: value.seenCardIds,
     disabledBuiltInCardIds: value.disabledBuiltInCardIds,
+  };
+}
+
+function migrateVersionThree(value: unknown): StoredData | null {
+  if (!isObject(value)
+    || value.version !== 3
+    || (value.session !== null && !isSession(value.session))
+    || !Array.isArray(value.customCards)
+    || !value.customCards.every(isCard)) {
+    return null;
+  }
+  const preferences = migratePreferences(value.preferences);
+  if (preferences === null) {
+    return null;
+  }
+  return {
+    version: 4,
+    preferences,
+    session: value.session,
+    customCards: value.customCards,
   };
 }
 
@@ -189,7 +221,7 @@ function migrateVersionTwo(value: unknown): StoredData | null {
     return null;
   }
   return {
-    version: 3,
+    version: 4,
     preferences,
     session: value.session,
     customCards: value.customCards,
@@ -209,7 +241,7 @@ function migrateVersionOne(value: unknown): StoredData | null {
   }
   const session = value.session === null ? null : migrateSession(value.session);
   return {
-    version: 3,
+    version: 4,
     preferences,
     session,
     customCards: value.customCards,
@@ -225,6 +257,11 @@ export function loadStoredData(storage: Storage = window.localStorage): StoredDa
     const parsed: unknown = JSON.parse(raw);
     if (isStoredData(parsed)) {
       return parsed;
+    }
+    const migratedThree = migrateVersionThree(parsed);
+    if (migratedThree !== null) {
+      storage.setItem(STORAGE_KEY, JSON.stringify(migratedThree));
+      return migratedThree;
     }
     const migratedTwo = migrateVersionTwo(parsed);
     if (migratedTwo !== null) {

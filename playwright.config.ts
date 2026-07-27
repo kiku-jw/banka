@@ -1,5 +1,15 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const runtimeProcess: unknown = Reflect.get(globalThis, "process");
+const runtimeEnvironment: unknown = typeof runtimeProcess === "object" && runtimeProcess !== null
+  ? Reflect.get(runtimeProcess, "env")
+  : null;
+const requestedPort: unknown = typeof runtimeEnvironment === "object" && runtimeEnvironment !== null
+  ? Reflect.get(runtimeEnvironment, "PLAYWRIGHT_PORT")
+  : null;
+const previewPort = typeof requestedPort === "string" ? requestedPort : "4173";
+const previewUrl = `http://127.0.0.1:${previewPort}/teply-krug/`;
+
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,
@@ -7,7 +17,7 @@ export default defineConfig({
   retries: 0,
   reporter: "line",
   use: {
-    baseURL: "http://127.0.0.1:4173/teply-krug/",
+    baseURL: previewUrl,
     trace: "retain-on-failure",
   },
   projects: [
@@ -24,8 +34,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run build && npm exec vite preview -- --host 127.0.0.1 --port 4173",
-    url: "http://127.0.0.1:4173/teply-krug/",
+    command: `npm run build && npm exec vite preview -- --host 127.0.0.1 --port ${previewPort}`,
+    url: previewUrl,
     reuseExistingServer: false,
   },
 });

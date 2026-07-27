@@ -89,7 +89,9 @@ test("captures an optional idea image without making it part of the prompt", asy
 test("captures the music settings without horizontal overflow", async ({ page }, testInfo) => {
   await page.goto("./");
   await page.getByRole("button", { name: "Настройки" }).click();
-  await expect(page.getByRole("heading", { name: "Настройте темп" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Настройки игры" })).toBeVisible();
+  await expect(page.getByLabel("Библейские вопросы")).toBeChecked();
+  await expect(page.getByRole("checkbox", { name: /^Служение/u })).toBeChecked();
   await expect(page.getByLabel("Фоновая музыка")).toBeChecked();
   await expect(page.getByLabel("Громкость музыки")).toHaveValue("50");
   const viewportWidth = await page.evaluate(() => window.innerWidth);

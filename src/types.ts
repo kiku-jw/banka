@@ -37,13 +37,15 @@ export interface Preferences {
   musicEnabled: boolean;
   musicVolume: number;
   motionEnabled: boolean;
+  bibleQuestionsEnabled: boolean;
+  ministryQuestionsEnabled: boolean;
   savedNames: string[];
   seenCardIds: string[];
   disabledBuiltInCardIds: string[];
 }
 
 export interface StoredData {
-  version: 3;
+  version: 4;
   preferences: Preferences;
   session: SessionState | null;
   customCards: Card[];

@@ -206,16 +206,36 @@ function persist(): void {
   saveStoredData(data);
 }
 
+function allCards(): Card[] {
+  return [...builtInCards, ...data.customCards];
+}
+
+function categoryEnabled(category: Category): boolean {
+  if (category === "bible") {
+    return data.preferences.bibleQuestionsEnabled;
+  }
+  if (category === "service") {
+    return data.preferences.ministryQuestionsEnabled;
+  }
+  return true;
+}
+
+function topicEnabled(card: Card): boolean {
+  return categoryEnabled(card.category);
+}
+
 function enabledCards(): Card[] {
-  const builtIns = builtInCards.filter((card) => !data.preferences.disabledBuiltInCardIds.includes(card.id));
-  return [...builtIns, ...data.customCards];
+  return allCards().filter((card) =>
+    topicEnabled(card)
+    && (card.source === "custom" || !data.preferences.disabledBuiltInCardIds.includes(card.id)),
+  );
 }
 
 function cardById(id: string | null): Card | null {
   if (id === null) {
     return null;
   }
-  return enabledCards().find((card) => card.id === id) ?? null;
+  return allCards().find((card) => card.id === id) ?? null;
 }
 
 function currentCard(): Card | null {
@@ -327,6 +347,10 @@ function renderWelcome(): void {
       <div class="welcome-copy">
         <h1 id="welcome-title">Что сегодня попадётся?</h1>
         <p class="welcome-lead">Играйте в одной комнате или по видеосвязи: впишите имена и тяните записки по очереди.</p>
+        <div class="welcome-notices">
+          <p>В игре есть вопросы о Библии, служении и личном духовном опыте. Любой вопрос можно пропустить без объяснений.</p>
+          <p class="privacy-promise"><strong>Ответы остаются в разговоре.</strong> Их не нужно вводить. Игра их не записывает, не анализирует и никому не отправляет.</p>
+        </div>
         <div class="welcome-actions">
           <button class="button button-primary button-large" data-action="new-game">Собрать компанию</button>
           ${canContinue ? '<button class="button button-secondary button-large" data-action="continue">Продолжить</button>' : ""}
@@ -405,7 +429,7 @@ function renderSetup(): void {
         <button class="text-button" data-action="back">Назад</button>
         <h1 id="setup-title">Кто сегодня играет?</h1>
         <p>Вставьте имена через запятую или с новой строки. Их порядок станет порядком ходов.</p>
-        <p>Первый вопрос будет о Библии. Дальше темы перемешаются сами.</p>
+        <p>${data.preferences.bibleQuestionsEnabled ? "Первая записка будет о Библии." : "Темы будут чередоваться сами."} Неподходящий вопрос можно пропустить без объяснений.</p>
       </div>
       <form class="setup-form" id="setup-form">
         <div class="form-heading"><h2>Имена</h2><span id="player-count">${validNames().length}/12</span></div>
@@ -480,7 +504,7 @@ function renderSetup(): void {
       recentCardIds: [],
     };
     previousTurn = null;
-    drawForCurrent("bible");
+    drawForCurrent(data.preferences.bibleQuestionsEnabled ? "bible" : undefined);
     screen = "game";
     persist();
     render();
@@ -973,7 +997,7 @@ function openCategoryDialog(): void {
       <h2>О чём хочется вопрос?</h2>
       <p>Выбери тему, и вопрос сменится.</p>
       <div class="dialog-options dialog-options-categories">
-        ${CATEGORIES.map((category) => `<button data-category="${category}">${categoryNames[category]}</button>`).join("")}
+        ${CATEGORIES.filter(categoryEnabled).map((category) => `<button data-category="${category}">${categoryNames[category]}</button>`).join("")}
       </div>
     </div>
   `);
@@ -1310,10 +1334,17 @@ function renderSettings(): void {
       <div class="page-heading">
         <button class="text-button" data-action="back-from-tool">Назад</button>
         <p class="section-kicker">Для хоста</p>
-        <h1 id="settings-title">Настройте темп</h1>
+        <h1 id="settings-title">Настройки игры</h1>
         <p>Изменения сохраняются только в этом браузере.</p>
       </div>
       <form class="settings-panel" id="settings-form">
+        <fieldset class="settings-section">
+          <legend>Темы вопросов</legend>
+          <label class="setting-row"><span><strong>Библейские вопросы</strong><small>О персонажах, событиях и стихах из Библии.</small></span><input name="bible-questions" type="checkbox" ${data.preferences.bibleQuestionsEnabled ? "checked" : ""} /></label>
+          <label class="setting-row"><span><strong>Служение</strong><small>Вопросы и ситуации, связанные со служением.</small></span><input name="ministry-questions" type="checkbox" ${data.preferences.ministryQuestionsEnabled ? "checked" : ""} /></label>
+        </fieldset>
+        <fieldset class="settings-section">
+          <legend>Темп и атмосфера</legend>
         <label class="setting-row"><span><strong>Мягкий таймер</strong><small>Он подаст сигнал, но никогда не прервёт ответ.</small></span><select name="timer">
           <option value="45" ${data.preferences.timerSeconds === 45 ? "selected" : ""}>45 секунд</option>
           <option value="75" ${data.preferences.timerSeconds === 75 ? "selected" : ""}>75 секунд</option>
@@ -1324,6 +1355,7 @@ function renderSettings(): void {
         <label class="setting-row"><span><strong>Фоновая музыка</strong><small>Четыре спокойных трека перемешиваются сами во время игры.</small></span><input name="music" type="checkbox" ${data.preferences.musicEnabled ? "checked" : ""} /></label>
         <label class="setting-row" for="music-volume"><span><strong>Громкость музыки</strong><small>Отдельно от шороха записок и других эффектов.</small></span><span class="volume-control"><input id="music-volume" name="music-volume" type="range" min="0" max="100" step="1" value="${data.preferences.musicVolume}" ${data.preferences.musicEnabled ? "" : "disabled"} /><output id="music-volume-value" for="music-volume">${data.preferences.musicVolume}%</output></span></label>
         <label class="setting-row"><span><strong>Анимации</strong><small>Банка, записки и переходы между ходами.</small></span><input name="motion" type="checkbox" ${data.preferences.motionEnabled ? "checked" : ""} /></label>
+        </fieldset>
         <button class="button button-primary" type="submit">Сохранить</button>
       </form>
       <div class="data-panel">
@@ -1357,6 +1389,8 @@ function renderSettings(): void {
     }
     data.preferences.soundEnabled = formData.get("sound") === "on";
     data.preferences.musicEnabled = formData.get("music") === "on";
+    data.preferences.bibleQuestionsEnabled = formData.get("bible-questions") === "on";
+    data.preferences.ministryQuestionsEnabled = formData.get("ministry-questions") === "on";
     const submittedMusicVolume = musicVolume?.value;
     const musicVolumeNumber = Number(submittedMusicVolume);
     if (submittedMusicVolume !== undefined

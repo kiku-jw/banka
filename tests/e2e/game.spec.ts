@@ -90,11 +90,75 @@ test("the first question is Bible-based and session state uses the new model", a
     };
   });
   expect(state).toEqual({
-    version: 3,
+    version: 4,
     card: expect.stringContaining("spark-bible-"),
     mode: "standard",
     stage: undefined,
   });
+});
+
+test("the host can turn Bible and ministry questions off independently", async ({ page }) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: "Настройки" }).click();
+  await page.getByLabel("Библейские вопросы").uncheck();
+  await page.getByRole("checkbox", { name: /^Служение/u }).uncheck();
+  await page.getByRole("button", { name: "Сохранить" }).click();
+
+  await page.getByRole("button", { name: "Собрать компанию" }).click();
+  await page.getByLabel("Имена по порядку ходов").fill("Аня\nБорис");
+  await page.getByRole("button", { name: "Начать игру" }).click();
+
+  const disabledState = await page.evaluate(() => {
+    const raw = localStorage.getItem("teply-krug:v1");
+    const stored: unknown = raw === null ? null : JSON.parse(raw);
+    const preferences = typeof stored === "object" && stored !== null
+      ? Reflect.get(stored, "preferences")
+      : null;
+    const session = typeof stored === "object" && stored !== null
+      ? Reflect.get(stored, "session")
+      : null;
+    return {
+      bibleQuestionsEnabled: typeof preferences === "object" && preferences !== null
+        ? Reflect.get(preferences, "bibleQuestionsEnabled")
+        : null,
+      ministryQuestionsEnabled: typeof preferences === "object" && preferences !== null
+        ? Reflect.get(preferences, "ministryQuestionsEnabled")
+        : null,
+      currentCardId: typeof session === "object" && session !== null
+        ? Reflect.get(session, "currentCardId")
+        : null,
+    };
+  });
+
+  expect(disabledState.bibleQuestionsEnabled).toBe(false);
+  expect(disabledState.ministryQuestionsEnabled).toBe(false);
+  expect(disabledState.currentCardId).not.toContain("-bible-");
+  expect(disabledState.currentCardId).not.toContain("-service-");
+
+  await openFallbacks(page);
+  await page.getByRole("button", { name: /Выбрать тему/ }).click();
+  await expect(page.getByRole("button", { name: "Библия", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Служение", exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "Закрыть" }).click();
+
+  await page.getByRole("button", { name: "Настройки" }).click();
+  await page.getByLabel("Библейские вопросы").check();
+  await page.getByRole("button", { name: "Сохранить" }).click();
+  await openFallbacks(page);
+  await page.getByRole("button", { name: /Выбрать тему/ }).click();
+  await page.getByRole("button", { name: "Библия", exact: true }).click();
+
+  const reenabledCardId = await page.evaluate(() => {
+    const raw = localStorage.getItem("teply-krug:v1");
+    const stored: unknown = raw === null ? null : JSON.parse(raw);
+    const session = typeof stored === "object" && stored !== null
+      ? Reflect.get(stored, "session")
+      : null;
+    return typeof session === "object" && session !== null
+      ? Reflect.get(session, "currentCardId")
+      : null;
+  });
+  expect(reenabledCardId).toContain("-bible-");
 });
 
 test("one-step back restores the previous player and revealed question", async ({ page }) => {
@@ -466,7 +530,7 @@ test("the deck editor lives inside host settings", async ({ page }) => {
   await page.getByRole("button", { name: "Открыть колоду" }).click();
   await expect(page.getByRole("heading", { name: "Вопросы вашей компании" })).toBeVisible();
   await page.getByRole("button", { name: "Назад" }).click();
-  await expect(page.getByRole("heading", { name: "Настройте темп" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Настройки игры" })).toBeVisible();
   await page.getByRole("button", { name: "Назад" }).click();
   await expect(page.getByRole("heading", { name: "Игрок 1" })).toBeVisible();
 });

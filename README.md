@@ -23,6 +23,8 @@
 
 The game and its 360 hand-written prompts are in Russian. They are designed for
 a friendly group with different backgrounds and levels of ministry experience.
+The jar includes questions about the Bible, ministry, and personal spiritual
+experience. Any question can be skipped without an explanation.
 
 ## How a session works
 
@@ -46,13 +48,10 @@ concrete answer starters, such as objects, places, dishes, or hobbies. These
 images never appear on consecutive turns, and every question remains complete
 without looking at them.
 
-The first question is always Bible-related. The deck then moves gradually from
-light topics into personal stories, ministry, and group activities. Players do
-not see categories or difficulty levels; they simply continue round by round.
-
 The deck contains 360 explicitly written cards about people, friendship, the
 Bible, ministry, and creative group activities. A prompt does not repeat until
-the applicable part of the deck has been exhausted.
+the applicable part of the deck has been exhausted. The host can independently
+turn off Bible or ministry questions before or during a session.
 
 ## The game screen
 
@@ -82,6 +81,7 @@ group. There is no final ranking.
 - A full introduction for the first note and three quicker reveal patterns after it.
 - 15- and 30-minute modes that suggest finishing only after a complete round.
 - Independent controls for sound effects, background music, and animation, plus a separate music volume.
+- Independent switches for Bible and ministry questions.
 - Music starts at 50% volume on a new browser and keeps any later host setting.
 - A one-step Back control recovers the previous turn after an accidental **ДАЛЬШЕ** press.
 - Per-question editorial notes can be reviewed in a prefilled email draft at the end.
@@ -93,7 +93,7 @@ group. There is no final ranking.
 ## Privacy and status
 
 This is a fully static application with no accounts, server, or analytics.
-Answers are never entered or stored. Names, settings, custom cards, and optional
+Answers are not entered, recorded, analyzed, or sent anywhere. Names, settings, custom cards, and optional
 editorial notes about questions remain in the browser running the game. Notes
 leave the browser only if the host reviews and sends the prepared email.
 

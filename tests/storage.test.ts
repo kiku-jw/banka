@@ -68,9 +68,11 @@ describe("local persistence", () => {
       customCards: [],
     }));
     const migrated = loadStoredData(storage);
-    expect(migrated.version).toBe(3);
+    expect(migrated.version).toBe(4);
     expect(migrated.preferences.musicEnabled).toBe(true);
     expect(migrated.preferences.musicVolume).toBe(50);
+    expect(migrated.preferences.bibleQuestionsEnabled).toBe(true);
+    expect(migrated.preferences.ministryQuestionsEnabled).toBe(true);
     expect(migrated.session?.mode).toBe("open");
     expect(migrated.session?.turnsCompleted).toBe(1);
     expect(migrated.session?.players).toEqual([
@@ -97,10 +99,38 @@ describe("local persistence", () => {
 
     const migrated = loadStoredData(storage);
 
-    expect(migrated.version).toBe(3);
+    expect(migrated.version).toBe(4);
     expect(migrated.preferences.musicEnabled).toBe(true);
     expect(migrated.preferences.musicVolume).toBe(50);
+    expect(migrated.preferences.bibleQuestionsEnabled).toBe(true);
+    expect(migrated.preferences.ministryQuestionsEnabled).toBe(true);
     expect(JSON.parse(storage.getItem("teply-krug:v1") ?? "{}")).toEqual(migrated);
+  });
+
+  it("migrates version three and enables both optional topics", () => {
+    const storage = new MemoryStorage();
+    storage.setItem("teply-krug:v1", JSON.stringify({
+      version: 3,
+      preferences: {
+        timerSeconds: 75,
+        soundEnabled: true,
+        musicEnabled: true,
+        musicVolume: 35,
+        motionEnabled: true,
+        savedNames: ["Аня", "Борис"],
+        seenCardIds: [],
+        disabledBuiltInCardIds: [],
+      },
+      session: null,
+      customCards: [],
+    }));
+
+    const migrated = loadStoredData(storage);
+
+    expect(migrated.version).toBe(4);
+    expect(migrated.preferences.bibleQuestionsEnabled).toBe(true);
+    expect(migrated.preferences.ministryQuestionsEnabled).toBe(true);
+    expect(migrated.preferences.musicVolume).toBe(35);
   });
 
   it("fails closed on malformed data", () => {

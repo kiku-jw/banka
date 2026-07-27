@@ -22,4 +22,12 @@ describe("visible interface copy", () => {
     expect(readmeSource).not.toMatch(/small Zoom groups|shared Zoom screen|Zoom-compatibility/iu);
     expect(editorialGuideSource).not.toMatch(/Zoom evening/iu);
   });
+
+  it("states the content and privacy rules without hidden-depth marketing", () => {
+    expect(interfaceSource).toContain("В игре есть вопросы о Библии, служении и личном духовном опыте.");
+    expect(interfaceSource).toContain("Любой вопрос можно пропустить без объяснений.");
+    expect(interfaceSource).toContain("Игра их не записывает, не анализирует и никому не отправляет.");
+    expect(interfaceSource).not.toMatch(/скрыт\w* глубин|невидим\w* этап/iu);
+    expect(readmeSource).not.toMatch(/hidden depth|invisible stages|difficulty levels/iu);
+  });
 });
