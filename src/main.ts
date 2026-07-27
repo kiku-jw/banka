@@ -1414,6 +1414,18 @@ function renderSettings(): void {
         <div><strong>История вопросов</strong><span>${data.preferences.seenCardIds.length} карточек уже использовано</span><button class="button button-secondary" data-action="reset-history">Начать колоду заново</button></div>
         <div><strong>Все локальные данные</strong><span>Имена, текущая игра, свои карточки, замечания и настройки</span><button class="button button-danger" data-action="reset-all">Удалить данные</button></div>
       </div>
+      <section class="author-links" aria-labelledby="author-links-title">
+        <div>
+          <h2 id="author-links-title">Автор проекта</h2>
+          <p>Другие проекты и способы связаться.</p>
+        </div>
+        <nav aria-label="Ссылки автора">
+          <a href="https://kikuai.dev/" target="_blank" rel="noopener noreferrer"><strong>Сайт</strong><span>kikuai.dev ↗</span></a>
+          <a href="https://t.me/kiku_ai" target="_blank" rel="noopener noreferrer"><strong>Telegram</strong><span>@kiku_ai ↗</span></a>
+          <a href="https://github.com/kiku-jw" target="_blank" rel="noopener noreferrer"><strong>GitHub</strong><span>@kiku-jw ↗</span></a>
+          <a href="https://github.com/kiku-jw/teply-krug" target="_blank" rel="noopener noreferrer"><strong>Репозиторий</strong><span>teply-krug ↗</span></a>
+        </nav>
+      </section>
     </section>
   `, { compactHeader: true });
   bindToolBack();

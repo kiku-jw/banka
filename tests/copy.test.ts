@@ -34,4 +34,12 @@ describe("visible interface copy", () => {
     expect(interfaceSource).not.toMatch(/скрыт\w* глубин|невидим\w* этап/iu);
     expect(readmeSource).not.toMatch(/hidden depth|invisible stages|difficulty levels/iu);
   });
+
+  it("links to the author's public pages from the host menu", () => {
+    expect(interfaceSource).toContain('href="https://kikuai.dev/"');
+    expect(interfaceSource).toContain('href="https://t.me/kiku_ai"');
+    expect(interfaceSource).toContain('href="https://github.com/kiku-jw"');
+    expect(interfaceSource).toContain('href="https://github.com/kiku-jw/teply-krug"');
+    expect(interfaceSource.match(/target="_blank" rel="noopener noreferrer"/gu)).toHaveLength(4);
+  });
 });
