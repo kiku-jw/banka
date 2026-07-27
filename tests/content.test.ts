@@ -126,6 +126,11 @@ describe("built-in deck", () => {
     expect(deck).not.toContain("Изобрази Илию, который слышит тихий спокойный голос.");
     expect(deck).not.toContain("Придумай группе добрый вызов до следующей встречи.");
     expect(deck).not.toContain("Назови одно качество каждого из двух участников, которое пригодилось бы в совместном служении.");
+    expect(deck).not.toContain("Какая короткая беседа в служении способна ободрить на весь день?");
+    expect(deck).not.toContain("Какая короткая беседа в служении может ободрить на весь день?");
+    expect(deck).not.toMatch(/или придумай (?:её|такой)/iu);
+    expect(deck).not.toContain("Как ответишь в служении на неожиданный вопрос?");
+    expect(deck).not.toContain("Как лучше реагировать на неожиданный вопрос в служении?");
   });
 
   it("does not contain the prompts reported after live play", () => {
