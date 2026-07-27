@@ -68,6 +68,7 @@ type SoundCue = "paper" | "turn" | "glass" | "timer";
 const jarPosterUrl = "./media/question-jar-poster.webp";
 const jarIntroUrl = "./media/question-jar-intro.mp4";
 const jarQuickUrl = "./media/question-jar-quick.mp4";
+const musicFadeDurationMs = 1_800;
 const musicTrackUrls: readonly string[] = [
   "./media/music/paper-jar-whispers-1.mp3",
   "./media/music/paper-jar-whispers-2.mp3",
@@ -82,6 +83,8 @@ document.body.append(backgroundMusic);
 let musicQueue: string[] = [];
 let lastMusicTrack: string | null = null;
 let musicPlaybackRequested = false;
+let musicFadeFrame: number | null = null;
+let musicFadeRun = 0;
 
 function isActiveMusicScreen(): boolean {
   return data.session !== null
@@ -92,6 +95,57 @@ function isActiveMusicScreen(): boolean {
 
 function applyBackgroundMusicVolume(): void {
   backgroundMusic.volume = data.preferences.musicVolume / 100;
+}
+
+function cancelBackgroundMusicFade(): void {
+  musicFadeRun += 1;
+  if (musicFadeFrame !== null) {
+    window.cancelAnimationFrame(musicFadeFrame);
+    musicFadeFrame = null;
+  }
+}
+
+function fadeBackgroundMusicIn(): void {
+  cancelBackgroundMusicFade();
+  const run = musicFadeRun;
+  const targetVolume = data.preferences.musicVolume / 100;
+  const startedAt = performance.now();
+  backgroundMusic.volume = 0;
+
+  const advanceFade = (timestamp: number): void => {
+    if (run !== musicFadeRun
+      || !musicPlaybackRequested
+      || !data.preferences.musicEnabled
+      || !isActiveMusicScreen()) {
+      return;
+    }
+    const progress = Math.min(1, Math.max(0, (timestamp - startedAt) / musicFadeDurationMs));
+    backgroundMusic.volume = targetVolume * progress;
+    if (progress < 1) {
+      musicFadeFrame = window.requestAnimationFrame(advanceFade);
+    } else {
+      musicFadeFrame = null;
+    }
+  };
+
+  musicFadeFrame = window.requestAnimationFrame(advanceFade);
+}
+
+function playBackgroundMusic(fadeIn: boolean): void {
+  cancelBackgroundMusicFade();
+  const run = musicFadeRun;
+  if (fadeIn) {
+    backgroundMusic.volume = 0;
+  } else {
+    applyBackgroundMusicVolume();
+  }
+  void backgroundMusic.play().then(() => {
+    if (fadeIn && run === musicFadeRun) {
+      fadeBackgroundMusicIn();
+    }
+  }).catch(() => {
+    // A rejected autoplay promise must never interrupt the host's game.
+  });
 }
 
 function nextBackgroundMusicTrack(): string | null {
@@ -106,7 +160,7 @@ function nextBackgroundMusicTrack(): string | null {
   return nextTrack;
 }
 
-function playNextBackgroundMusicTrack(): void {
+function playNextBackgroundMusicTrack(fadeIn = false): void {
   if (!musicPlaybackRequested || !data.preferences.musicEnabled || !isActiveMusicScreen()) {
     return;
   }
@@ -114,15 +168,13 @@ function playNextBackgroundMusicTrack(): void {
   if (nextTrack === null) {
     return;
   }
-  applyBackgroundMusicVolume();
   backgroundMusic.src = nextTrack;
-  void backgroundMusic.play().catch(() => {
-    // A rejected autoplay promise must never interrupt the host's game.
-  });
+  playBackgroundMusic(fadeIn);
 }
 
-function startBackgroundMusic(resetPlaylist = false): void {
+function startBackgroundMusic(resetPlaylist = false, fadeIn = false): void {
   if (resetPlaylist) {
+    cancelBackgroundMusicFade();
     backgroundMusic.pause();
     backgroundMusic.removeAttribute("src");
     musicQueue = [];
@@ -132,34 +184,33 @@ function startBackgroundMusic(resetPlaylist = false): void {
   if (!data.preferences.musicEnabled || !isActiveMusicScreen()) {
     return;
   }
-  applyBackgroundMusicVolume();
   if (backgroundMusic.getAttribute("src") === null) {
-    playNextBackgroundMusicTrack();
+    playNextBackgroundMusicTrack(true);
   } else {
-    void backgroundMusic.play().catch(() => {
-      // Settings remain usable when the browser refuses playback.
-    });
+    playBackgroundMusic(fadeIn);
   }
 }
 
-function syncBackgroundMusic(): void {
+function syncBackgroundMusic(fadeOnResume = false): void {
   applyBackgroundMusicVolume();
   if (!musicPlaybackRequested || !data.preferences.musicEnabled || !isActiveMusicScreen()) {
+    cancelBackgroundMusicFade();
     backgroundMusic.pause();
     return;
   }
-  startBackgroundMusic();
+  startBackgroundMusic(false, fadeOnResume);
 }
 
 function stopBackgroundMusic(): void {
   musicPlaybackRequested = false;
+  cancelBackgroundMusicFade();
   backgroundMusic.pause();
   backgroundMusic.removeAttribute("src");
   musicQueue = [];
   lastMusicTrack = null;
 }
 
-backgroundMusic.addEventListener("ended", playNextBackgroundMusicTrack);
+backgroundMusic.addEventListener("ended", () => playNextBackgroundMusicTrack());
 
 function escapeHtml(value: string): string {
   return value
@@ -1382,6 +1433,7 @@ function renderSettings(): void {
   });
   settingsForm?.addEventListener("submit", (event) => {
     event.preventDefault();
+    const musicWasEnabled = data.preferences.musicEnabled;
     const formData = new FormData(settingsForm);
     const timer = Number(formData.get("timer"));
     if ([0, 45, 75, 120].includes(timer)) {
@@ -1405,7 +1457,7 @@ function renderSettings(): void {
     showToast("Настройки сохранены.");
     screen = returnScreen === "settings" ? "welcome" : returnScreen;
     render();
-    syncBackgroundMusic();
+    syncBackgroundMusic(!musicWasEnabled && data.preferences.musicEnabled);
   });
   root.querySelector<HTMLElement>("[data-action='reset-history']")?.addEventListener("click", () => {
     if (window.confirm("Вернуть все встроенные и свои вопросы в колоду?")) {
