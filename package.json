@@ -4,13 +4,13 @@
   "version": "1.0.0",
   "description": "A host-controlled Russian conversation game built around drawing questions from a jar.",
   "license": "MIT",
-  "homepage": "https://kiku-jw.github.io/teply-krug/",
+  "homepage": "https://kiku-jw.github.io/dostavay/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kiku-jw/teply-krug.git"
+    "url": "git+https://github.com/kiku-jw/dostavay.git"
   },
   "bugs": {
-    "url": "https://github.com/kiku-jw/teply-krug/issues"
+    "url": "https://github.com/kiku-jw/dostavay/issues"
   },
   "keywords": [
     "conversation-game",

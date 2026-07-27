@@ -10,13 +10,13 @@
 </p>
 
 <p align="center">
-  <a href="https://kiku-jw.github.io/teply-krug/"><img alt="Open the game" src="https://img.shields.io/badge/Open_the_game-F6BD67?style=for-the-badge&logo=github&logoColor=17130D"></a>
-  <a href="https://github.com/kiku-jw/teply-krug/actions/workflows/pages.yml"><img alt="GitHub Pages" src="https://github.com/kiku-jw/teply-krug/actions/workflows/pages.yml/badge.svg"></a>
+  <a href="https://kiku-jw.github.io/dostavay/"><img alt="Open the game" src="https://img.shields.io/badge/Open_the_game-F6BD67?style=for-the-badge&logo=github&logoColor=17130D"></a>
+  <a href="https://github.com/kiku-jw/dostavay/actions/workflows/pages.yml"><img alt="GitHub Pages" src="https://github.com/kiku-jw/dostavay/actions/workflows/pages.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-17243A?style=flat-square"></a>
 </p>
 
 <p align="center">
-  <a href="https://kiku-jw.github.io/teply-krug/">
+  <a href="https://kiku-jw.github.io/dostavay/">
     <img src="docs/media/welcome.png" alt="The Dostavay game welcome screen" width="100%">
   </a>
 </p>

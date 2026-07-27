@@ -1423,7 +1423,7 @@ function renderSettings(): void {
           <a href="https://kikuai.dev/" target="_blank" rel="noopener noreferrer"><strong>Сайт</strong><span>kikuai.dev ↗</span></a>
           <a href="https://t.me/kiku_ai" target="_blank" rel="noopener noreferrer"><strong>Telegram</strong><span>@kiku_ai ↗</span></a>
           <a href="https://github.com/kiku-jw" target="_blank" rel="noopener noreferrer"><strong>GitHub</strong><span>@kiku-jw ↗</span></a>
-          <a href="https://github.com/kiku-jw/teply-krug" target="_blank" rel="noopener noreferrer"><strong>Репозиторий</strong><span>teply-krug ↗</span></a>
+          <a href="https://github.com/kiku-jw/dostavay" target="_blank" rel="noopener noreferrer"><strong>Репозиторий</strong><span>dostavay ↗</span></a>
         </nav>
       </section>
     </section>
