@@ -37,6 +37,55 @@ test("captures a revealed game card", async ({ page }, testInfo) => {
   await page.screenshot({ path: testInfo.outputPath("finish.png"), fullPage: true });
 });
 
+test("captures an optional idea image without making it part of the prompt", async ({ page }, testInfo) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("teply-krug:v1", JSON.stringify({
+      version: 3,
+      preferences: {
+        timerSeconds: 75,
+        soundEnabled: false,
+        musicEnabled: false,
+        musicVolume: 50,
+        motionEnabled: false,
+        savedNames: ["Аня", "Борис"],
+        seenCardIds: ["spark-personal-3"],
+        disabledBuiltInCardIds: [],
+      },
+      session: {
+        players: [
+          { id: "player-1", name: "Аня" },
+          { id: "player-2", name: "Борис" },
+        ],
+        currentPlayerIndex: 0,
+        round: 1,
+        currentCardId: "spark-personal-3",
+        partnerPlayerId: null,
+        mode: "open",
+        turnsCompleted: 0,
+        targetTurns: null,
+        recentCardIds: ["spark-personal-3"],
+      },
+      customCards: [],
+    }));
+  });
+  await page.goto("./");
+  await page.getByRole("button", { name: "Продолжить" }).click();
+  await page.getByRole("button", { name: "ВЫТЯНУТЬ", exact: true }).click();
+  const ideaImage = page.locator(".question-idea-image");
+  await expect(ideaImage).toBeVisible();
+  await expect(ideaImage).toHaveAttribute("alt", "");
+  await expect(
+    page.locator(".question-card").getByText(
+      "Какую вещь из детства тебе было бы приятно снова подержать в руках?",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await expect.poll(
+    () => ideaImage.evaluate((image: HTMLImageElement) => image.naturalWidth),
+  ).toBeGreaterThan(0);
+  await page.screenshot({ path: testInfo.outputPath("idea-image.png"), fullPage: true });
+});
+
 test("captures the music settings without horizontal overflow", async ({ page }, testInfo) => {
   await page.goto("./");
   await page.getByRole("button", { name: "Настройки" }).click();

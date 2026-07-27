@@ -58,6 +58,29 @@ happen in familiar words, keep options secondary, and never expose stage names
 or token-like mechanics to players. Session duration is a promise to suggest a
 natural stopping point, not a countdown that ends someone's answer.
 
+## Optional idea images
+
+An image earns a place only when it gives several concrete starting points for
+an open answer. It must not exist merely for atmosphere or decoration.
+
+- The prompt remains complete and equally answerable when the image is hidden.
+- The prompt never tells players to inspect, choose from, or use the image.
+- Prefer several recognisable examples with equal visual weight over one
+  dominant answer.
+- Keep images out of performance cards and personal spiritual-history prompts.
+- Do not show named Bible characters, fake scripture, crosses, church imagery,
+  denominational symbols, national symbols, flags, or readable text.
+- Illustrated turns are rare and never appear consecutively.
+- Idea images have empty alternative text and remain outside the stored
+  card data.
+
+Before connecting an image, ask:
+
+1. Could it help someone who has no answer yet?
+2. Does it offer more than one direction?
+3. Would hiding it leave the question unchanged?
+4. Does it avoid implying that the pictured examples are the only answers?
+
 ## Quick read-aloud check
 
 Before shipping a card, ask:

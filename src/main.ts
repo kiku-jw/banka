@@ -1,6 +1,7 @@
 import "./styles.css";
 
 import { builtInCards } from "./content/cards";
+import { ideaVisualForTurn } from "./content/idea-visuals";
 import {
   categoryNames,
   CATEGORIES,
@@ -710,6 +711,7 @@ function renderQuestionCard(card: Card): string {
   if (session === null) {
     return "";
   }
+  const ideaVisual = ideaVisualForTurn(card.id, session.recentCardIds);
   const player = currentPlayer();
   const partner = session.players.find((player) => player.id === session.partnerPlayerId);
   const contexts = [
@@ -718,7 +720,10 @@ function renderQuestionCard(card: Card): string {
       : "",
   ].filter((context) => context.length > 0);
   return `
-    <article class="question-card ${card.mode === "perform" ? "question-card-perform" : ""}">
+    <article class="question-card ${card.mode === "perform" ? "question-card-perform" : ""} ${ideaVisual === null ? "" : "question-card-illustrated"}">
+      ${ideaVisual === null
+        ? ""
+        : `<img class="question-idea-image" src="${ideaVisual.src}" style="object-position: ${ideaVisual.position}" alt="" aria-hidden="true" width="1536" height="1024" decoding="async" />`}
       <p>${escapeHtml(card.text)}</p>
       ${contexts.length > 0 ? `<div class="card-context">${contexts.map((context) => `<span>${context}</span>`).join("")}</div>` : ""}
     </article>

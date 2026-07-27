@@ -41,6 +41,11 @@ The first note uses the full jar animation. Later notes arrive faster, with
 occasional changes in direction or extra sheets flying out. The prompt remains
 ordinary HTML text, so it stays legible on a shared display and a phone.
 
+A small set of open questions may also show a paper-diorama image with several
+concrete answer starters, such as objects, places, dishes, or hobbies. These
+images never appear on consecutive turns, and every question remains complete
+without looking at them.
+
 The first question is always Bible-related. The deck then moves gradually from
 light topics into personal stories, ministry, and group activities. Players do
 not see categories or difficulty levels; they simply continue round by round.
