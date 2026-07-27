@@ -253,6 +253,23 @@ describe("built-in deck", () => {
     );
   });
 
+  it("uses closeness mechanics without high-pressure disclosure prompts", () => {
+    const deck = builtInCards.map((card) => card.text).join("\n");
+
+    expect(deck).not.toMatch(
+      /хрустальн[^.?!]{0,30}шар|как[^.?!]{0,30}умр|через год[^.?!]{0,30}умр|дом[^.?!]{0,40}загор|чья смерть|ужасное воспоминание|когда[^.?!]{0,30}плак|как тебя любить|безопасност[^.?!]{0,30}открыва|личн[^.?!]{0,30}проблем/iu,
+    );
+    expect(deck).toEqual(
+      expect.stringContaining("Что для тебя самое важное в дружбе?"),
+    );
+    expect(deck).toEqual(
+      expect.stringContaining("Из каких поступков для тебя складывается доверие?"),
+    );
+    expect(deck).toEqual(
+      expect.stringContaining("Как друзья могут лучше всего проявить к тебе заботу?"),
+    );
+  });
+
   it("addresses players without assuming gender", () => {
     const genderedForms = [
       "мог",

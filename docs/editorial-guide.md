@@ -81,6 +81,22 @@ Before connecting an image, ask:
 3. Would hiding it leave the question unchanged?
 4. Does it avoid implying that the pictured examples are the only answers?
 
+## Depth without forced disclosure
+
+Deeper turns should reveal present values, hopes, gratitude, friendship, or
+ways of receiving support. They should not depend on recalling an obscure
+incident or require a painful confession.
+
+- Build depth gradually; do not begin with private or emotionally loaded topics.
+- Ask about what matters now or what someone hopes for, not only what happened
+  in the past.
+- Make every answer safe at more than one level: a player may answer lightly or
+  personally without breaking the prompt.
+- Use friendship and group language, not romantic-partner or dating language.
+- Do not use death, disaster, occult framing, trauma, crying, family comparison,
+  or forced discussion of a personal problem.
+- Never prescribe a disclosure time or demand a fixed number of intimate facts.
+
 ## Quick read-aloud check
 
 Before shipping a card, ask:
