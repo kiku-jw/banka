@@ -7,7 +7,7 @@ interface ReviewState {
   comments: Record<string, string>;
 }
 
-const storageKey = "dostavay:question-review:v1";
+const storageKey = "dostavay:question-review:v2";
 const root = document.querySelector<HTMLElement>("#review-app");
 const liveRegion = document.querySelector<HTMLElement>("#review-status");
 const validCardIds = new Set(builtInCards.map((card) => card.id));
