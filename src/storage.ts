@@ -7,7 +7,7 @@ const defaultPreferences: Preferences = {
   timerSeconds: 75,
   soundEnabled: true,
   musicEnabled: true,
-  musicVolume: 50,
+  musicVolume: 20,
   motionEnabled: true,
   bibleQuestionsEnabled: true,
   ministryQuestionsEnabled: true,

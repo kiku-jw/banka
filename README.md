@@ -82,7 +82,7 @@ group. There is no final ranking.
 - 15- and 30-minute modes that suggest finishing only after a complete round.
 - Independent controls for sound effects, background music, and animation, plus a separate music volume.
 - Independent switches for Bible and ministry questions.
-- Music starts at 50% volume on a new browser and keeps any later host setting.
+- Music starts at 20% volume on a new browser and keeps any later host setting.
 - A one-step Back control recovers the previous turn after an accidental **ДАЛЬШЕ** press.
 - Per-question editorial notes can be reviewed in a prefilled email draft at the end.
 - A browser-based editor for custom cards.

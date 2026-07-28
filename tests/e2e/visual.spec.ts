@@ -93,7 +93,7 @@ test("captures the music settings without horizontal overflow", async ({ page },
   await expect(page.getByLabel("Библейские вопросы")).toBeChecked();
   await expect(page.getByRole("checkbox", { name: /^Служение/u })).toBeChecked();
   await expect(page.getByLabel("Фоновая музыка")).toBeChecked();
-  await expect(page.getByLabel("Громкость музыки")).toHaveValue("50");
+  await expect(page.getByLabel("Громкость музыки")).toHaveValue("20");
   await expect(page.getByRole("link", { name: /Сайт kikuai\.dev/ })).toHaveAttribute("href", "https://kikuai.dev/");
   await expect(page.getByRole("link", { name: /Telegram @kiku_ai/ })).toHaveAttribute("href", "https://t.me/kiku_ai");
   await expect(page.getByRole("link", { name: /GitHub @kiku-jw/ })).toHaveAttribute("href", "https://github.com/kiku-jw");

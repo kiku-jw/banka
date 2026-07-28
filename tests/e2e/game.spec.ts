@@ -436,7 +436,7 @@ test("background music uses a shuffled cycle and separate persistent controls", 
   expect(firstStartVolume).toBe(0);
   await expect.poll(async () => audio.evaluate((element) =>
     element instanceof HTMLAudioElement ? element.volume : -1
-  )).toBe(0.5);
+  )).toBe(0.2);
 
   for (let index = 0; index < 4; index += 1) {
     await audio.evaluate((element) => element.dispatchEvent(new Event("ended")));
@@ -451,12 +451,12 @@ test("background music uses a shuffled cycle and separate persistent controls", 
     const values = Reflect.get(window, "__musicStartVolumes");
     return Array.isArray(values) ? values.slice(1, 5) : [];
   });
-  expect(cycleStartVolumes).toEqual([0.5, 0.5, 0.5, 0.5]);
+  expect(cycleStartVolumes).toEqual([0.2, 0.2, 0.2, 0.2]);
 
   await page.getByRole("button", { name: "Настройки" }).click();
   await expect(page.getByLabel("Фоновая музыка")).toBeChecked();
   const volume = page.getByLabel("Громкость музыки");
-  await expect(volume).toHaveValue("50");
+  await expect(volume).toHaveValue("20");
   await volume.fill("43");
   await expect(page.locator("#music-volume-value")).toHaveText("43%");
   await page.getByLabel("Фоновая музыка").uncheck();

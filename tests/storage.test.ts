@@ -70,7 +70,7 @@ describe("local persistence", () => {
     const migrated = loadStoredData(storage);
     expect(migrated.version).toBe(4);
     expect(migrated.preferences.musicEnabled).toBe(true);
-    expect(migrated.preferences.musicVolume).toBe(50);
+    expect(migrated.preferences.musicVolume).toBe(20);
     expect(migrated.preferences.bibleQuestionsEnabled).toBe(true);
     expect(migrated.preferences.ministryQuestionsEnabled).toBe(true);
     expect(migrated.session?.mode).toBe("open");
@@ -101,7 +101,7 @@ describe("local persistence", () => {
 
     expect(migrated.version).toBe(4);
     expect(migrated.preferences.musicEnabled).toBe(true);
-    expect(migrated.preferences.musicVolume).toBe(50);
+    expect(migrated.preferences.musicVolume).toBe(20);
     expect(migrated.preferences.bibleQuestionsEnabled).toBe(true);
     expect(migrated.preferences.ministryQuestionsEnabled).toBe(true);
     expect(JSON.parse(storage.getItem("teply-krug:v1") ?? "{}")).toEqual(migrated);
