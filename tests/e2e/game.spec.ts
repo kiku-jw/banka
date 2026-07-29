@@ -102,7 +102,7 @@ test("the host can turn Bible and ministry questions off independently", async (
   await page.getByRole("button", { name: "Настройки" }).click();
   await page.getByLabel("Библейские вопросы").uncheck();
   await page.getByRole("checkbox", { name: /^Служение/u }).uncheck();
-  await page.getByRole("button", { name: "Сохранить" }).click();
+  await page.getByRole("button", { name: "Назад" }).click();
 
   await page.getByRole("button", { name: "Собрать компанию" }).click();
   await page.getByLabel("Имена по порядку ходов").fill("Аня\nБорис");
@@ -143,7 +143,7 @@ test("the host can turn Bible and ministry questions off independently", async (
 
   await page.getByRole("button", { name: "Настройки" }).click();
   await page.getByLabel("Библейские вопросы").check();
-  await page.getByRole("button", { name: "Сохранить" }).click();
+  await page.getByRole("button", { name: "Назад" }).click();
   await openFallbacks(page);
   await page.getByRole("button", { name: /Выбрать тему/ }).click();
   await page.getByRole("button", { name: "Библия", exact: true }).click();
@@ -159,6 +159,43 @@ test("the host can turn Bible and ministry questions off independently", async (
       : null;
   });
   expect(reenabledCardId).toContain("-bible-");
+});
+
+test("all settings persist immediately without a Save button", async ({ page }) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: "Настройки" }).click();
+  await expect(page.getByRole("button", { name: "Сохранить" })).toHaveCount(0);
+
+  await page.getByLabel("Мягкий таймер").selectOption("45");
+  await page.getByLabel("Звуковые эффекты").uncheck();
+  await page.getByLabel("Анимации").uncheck();
+
+  const preferences = await page.evaluate(() => {
+    const raw = localStorage.getItem("teply-krug:v1");
+    const stored: unknown = raw === null ? null : JSON.parse(raw);
+    const value = typeof stored === "object" && stored !== null
+      ? Reflect.get(stored, "preferences")
+      : null;
+    return typeof value === "object" && value !== null
+      ? {
+          timerSeconds: Reflect.get(value, "timerSeconds"),
+          soundEnabled: Reflect.get(value, "soundEnabled"),
+          motionEnabled: Reflect.get(value, "motionEnabled"),
+        }
+      : null;
+  });
+  expect(preferences).toEqual({
+    timerSeconds: 45,
+    soundEnabled: false,
+    motionEnabled: false,
+  });
+  await expect(page.locator("body")).toHaveClass(/motion-off/u);
+
+  await page.reload();
+  await page.getByRole("button", { name: "Настройки" }).click();
+  await expect(page.getByLabel("Мягкий таймер")).toHaveValue("45");
+  await expect(page.getByLabel("Звуковые эффекты")).not.toBeChecked();
+  await expect(page.getByLabel("Анимации")).not.toBeChecked();
 });
 
 test("one-step back restores the previous player and revealed question", async ({ page }) => {
@@ -388,7 +425,7 @@ test("paper and glass cues follow the host sound setting", async ({ page }) => {
 
   await page.getByRole("button", { name: "Настройки" }).click();
   await page.getByLabel("Звуковые эффекты").uncheck();
-  await page.getByRole("button", { name: "Сохранить" }).click();
+  await page.getByRole("button", { name: "Назад" }).click();
   await page.getByRole("button", { name: "ДАЛЬШЕ", exact: true }).click();
   const disabledCount = await page.evaluate(() => {
     const values = Reflect.get(window, "__soundStarts");
@@ -457,11 +494,14 @@ test("background music uses a shuffled cycle and separate persistent controls", 
   await expect(page.getByLabel("Фоновая музыка")).toBeChecked();
   const volume = page.getByLabel("Громкость музыки");
   await expect(volume).toHaveValue("20");
+  await expect(page.getByRole("button", { name: "Сохранить" })).toHaveCount(0);
   await volume.fill("43");
   await expect(page.locator("#music-volume-value")).toHaveText("43%");
+  await expect.poll(async () => audio.evaluate((element) =>
+    element instanceof HTMLAudioElement ? element.volume : -1
+  )).toBe(0.43);
   await page.getByLabel("Фоновая музыка").uncheck();
   await expect(volume).toBeDisabled();
-  await page.getByRole("button", { name: "Сохранить" }).click();
 
   const preferences = await page.evaluate(() => {
     const raw = localStorage.getItem("teply-krug:v1");
@@ -492,10 +532,9 @@ test("background music uses a shuffled cycle and separate persistent controls", 
   });
   expect(pauseCount).toBeGreaterThan(0);
 
-  await page.getByRole("button", { name: "Настройки" }).click();
   await expect(page.getByLabel("Громкость музыки")).toHaveValue("43");
   await page.getByLabel("Фоновая музыка").check();
-  await page.getByRole("button", { name: "Сохранить" }).click();
+  await expect(volume).toBeEnabled();
   const resumedStartVolume = await page.evaluate(() => {
     const values = Reflect.get(window, "__musicStartVolumes");
     return Array.isArray(values) ? values.at(-1) : null;
@@ -506,6 +545,7 @@ test("background music uses a shuffled cycle and separate persistent controls", 
   )).toBe(0.43);
   await expect(audio).toHaveAttribute("src", /paper-jar-whispers-\d\.mp3$/);
 
+  await page.getByRole("button", { name: "Назад" }).click();
   await page.reload();
   await expect(audio).not.toHaveAttribute("src", /paper-jar-whispers-\d\.mp3$/);
   await page.getByRole("button", { name: "Продолжить" }).click();

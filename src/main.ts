@@ -1386,7 +1386,7 @@ function renderSettings(): void {
         <button class="text-button" data-action="back-from-tool">Назад</button>
         <p class="section-kicker">Для хоста</p>
         <h1 id="settings-title">Настройки игры</h1>
-        <p>Изменения сохраняются только в этом браузере.</p>
+        <p>Изменения применяются сразу и сохраняются только в этом браузере.</p>
       </div>
       <form class="settings-panel" id="settings-form">
         <fieldset class="settings-section">
@@ -1407,7 +1407,6 @@ function renderSettings(): void {
         <label class="setting-row" for="music-volume"><span><strong>Громкость музыки</strong><small>Отдельно от шороха записок и других эффектов.</small></span><span class="volume-control"><input id="music-volume" name="music-volume" type="range" min="0" max="100" step="1" value="${data.preferences.musicVolume}" ${data.preferences.musicEnabled ? "" : "disabled"} /><output id="music-volume-value" for="music-volume">${data.preferences.musicVolume}%</output></span></label>
         <label class="setting-row"><span><strong>Анимации</strong><small>Банка, записки и переходы между ходами.</small></span><input name="motion" type="checkbox" ${data.preferences.motionEnabled ? "checked" : ""} /></label>
         </fieldset>
-        <button class="button button-primary" type="submit">Сохранить</button>
       </form>
       <div class="data-panel">
         <div><strong>Вопросы</strong><span>Свои карточки и скрытие встроенных</span><button class="button button-secondary" data-action="editor">Открыть колоду</button></div>
@@ -1430,22 +1429,15 @@ function renderSettings(): void {
   `, { compactHeader: true });
   bindToolBack();
   const settingsForm = root.querySelector<HTMLFormElement>("#settings-form");
-  const musicToggle = root.querySelector<HTMLInputElement>("input[name='music']");
   const musicVolume = root.querySelector<HTMLInputElement>("#music-volume");
   const musicVolumeValue = root.querySelector<HTMLOutputElement>("#music-volume-value");
-  musicToggle?.addEventListener("change", () => {
-    if (musicVolume !== null) {
-      musicVolume.disabled = !musicToggle.checked;
+  const applySettings = (): void => {
+    if (settingsForm === null) {
+      return;
     }
-  });
-  musicVolume?.addEventListener("input", () => {
-    if (musicVolumeValue !== null) {
-      musicVolumeValue.value = `${musicVolume.value}%`;
-    }
-  });
-  settingsForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
+    const previousTimer = data.preferences.timerSeconds;
     const musicWasEnabled = data.preferences.musicEnabled;
+    const previousMusicVolume = data.preferences.musicVolume;
     const formData = new FormData(settingsForm);
     const timer = Number(formData.get("timer"));
     if ([0, 45, 75, 120].includes(timer)) {
@@ -1464,12 +1456,27 @@ function renderSettings(): void {
       data.preferences.musicVolume = musicVolumeNumber;
     }
     data.preferences.motionEnabled = formData.get("motion") === "on";
-    resetTimer();
+    if (previousTimer !== data.preferences.timerSeconds) {
+      resetTimer();
+    }
     persist();
-    showToast("Настройки сохранены.");
-    screen = returnScreen === "settings" ? "welcome" : returnScreen;
-    render();
-    syncBackgroundMusic(!musicWasEnabled && data.preferences.musicEnabled);
+    document.body.classList.toggle("motion-off", !data.preferences.motionEnabled);
+    if (musicVolume !== null) {
+      musicVolume.disabled = !data.preferences.musicEnabled;
+    }
+    if (musicWasEnabled !== data.preferences.musicEnabled) {
+      syncBackgroundMusic(!musicWasEnabled && data.preferences.musicEnabled);
+    } else if (previousMusicVolume !== data.preferences.musicVolume) {
+      cancelBackgroundMusicFade();
+      applyBackgroundMusicVolume();
+    }
+  };
+  settingsForm?.addEventListener("change", applySettings);
+  musicVolume?.addEventListener("input", () => {
+    if (musicVolumeValue !== null) {
+      musicVolumeValue.value = `${musicVolume.value}%`;
+    }
+    applySettings();
   });
   root.querySelector<HTMLElement>("[data-action='reset-history']")?.addEventListener("click", () => {
     if (window.confirm("Вернуть все встроенные и свои вопросы в колоду?")) {

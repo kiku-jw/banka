@@ -1,0 +1,6 @@
+{
+  "taskId": "issue-17",
+  "status": "FAIL",
+  "verifiedAt": "2026-07-30T00:58:00+03:00",
+  "reason": "AC1 through AC6 pass locally. AC7 cannot pass until the committed revision deploys to GitHub Pages and receives a live readback."
+}

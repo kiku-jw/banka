@@ -1744,11 +1744,6 @@ textarea:hover {
   text-align: right;
 }
 
-.settings-panel > .button {
-  justify-self: end;
-  margin-top: 24px;
-}
-
 .data-panel {
   margin-top: 30px;
   display: grid;

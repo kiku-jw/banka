@@ -1,0 +1,42 @@
+{
+  "taskId": "issue-17",
+  "status": "IN_PROGRESS",
+  "implementationRevision": null,
+  "acceptanceCriteria": [
+    {
+      "id": "AC1",
+      "status": "PASS",
+      "proof": "Storage migration tests and browser playback prove the 20 percent default"
+    },
+    {
+      "id": "AC2",
+      "status": "PASS",
+      "proof": "Browser test observes slider text, active audio volume, localStorage, and reload at 43 percent"
+    },
+    {
+      "id": "AC3",
+      "status": "PASS",
+      "proof": "Browser test observes immediate disable/pause and enable/fade behavior"
+    },
+    {
+      "id": "AC4",
+      "status": "PASS",
+      "proof": "Browser tests cover immediate timer, sound, motion, Bible, and ministry persistence"
+    },
+    {
+      "id": "AC5",
+      "status": "PASS",
+      "proof": "DOM assertion and desktop/mobile screenshots prove no settings Save button"
+    },
+    {
+      "id": "AC6",
+      "status": "PASS",
+      "proof": "Native DOM, localStorage, and HTMLAudioElement implementation with no dependency or schema change"
+    },
+    {
+      "id": "AC7",
+      "status": "UNKNOWN",
+      "proof": "Local suites pass; committed revision, Pages deployment, and live readback are pending"
+    }
+  ]
+}
