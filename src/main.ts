@@ -301,7 +301,7 @@ function currentPlayer() {
   return session.players[session.currentPlayerIndex] ?? null;
 }
 
-function drawForCurrent(category?: Category, excludedCardIds: string[] = []): Card | null {
+function drawForCurrent(category?: Category | readonly Category[], excludedCardIds: string[] = []): Card | null {
   const session = data.session;
   if (session === null) {
     return null;
@@ -1042,37 +1042,53 @@ function openPartnerDialog(): void {
 }
 
 function openCategoryDialog(): void {
+  const spiritualCategories: Category[] = [];
+  if (categoryEnabled("service")) {
+    spiritualCategories.push("service");
+  }
+  if (categoryEnabled("bible")) {
+    spiritualCategories.push("bible");
+  }
   const dialog = openDialog(`
     <div class="dialog-panel">
       <button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button>
       <h2>О чём хочется вопрос?</h2>
       <p>Выбери тему, и вопрос сменится.</p>
       <div class="dialog-options dialog-options-categories">
-        ${CATEGORIES.filter(categoryEnabled).map((category) => `<button data-category="${category}">${categoryNames[category]}</button>`).join("")}
+        <button data-category="personal">${categoryNames.personal}</button>
+        <button data-category="stories">${categoryNames.stories}</button>
+        ${spiritualCategories.length > 0 ? '<button data-spiritual-topic>О духовном</button>' : ""}
+        <button data-category="creative">${categoryNames.creative}</button>
       </div>
     </div>
   `);
+  const chooseCategory = (category: Category | readonly Category[]): void => {
+    const previousCardId = data.session?.currentCardId ?? null;
+    const wasRevealed = cardRevealed;
+    const selected = drawForCurrent(category);
+    const player = currentPlayer();
+    dialog?.close();
+    if (selected !== null && player !== null) {
+      playSound("glass");
+      beginJarReveal(player.name, selected.text);
+    } else if (data.session !== null) {
+      data.session.currentCardId = previousCardId;
+      cardRevealed = wasRevealed;
+      persist();
+      render();
+      showToast("В этой теме пока нет доступных вопросов.");
+    }
+  };
   dialog?.querySelectorAll<HTMLElement>("[data-category]").forEach((button) => {
     button.addEventListener("click", () => {
       const category = button.dataset.category;
       if (category !== undefined && isCategoryValue(category)) {
-        const previousCardId = data.session?.currentCardId ?? null;
-        const wasRevealed = cardRevealed;
-        const selected = drawForCurrent(category);
-        const player = currentPlayer();
-        dialog.close();
-        if (selected !== null && player !== null) {
-          playSound("glass");
-          beginJarReveal(player.name, selected.text);
-        } else if (data.session !== null) {
-          data.session.currentCardId = previousCardId;
-          cardRevealed = wasRevealed;
-          persist();
-          render();
-          showToast("В этой теме пока нет доступных вопросов.");
-        }
+        chooseCategory(category);
       }
     });
+  });
+  dialog?.querySelector<HTMLElement>("[data-spiritual-topic]")?.addEventListener("click", () => {
+    chooseCategory(spiritualCategories);
   });
 }
 

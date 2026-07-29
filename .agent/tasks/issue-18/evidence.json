@@ -1,0 +1,42 @@
+{
+  "taskId": "issue-18",
+  "status": "IN_PROGRESS",
+  "implementationRevision": null,
+  "acceptanceCriteria": [
+    {
+      "id": "AC1",
+      "status": "PASS",
+      "proof": "Browser assertions and responsive screenshots show one combined option and no separate Bible or ministry buttons"
+    },
+    {
+      "id": "AC2",
+      "status": "PASS",
+      "proof": "Unit test deterministically selects both service and Bible cards through the union filter"
+    },
+    {
+      "id": "AC3",
+      "status": "PASS",
+      "proof": "Browser test enables only Bible and selects a Bible card through the combined option"
+    },
+    {
+      "id": "AC4",
+      "status": "PASS",
+      "proof": "Browser test proves the combined option is absent when both underlying preferences are disabled"
+    },
+    {
+      "id": "AC5",
+      "status": "PASS",
+      "proof": "Separate settings controls and editor category names remain unchanged"
+    },
+    {
+      "id": "AC6",
+      "status": "PASS",
+      "proof": "Canonical draw path, history, empty-pool recovery, storage, and local-only architecture are preserved"
+    },
+    {
+      "id": "AC7",
+      "status": "UNKNOWN",
+      "proof": "Local suites pass; committed revision, Pages deployment, and live readback are pending"
+    }
+  ]
+}

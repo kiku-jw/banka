@@ -137,6 +137,7 @@ test("the host can turn Bible and ministry questions off independently", async (
 
   await openFallbacks(page);
   await page.getByRole("button", { name: /Выбрать тему/ }).click();
+  await expect(page.getByRole("button", { name: "О духовном", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Библия", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Служение", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "Закрыть" }).click();
@@ -146,7 +147,7 @@ test("the host can turn Bible and ministry questions off independently", async (
   await page.getByRole("button", { name: "Назад" }).click();
   await openFallbacks(page);
   await page.getByRole("button", { name: /Выбрать тему/ }).click();
-  await page.getByRole("button", { name: "Библия", exact: true }).click();
+  await page.getByRole("button", { name: "О духовном", exact: true }).click();
 
   const reenabledCardId = await page.evaluate(() => {
     const raw = localStorage.getItem("teply-krug:v1");
@@ -277,7 +278,9 @@ test("answering together and choosing a theme stay optional", async ({ page }) =
 
   await openFallbacks(page);
   await page.getByRole("button", { name: /Выбрать тему/ }).click();
-  await page.getByRole("button", { name: "Библия", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Библия", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Служение", exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "О духовном", exact: true }).click();
   await expect(page.locator(".question-card")).toBeVisible();
   const currentCardId = await page.evaluate(() => {
     const raw = localStorage.getItem("teply-krug:v1");
@@ -289,7 +292,7 @@ test("answering together and choosing a theme stay optional", async ({ page }) =
     const id = typeof session === "object" && session !== null ? Reflect.get(session, "currentCardId") : null;
     return typeof id === "string" ? id : "";
   });
-  expect(currentCardId).toContain("-bible-");
+  expect(currentCardId).toMatch(/-(?:bible|service)-/u);
 });
 
 test("an unavailable host theme keeps the current question intact", async ({ page }) => {

@@ -45,6 +45,16 @@ describe("game model", () => {
     expect(result.seenCardIds).toHaveLength(1);
   });
 
+  it("draws from the union of selected categories", () => {
+    const pool: Card[] = [
+      card("personal", "spark", "personal", "answer", "Какой день недели тебе нравится больше всего?"),
+      card("service", "spark", "service", "answer", "Какой случай в служении тебя ободрил?"),
+      card("bible", "spark", "bible", "answer", "Какой библейский рассказ тебе особенно близок?"),
+    ];
+    expect(drawCard(pool, 1, [], () => 0, ["service", "bible"]).card?.category).toBe("service");
+    expect(drawCard(pool, 1, [], () => 0.99, ["service", "bible"]).card?.category).toBe("bible");
+  });
+
   it("expands the available stages instead of replacing the whole deck", () => {
     const pool: Card[] = [
       card("spark", "spark", "personal", "answer", "Вспомни любимую игру из детства."),

@@ -104,6 +104,25 @@ test("captures the music settings without horizontal overflow", async ({ page },
   await page.screenshot({ path: testInfo.outputPath("music-settings.png"), fullPage: true });
 });
 
+test("captures the combined spiritual topic chooser", async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./");
+  await page.getByRole("button", { name: "Собрать компанию" }).click();
+  await page.getByLabel("Имена по порядку ходов").fill("Аня\nБорис");
+  await page.getByRole("button", { name: "Начать игру" }).click();
+  await page.getByRole("button", { name: "ВЫТЯНУТЬ", exact: true }).click();
+  await page.getByText("Если вопрос не подходит", { exact: true }).click();
+  await page.getByRole("button", { name: /Выбрать тему/ }).click();
+  await expect(page.getByRole("heading", { name: "О чём хочется вопрос?" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "О духовном", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Библия", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Служение", exact: true })).toHaveCount(0);
+  const viewportWidth = await page.evaluate(() => window.innerWidth);
+  const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+  expect(documentWidth).toBe(viewportWidth);
+  await page.screenshot({ path: testInfo.outputPath("spiritual-topic.png"), fullPage: true });
+});
+
 test("captures question feedback and the finish handoff", async ({ page }, testInfo) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("./");

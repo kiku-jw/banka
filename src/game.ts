@@ -1,5 +1,7 @@
 import type { Card, Category, DrawResult, Player, SessionMode, Stage } from "./types";
 
+type CategoryFilter = Category | readonly Category[];
+
 export const STAGES: Stage[] = ["spark", "closer", "together"];
 export const CATEGORIES: Category[] = ["personal", "stories", "service", "bible", "creative"];
 export const SESSION_MODES: SessionMode[] = ["quick", "standard", "open"];
@@ -71,7 +73,17 @@ function openingKey(text: string): string {
   return text.trim().split(/\s+/u)[0]?.toLocaleLowerCase("ru-RU").replace(/[«»"!?.,:]/gu, "") ?? "";
 }
 
-function followsSmoothly(card: Card, previous: Card | null, category?: Category): boolean {
+function matchesCategory(card: Card, category?: CategoryFilter): boolean {
+  if (category === undefined) {
+    return true;
+  }
+  if (typeof category === "string") {
+    return card.category === category;
+  }
+  return category.includes(card.category);
+}
+
+function followsSmoothly(card: Card, previous: Card | null, category?: CategoryFilter): boolean {
   if (previous === null) {
     return true;
   }
@@ -90,14 +102,14 @@ export function drawCard(
   round: number,
   seenCardIds: string[],
   random: () => number = Math.random,
-  category?: Category,
+  category?: CategoryFilter,
   excludedCardIds: string[] = [],
   previousCardId: string | null = null,
 ): DrawResult {
   const stages = allowedStages(round);
   const eligible = cards.filter((card) =>
     stages.some((stage) => stage === card.stage)
-    && (category === undefined || card.category === category)
+    && matchesCategory(card, category)
     && !excludedCardIds.includes(card.id),
   );
   let available = eligible.filter((card) => !seenCardIds.includes(card.id));
