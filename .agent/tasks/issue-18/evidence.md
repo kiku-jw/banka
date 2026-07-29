@@ -1,8 +1,8 @@
 # Evidence
 
-Status before publication: AC1 through AC6 pass locally. AC7 remains unproven
-until the exact committed revision deploys to GitHub Pages and receives a live
-browser readback.
+Final status: PASS. Implementation revision
+`aa022151afa6673de3f78b577ab9b210c0abc454` deployed successfully through
+GitHub Pages run `30495934787` and passed a live browser readback.
 
 ## Acceptance criteria
 
@@ -23,8 +23,15 @@ browser readback.
   existing `drawCard` path. No storage, history, card data, dependency, service,
   or initial Bible-first behavior changed. The empty-topic recovery regression
   passes.
-- **AC7 — UNKNOWN.** All local checks pass; committed revision, Pages
-  deployment, and live readback are pending.
+- **AC7 — PASS.** GitHub Pages run
+  `https://github.com/kiku-jw/dostavay/actions/runs/30495934787` completed with
+  successful build and deploy jobs for the exact implementation revision. A
+  fresh Playwright CLI session opened `https://kiku-jw.github.io/dostavay/`,
+  started a real game, and opened the live chooser. Its snapshot contained
+  exactly the four intended topic buttons and no separate Bible/ministry
+  buttons. Selecting `О духовном` updated production localStorage to
+  `currentCardId: "spark-service-2"` while the seen history also contained a
+  Bible card, confirming the combined live pool.
 
 ## Local verification
 
@@ -38,3 +45,7 @@ browser readback.
   `raw/spiritual-topic-desktop.jpg` and
   `raw/spiritual-topic-mobile.jpg` show four balanced choices, the natural
   combined label, and no overflow.
+- GitHub Pages run `30495934787` — PASS: build and deploy jobs succeeded for
+  `aa022151afa6673de3f78b577ab9b210c0abc454`.
+- Live Playwright CLI smoke — PASS: production labels, old-button absence, and
+  a service-category result selected through `О духовном` were read back.

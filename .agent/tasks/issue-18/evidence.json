@@ -1,7 +1,8 @@
 {
   "taskId": "issue-18",
-  "status": "IN_PROGRESS",
-  "implementationRevision": null,
+  "status": "PASS",
+  "implementationRevision": "aa022151afa6673de3f78b577ab9b210c0abc454",
+  "pagesRun": "https://github.com/kiku-jw/dostavay/actions/runs/30495934787",
   "acceptanceCriteria": [
     {
       "id": "AC1",
@@ -35,8 +36,8 @@
     },
     {
       "id": "AC7",
-      "status": "UNKNOWN",
-      "proof": "Local suites pass; committed revision, Pages deployment, and live readback are pending"
+      "status": "PASS",
+      "proof": "Pages run 30495934787 succeeded and live Playwright readback proved the four-button dialog and a service card selected through the combined option"
     }
   ]
 }
