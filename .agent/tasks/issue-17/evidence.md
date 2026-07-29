@@ -1,7 +1,8 @@
 # Evidence
 
-Status before publication: implementation is locally verified; AC7 remains
-unproven until the exact committed revision deploys to GitHub Pages.
+Final status: PASS. Implementation revision
+`2a7c0c62ed77aabd213be204c82b2557957076f0` deployed successfully through
+GitHub Pages run `30494505083` and passed a live browser readback.
 
 ## Acceptance criteria
 
@@ -26,8 +27,15 @@ unproven until the exact committed revision deploys to GitHub Pages.
 - **AC6 — PASS.** The diff uses the existing form, localStorage persistence,
   native range/change events, and native audio element. No package, storage
   schema, runtime service, or autoplay entry point changed.
-- **AC7 — UNKNOWN.** Local verification passed, but GitHub Pages deployment and
-  production readback require a committed and pushed revision.
+- **AC7 — PASS.** GitHub Pages run
+  `https://github.com/kiku-jw/dostavay/actions/runs/30494505083` completed with
+  successful build and deploy jobs for the exact implementation revision. A
+  fresh Playwright CLI session opened `https://kiku-jw.github.io/dostavay/`,
+  observed the 20% default and no Save button, persisted 43% without leaving
+  settings, started an active game with music playing, then moved the slider
+  from 43% to 20%. The live audio element immediately reported volume `0.2`
+  while still playing, and localStorage immediately reported
+  `musicVolume: 20`.
 
 ## Local verification
 
@@ -40,3 +48,8 @@ unproven until the exact committed revision deploys to GitHub Pages.
 - Visual inspection — PASS:
   `raw/settings-desktop.jpg` and `raw/settings-mobile.jpg` show 20%, the
   immediate-apply explanation, no settings Save button, and no overflow.
+- GitHub Pages run `30494505083` — PASS: build and deploy jobs succeeded for
+  `2a7c0c62ed77aabd213be204c82b2557957076f0`.
+- Live Playwright CLI smoke — PASS: production default, immediate slider text,
+  active audio volume, local persistence, and Save-button absence were read
+  back from the deployed page.

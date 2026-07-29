@@ -1,7 +1,8 @@
 {
   "taskId": "issue-17",
-  "status": "IN_PROGRESS",
-  "implementationRevision": null,
+  "status": "PASS",
+  "implementationRevision": "2a7c0c62ed77aabd213be204c82b2557957076f0",
+  "pagesRun": "https://github.com/kiku-jw/dostavay/actions/runs/30494505083",
   "acceptanceCriteria": [
     {
       "id": "AC1",
@@ -35,8 +36,8 @@
     },
     {
       "id": "AC7",
-      "status": "UNKNOWN",
-      "proof": "Local suites pass; committed revision, Pages deployment, and live readback are pending"
+      "status": "PASS",
+      "proof": "Pages run 30494505083 succeeded and live Playwright readback proved immediate active audio volume, persistence, default, and Save-button absence"
     }
   ]
 }
