@@ -23,8 +23,11 @@ Temporary task artifact for `kiku-jw/dostavay#19`.
   opening draw (`spark-personal-8`), next turn, timer-off presentation,
   disabled Bible/service topics (`spark-stories-4`), fallback topic chooser,
   and 390px overflow (`scrollWidth = clientWidth = 390`).
-- AC8 — PENDING: the 20-card player-review follow-up has passed locally and is
-  awaiting publication through the existing Pages workflow.
+- AC8 — PASS: follow-up commit
+  `da9cea3bd546d09f1fdc7a4d1fa8201687fac1fa` was published from `main`.
+  GitHub Pages run `30690781930` completed its test, browser, and deploy gates;
+  the live page returned HTTP 200 and its card asset contains the replacement
+  question but not the superseded wording.
 
 ## Fresh commands
 
@@ -37,6 +40,12 @@ PLAYWRIGHT_PORT=4189 npm run test:e2e
 
 git diff --check
   clean
+
+GitHub Pages run 30690781930
+  build success; browser-flow gate success; deploy success
+
+curl https://kiku-jw.github.io/dostavay/
+  HTTP 200; deployed card asset contains the replacement question
 
 ```
 
