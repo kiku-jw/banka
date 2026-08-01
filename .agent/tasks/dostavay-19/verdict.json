@@ -1,0 +1,14 @@
+{
+  "task": "dostavay-19",
+  "verdict": "PASS",
+  "reviewed_sha": "ecd7d5db1f0767f4285b012b8fa0e42ee6e3bc4d",
+  "acceptance_passed": 8,
+  "acceptance_failed": 0,
+  "verification": {
+    "unit_tests": "53 passed",
+    "e2e_tests": "61 passed, 1 intentionally skipped",
+    "manual_smoke": "desktop and mobile passed",
+    "pages_run": "30689958321 succeeded",
+    "live_url": "https://kiku-jw.github.io/dostavay/"
+  }
+}

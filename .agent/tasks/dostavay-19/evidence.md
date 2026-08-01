@@ -23,7 +23,10 @@ Temporary task artifact for `kiku-jw/dostavay#19`.
   opening draw (`spark-personal-8`), next turn, timer-off presentation,
   disabled Bible/service topics (`spark-stories-4`), fallback topic chooser,
   and 390px overflow (`scrollWidth = clientWidth = 390`).
-- AC8 — PENDING: publish and verify the existing GitHub Pages workflow.
+- AC8 — PASS: commit `ecd7d5db1f0767f4285b012b8fa0e42ee6e3bc4d`
+  was published from `main`. GitHub Pages run `30689958321` completed both
+  build and deploy successfully, and the live page returned HTTP 200 with the
+  new welcome, setup, and timer-off strings in its deployed asset.
 
 ## Fresh commands
 
@@ -36,6 +39,12 @@ npm run test:e2e
 
 git diff --check
   clean
+
+GitHub Pages run 30689958321
+  build success; browser-flow gate success; deploy success
+
+curl https://kiku-jw.github.io/dostavay/
+  HTTP 200; deployed asset contains the final product copy
 ```
 
 ## Manual smoke artifacts

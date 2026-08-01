@@ -1,6 +1,6 @@
 {
   "task": "dostavay-19",
-  "phase": "verification",
+  "phase": "complete",
   "acceptance": [
     { "id": "AC1", "status": "pass", "evidence": "15 groups and 360 prompts audited; 90 rewritten; 270 accepted" },
     { "id": "AC2", "status": "pass", "evidence": "human audit and content regression tests" },
@@ -9,6 +9,8 @@
     { "id": "AC5", "status": "pass", "evidence": "storage and timer-expiry coverage" },
     { "id": "AC6", "status": "pass", "evidence": "53 unit tests and build; 61 E2E passed with 1 viewport skip" },
     { "id": "AC7", "status": "pass", "evidence": "headed desktop/mobile smoke and 390px overflow check" },
-    { "id": "AC8", "status": "pending", "evidence": "awaiting Pages publication" }
-  ]
+    { "id": "AC8", "status": "pass", "evidence": "Pages run 30689958321 succeeded; live page returned HTTP 200 with final asset" }
+  ],
+  "reviewed_sha": "ecd7d5db1f0767f4285b012b8fa0e42ee6e3bc4d",
+  "deployment_url": "https://kiku-jw.github.io/dostavay/"
 }
