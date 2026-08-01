@@ -31,6 +31,16 @@ about another language or place, but any language or place must work.
   not assume pioneering, public witnessing, speaking with children, travel, or
   a large collection of memorable calls.
 - Keep deeper cards personal but voluntary. They should invite a real story without demanding details about trauma, loss, family conflict, or past wrongdoing.
+- Do not state a player's experience, spiritual response, or lesson as fact.
+  Questions such as "which account strengthened your faith" or "which choice
+  helps you be courageous" require the player to accept the author's premise.
+  Ask for an observation, preference, or imagination instead. When a specific
+  experience is genuinely worth inviting, make it conditional and give a
+  natural path such as "if so, tell us."
+- Do not treat a memorable incident, answered prayer, sacrifice, conversion
+  story, or ministry result as universal. A player must be able to answer
+  honestly without inventing evidence or explaining why the premise does not
+  apply.
 
 The internal stage and category tags are editorial tools, not visible game
 chapters. The selector should blend them gradually and avoid consecutive cards
@@ -105,3 +115,5 @@ Before shipping a card, ask:
 2. Can someone answer without first translating the question into normal language?
 3. Does it work both in one room and when everyone joins over video?
 4. Could it start a story or a laugh rather than an oral exam?
+5. Does it leave the player's experience and conclusion for the player to
+   supply?

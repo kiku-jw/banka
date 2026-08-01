@@ -1,9 +1,10 @@
 import "./styles.css";
 
-import { builtInCards } from "./content/cards";
+import { builtInCards, openingSafeCardIds } from "./content/cards";
 import { ideaVisualForTurn } from "./content/idea-visuals";
 import {
   categoryNames,
+  cardsForOpening,
   CATEGORIES,
   createPlayers,
   drawCard,
@@ -301,14 +302,18 @@ function currentPlayer() {
   return session.players[session.currentPlayerIndex] ?? null;
 }
 
-function drawForCurrent(category?: Category | readonly Category[], excludedCardIds: string[] = []): Card | null {
+function drawForCurrent(
+  category?: Category | readonly Category[],
+  excludedCardIds: string[] = [],
+  cardPool?: Card[],
+): Card | null {
   const session = data.session;
   if (session === null) {
     return null;
   }
   const previousCardId = session.recentCardIds.at(-1) ?? null;
   const result = drawCard(
-    enabledCards(),
+    cardPool ?? enabledCards(),
     session.round,
     data.preferences.seenCardIds,
     Math.random,
@@ -393,6 +398,9 @@ function bindGlobalActions(): void {
 function renderWelcome(): void {
   const canContinue = data.session !== null && data.session.players.length >= 2;
   const seenCount = data.preferences.seenCardIds.length;
+  const historyChip = seenCount === 0
+    ? "<strong>360</strong><span>без повторов</span>"
+    : `<strong>${seenCount}</strong><span>уже вытянуто</span>`;
   renderShell(`
     <section class="welcome" aria-labelledby="welcome-title">
       <div class="welcome-copy">
@@ -415,7 +423,7 @@ function renderWelcome(): void {
           <span class="loose-note loose-note-two" aria-hidden="true"></span>
         </div>
         <div class="scene-chip chip-left"><strong>15/30</strong><span>минут</span></div>
-        <div class="scene-chip chip-right"><strong>${seenCount}</strong><span>без повторов</span></div>
+        <div class="scene-chip chip-right">${historyChip}</div>
       </div>
       <div class="welcome-facts" aria-label="Как устроена игра">
         <div><strong>360</strong><span>записок в банке</span></div>
@@ -480,7 +488,7 @@ function renderSetup(): void {
         <button class="text-button" data-action="back">Назад</button>
         <h1 id="setup-title">Кто сегодня играет?</h1>
         <p>Вставьте имена через запятую или с новой строки. Их порядок станет порядком ходов.</p>
-        <p>${data.preferences.bibleQuestionsEnabled ? "Первая записка будет о Библии." : "Темы будут чередоваться сами."} Неподходящий вопрос можно пропустить без объяснений.</p>
+        <p>Первая записка будет лёгкой, а дальше темы станут чередоваться сами. Неподходящий вопрос можно пропустить без объяснений.</p>
       </div>
       <form class="setup-form" id="setup-form">
         <div class="form-heading"><h2>Имена</h2><span id="player-count">${validNames().length}/12</span></div>
@@ -555,7 +563,12 @@ function renderSetup(): void {
       recentCardIds: [],
     };
     previousTurn = null;
-    drawForCurrent(data.preferences.bibleQuestionsEnabled ? "bible" : undefined);
+    const availableCards = enabledCards();
+    drawForCurrent(
+      undefined,
+      [],
+      cardsForOpening(availableCards, openingSafeCardIds, data.preferences.seenCardIds),
+    );
     screen = "game";
     persist();
     render();

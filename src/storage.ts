@@ -4,7 +4,7 @@ import type { Card, CardMode, Category, Player, Preferences, SessionMode, Sessio
 const STORAGE_KEY = "teply-krug:v1";
 
 const defaultPreferences: Preferences = {
-  timerSeconds: 75,
+  timerSeconds: 0,
   soundEnabled: true,
   musicEnabled: true,
   musicVolume: 20,

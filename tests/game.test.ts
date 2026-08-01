@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { builtInCards } from "../src/content/cards";
+import { builtInCards, openingSafeCardIds } from "../src/content/cards";
 import {
+  cardsForOpening,
   createPlayers,
   drawCard,
   estimatedMinutesForTurns,
@@ -33,6 +34,16 @@ describe("game model", () => {
     const second = drawCard(builtInCards, 1, first.seenCardIds, () => 0);
     expect(second.card?.id).not.toBe(first.card?.id);
     expect(second.recycled).toBe(false);
+  });
+
+  it("uses the curated opening pool and falls back when it is unavailable", () => {
+    const curated = cardsForOpening(builtInCards, openingSafeCardIds, []);
+    expect(curated).toHaveLength(openingSafeCardIds.length);
+    curated.forEach((candidate) => expect(openingSafeCardIds).toContain(candidate.id));
+
+    const fallback = builtInCards.filter((candidate) => candidate.category === "personal");
+    expect(cardsForOpening(fallback, ["missing-card-id"], [])).toEqual(fallback);
+    expect(cardsForOpening(builtInCards, openingSafeCardIds, [...openingSafeCardIds])).toEqual(builtInCards);
   });
 
   it("recycles only an exhausted eligible category", () => {

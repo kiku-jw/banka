@@ -29,6 +29,10 @@ jobs:
         run: npm ci
       - name: Verify
         run: npm run check
+      - name: Install Chromium
+        run: npm exec playwright install --with-deps chromium
+      - name: Verify browser flows
+        run: npm run test:e2e
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

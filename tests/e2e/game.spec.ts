@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { openingSafeCardIds } from "../../src/content/cards";
+
 async function startGame(
   page: import("@playwright/test").Page,
   count = 6,
@@ -28,6 +30,14 @@ async function openFallbacks(page: import("@playwright/test").Page): Promise<voi
   await summary.click();
   await expect(page.getByRole("button", { name: /Другой вопрос/ })).toBeVisible();
 }
+
+test("the welcome screen describes the no-repeat deck without a zero-count ambiguity", async ({ page }) => {
+  await page.goto("./");
+  const historyChip = page.locator(".scene-chip.chip-right");
+  await expect(historyChip).toContainText("360");
+  await expect(historyChip).toContainText("без повторов");
+  await expect(historyChip).not.toContainText("0 без повторов");
+});
 
 test("the jar uses an intro and three short repeat treatments", async ({ page }) => {
   await page.addInitScript(() => {
@@ -70,7 +80,7 @@ test("bulk names and two-person play work without tokens", async ({ page }) => {
   await expect(page.getByRole("button", { name: "ДАЛЬШЕ", exact: true })).toBeEnabled();
 });
 
-test("the first question is Bible-based and session state uses the new model", async ({ page }) => {
+test("the first question comes from the curated opening pool and the timer is opt-in", async ({ page }) => {
   await startGame(page);
   const state = await page.evaluate(() => {
     const raw = localStorage.getItem("teply-krug:v1");
@@ -91,10 +101,13 @@ test("the first question is Bible-based and session state uses the new model", a
   });
   expect(state).toEqual({
     version: 4,
-    card: expect.stringContaining("spark-bible-"),
+    card: expect.any(String),
     mode: "standard",
     stage: undefined,
   });
+  expect(openingSafeCardIds).toContain(state?.card);
+  await expect(page.getByText("Без таймера", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Старт", exact: true })).toHaveCount(0);
 });
 
 test("the host can turn Bible and ministry questions off independently", async ({ page }) => {
@@ -348,6 +361,9 @@ test("an unavailable host theme keeps the current question intact", async ({ pag
 
 test("soft timer reaches zero without advancing the turn", async ({ page }) => {
   await page.clock.install();
+  await page.goto("./");
+  await page.getByRole("button", { name: "Настройки" }).click();
+  await page.getByLabel("Мягкий таймер").selectOption("75");
   await startGame(page);
   await reveal(page);
   await page.clock.runFor("00:01:16");

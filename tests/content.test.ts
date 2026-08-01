@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { builtInCards } from "../src/content/cards";
+import { builtInCards, openingSafeCardIds } from "../src/content/cards";
 import { CATEGORIES, STAGES } from "../src/game";
 
 const rejectedFromRankedReview = [
@@ -75,7 +75,7 @@ const approvedFromRankedReview = [
 const strongCardsFromFullDeckReview = [
   "Какой твой поступок в детстве привёл взрослых в шок?",
   "Замри так, будто тебя застали за тайным поеданием сладкого.",
-  "Какой дружеский совет сначала казался несерьёзным, а потом всё-таки пригодился?",
+  "Был ли дружеский совет, который сначала казался несерьёзным, а потом пригодился? Какой?",
   "Покажи вещь рядом с собой, с которой связана хорошая история.",
   "Выбери кого-нибудь и угадай, что ближе этому человеку: утро или вечер. Потом проверь ответ.",
   "Расскажи о первой попытке сделать в детстве что-то по-взрослому.",
@@ -85,16 +85,34 @@ const strongCardsFromFullDeckReview = [
 ] as const;
 
 const questionReviewReplacementAnchors = [
-  "Какое качество Иеговы стало для тебя особенно реальным благодаря личному опыту?",
-  "Какое уточнение в понимании Библии особенно помогло тебе лучше узнать Иегову?",
-  "От чего пришлось отказаться ради духовных целей и о чём ты не жалеешь?",
+  "Какое качество Иеговы тебе особенно легко замечать в повседневной жизни?",
+  "Какое уточнение в понимании Библии тебе особенно запомнилось?",
+  "Есть ли духовная цель, ради которой пришлось чем-то пожертвовать? Если удобно, расскажи.",
   "Кого из библейских персонажей напоминает каждый в вашей компании? Назови только добрые черты.",
   "В какой стране тебе хотелось бы попробовать миссионерское служение? Почему именно там?",
   "Хотелось бы тебе попробовать районное или вефильское служение? Что именно привлекает?",
   "За что в своей жизни ты чувствуешь наибольшую благодарность?",
-  "Если бы можно было изменить что-то в своём воспитании, что именно?",
-  "Расскажи короткую историю своей жизни через три самых важных поворота.",
+  "Какую хорошую привычку из детства тебе хотелось бы сохранить надолго?",
+  "Назови три вещи, по которым друзья сразу узнают тебя.",
   "С каким новым качеством или умением хотелось бы проснуться завтра?",
+] as const;
+
+const assumptionUnsafePrompts = [
+  "Какой случай в служении укрепил твою веру?",
+  "Какой разговор в служении помог тебе увидеть заботу Иеговы?",
+  "Какой выбор Есфири помогает тебе не молчать, когда нужно проявить смелость?",
+  "Какое уточнение в понимании Библии особенно помогло тебе лучше узнать Иегову?",
+  "Какое решение в жизни приблизило тебя к Иегове?",
+  "Что помогло тебе по-настоящему полюбить Иегову?",
+  "Если бы можно было изменить что-то в своём воспитании, что именно?",
+  "От чего пришлось отказаться ради духовных целей и о чём ты не жалеешь?",
+  "Когда ответ Иеговы на молитву оказался не таким, как ожидалось, но именно тем, что было нужно?",
+  "Какое качество Иеговы стало для тебя особенно реальным благодаря личному опыту?",
+  "Какая молитва из Библии научила тебя говорить с Иеговой откровеннее?",
+  "Расскажи короткую историю своей жизни через три самых важных поворота.",
+  "Когда собрание впервые стало для тебя семьёй?",
+  "Как забота Иеговы проявилась, когда пришлось чем-то пожертвовать ради служения?",
+  "Какое уточнение в понимании Библии за последнее время особенно укрепило твою веру?",
 ] as const;
 
 describe("built-in deck", () => {
@@ -115,6 +133,17 @@ describe("built-in deck", () => {
       for (const category of CATEGORIES) {
         expect(builtInCards.filter((card) => card.stage === stage && card.category === category)).toHaveLength(24);
       }
+    }
+  });
+
+  it("keeps a balanced curated pool of low-pressure opening cards", () => {
+    expect(openingSafeCardIds).toHaveLength(30);
+    expect(new Set(openingSafeCardIds).size).toBe(openingSafeCardIds.length);
+    const openingCards = builtInCards.filter((card) => openingSafeCardIds.includes(card.id));
+    expect(openingCards).toHaveLength(openingSafeCardIds.length);
+    openingCards.forEach((card) => expect(card.stage).toBe("spark"));
+    for (const category of CATEGORIES) {
+      expect(openingCards.filter((card) => card.category === category)).toHaveLength(6);
     }
   });
 
@@ -190,6 +219,18 @@ describe("built-in deck", () => {
     ];
 
     rejected.forEach((prompt) => expect(deck).not.toContain(prompt));
+  });
+
+  it("does not prescribe personal experience, spiritual effect, or a predetermined lesson", () => {
+    const deck = builtInCards.map((card) => card.text);
+
+    assumptionUnsafePrompts.forEach((prompt) => expect(deck).not.toContain(prompt));
+    expect(deck).toEqual(expect.arrayContaining([
+      "О чём тебе хотелось бы спросить Есфирь перед её разговором с царём?",
+      "Какое уточнение в понимании Библии тебе особенно запомнилось?",
+      "Что в истине стало особенно дорогим лично тебе?",
+      "Бывало ли, что ответ на молитву оказался неожиданным? Если удобно, расскажи.",
+    ]));
   });
 
   it("applies player reviews while keeping prompts that were not superseded", () => {
@@ -270,12 +311,20 @@ describe("built-in deck", () => {
   });
 
   it("keeps the most personal spiritual questions out of the opening stage", () => {
-    const deeperCards = builtInCards.filter((card) =>
-      /истина появилась|полюбить Иегову|благодарен Иегове|любишь наше братство|любовь братства|поступке брата или сестры/iu.test(card.text),
-    );
+    const deeperCardIds = [
+      "closer-personal-17",
+      "closer-personal-18",
+      "closer-personal-21",
+      "closer-personal-22",
+      "closer-personal-23",
+      "closer-stories-21",
+      "together-stories-1",
+    ];
+    const deeperCards = builtInCards.filter((card) => deeperCardIds.includes(card.id));
 
-    expect(deeperCards.length).toBeGreaterThanOrEqual(5);
+    expect(deeperCards).toHaveLength(deeperCardIds.length);
     deeperCards.forEach((card) => expect(card.stage).not.toBe("spark"));
+    deeperCards.forEach((card) => expect(openingSafeCardIds).not.toContain(card.id));
   });
 
   it("keeps the approved anchor questions in the deck", () => {
@@ -284,14 +333,14 @@ describe("built-in deck", () => {
     expect(deck).toEqual(
       expect.arrayContaining([
         "Какой твой поступок в детстве привёл взрослых в шок?",
-        "Расскажи, как истина появилась в твоей жизни.",
-        "Что помогло тебе по-настоящему полюбить Иегову?",
+        "Что в истине стало особенно дорогим лично тебе?",
+        "Что ты особенно любишь в Иегове?",
         "За что тебе сейчас особенно хочется благодарить Иегову?",
         "За что ты особенно любишь наше братство?",
         "Какое ремесло или хобби хочется освоить в новом мире?",
         "Каким будет твой дом в новом мире? Что будет рядом?",
-        "Какая работа или обязанность научила тебя чему-то неожиданному?",
-        "Какой библейский рассказ или стих открылся тебе по-новому на другом языке?",
+        "Была ли работа или обязанность, которая неожиданно чему-то научила? Чему именно?",
+        "Есть ли библейский рассказ или стих, который по-новому прозвучал на другом языке? Какой?",
       ]),
     );
   });

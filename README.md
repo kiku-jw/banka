@@ -75,7 +75,7 @@ group. There is no final ranking.
 
 ## Designed for one room or a video call
 
-- Optional 45-, 75-, or 120-second timer that never advances the turn automatically.
+- Optional 45-, 75-, or 120-second timer, off by default, that never advances the turn automatically.
 - Paper and jar sounds while drawing, plus brief cues for a new turn and elapsed time.
 - Four quiet background tracks play in a random cycle without repeating at the cycle boundary.
 - A full introduction for the first note and three quicker reveal patterns after it.

@@ -137,6 +137,16 @@ export function drawCard(
   };
 }
 
+export function cardsForOpening(
+  cards: Card[],
+  openingCardIds: readonly string[],
+  seenCardIds: readonly string[],
+): Card[] {
+  const curated = cards.filter((card) => openingCardIds.includes(card.id));
+  const hasUnseenCuratedCard = curated.some((card) => !seenCardIds.includes(card.id));
+  return hasUnseenCuratedCard ? curated : cards;
+}
+
 function targetSeconds(mode: SessionMode): number | null {
   if (mode === "quick") {
     return 15 * 60;

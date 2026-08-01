@@ -31,6 +31,10 @@ class MemoryStorage implements Storage {
 }
 
 describe("local persistence", () => {
+  it("starts a new browser with the soft timer disabled", () => {
+    expect(createDefaultStoredData().preferences.timerSeconds).toBe(0);
+  });
+
   it("round-trips valid data", () => {
     const storage = new MemoryStorage();
     const data = createDefaultStoredData();

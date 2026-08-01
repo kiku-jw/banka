@@ -37,5 +37,6 @@ export default defineConfig({
     command: `npm run build && npm exec vite preview -- --host 127.0.0.1 --port ${previewPort}`,
     url: previewUrl,
     reuseExistingServer: false,
+    timeout: 120_000,
   },
 });
