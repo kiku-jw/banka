@@ -9,8 +9,8 @@ Temporary task artifact for `kiku-jw/dostavay#19`.
   `raw/question-audit.md`.
 - Kept stable card IDs and the 24-card group balance so saved history, hidden
   cards, feedback, and visual mappings remain valid.
-- Represented opening safety as a curated 30-ID content list rather than a
-  public card field or numeric depth scale. The list contains six `spark`
+- Represented opening safety as a curated 20-ID content list rather than a
+  public card field or numeric depth scale. The list contains four `spark`
   prompts from each category.
 - Opening selection filters the already enabled deck, then falls back to the
   full enabled deck when no curated card is available or every curated card
@@ -26,6 +26,9 @@ Temporary task artifact for `kiku-jw/dostavay#19`.
 - The welcome history chip now shows `360 без повторов` for a fresh browser
   instead of the ambiguous `0 без повторов`. After play begins it reports the
   number already drawn.
+- A player-review follow-up reduced the opening pool from 30 to 20 and replaced
+  `Что хорошее в обычной жизни ты особенно ценишь?` with the more concrete
+  `Какая мелочь может сделать твой день приятнее?`.
 
 ## Spec deviations
 

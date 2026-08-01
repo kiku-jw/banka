@@ -95,6 +95,7 @@ const questionReviewReplacementAnchors = [
   "Какую хорошую привычку из детства тебе хотелось бы сохранить надолго?",
   "Назови три вещи, по которым друзья сразу узнают тебя.",
   "С каким новым качеством или умением хотелось бы проснуться завтра?",
+  "Какая мелочь может сделать твой день приятнее?",
 ] as const;
 
 const assumptionUnsafePrompts = [
@@ -113,6 +114,7 @@ const assumptionUnsafePrompts = [
   "Когда собрание впервые стало для тебя семьёй?",
   "Как забота Иеговы проявилась, когда пришлось чем-то пожертвовать ради служения?",
   "Какое уточнение в понимании Библии за последнее время особенно укрепило твою веру?",
+  "Что хорошее в обычной жизни ты особенно ценишь?",
 ] as const;
 
 describe("built-in deck", () => {
@@ -137,13 +139,13 @@ describe("built-in deck", () => {
   });
 
   it("keeps a balanced curated pool of low-pressure opening cards", () => {
-    expect(openingSafeCardIds).toHaveLength(30);
+    expect(openingSafeCardIds).toHaveLength(20);
     expect(new Set(openingSafeCardIds).size).toBe(openingSafeCardIds.length);
     const openingCards = builtInCards.filter((card) => openingSafeCardIds.includes(card.id));
     expect(openingCards).toHaveLength(openingSafeCardIds.length);
     openingCards.forEach((card) => expect(card.stage).toBe("spark"));
     for (const category of CATEGORIES) {
-      expect(openingCards.filter((card) => card.category === category)).toHaveLength(6);
+      expect(openingCards.filter((card) => card.category === category)).toHaveLength(4);
     }
   });
 

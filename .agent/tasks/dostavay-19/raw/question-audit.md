@@ -15,10 +15,13 @@ IDs in the group are explicitly accepted after review.
 
 ## spark x stories
 
-- Rewrite: `spark-stories-10`, `spark-stories-21`, `spark-stories-23`.
+- Rewrite: `spark-stories-7`, `spark-stories-10`, `spark-stories-21`,
+  `spark-stories-23`.
 - Reason: the originals assumed an old dream, a sufficiently developed current
-  conversation, or a repeatedly wrong first impression.
-- Accepted unchanged: the other 21 prompts.
+  conversation, or a repeatedly wrong first impression. The phrase
+  `обычная жизнь` also created an unclear contrast instead of naming an
+  answerable everyday moment.
+- Accepted unchanged: the other 20 prompts.
 
 ## spark x service
 
@@ -134,5 +137,5 @@ IDs in the group are explicitly accepted after review.
 ## Totals
 
 - Reviewed: 360 prompts across all 15 groups.
-- Rewritten: 90 prompts.
-- Accepted unchanged: 270 prompts.
+- Rewritten: 91 prompts.
+- Accepted unchanged: 269 prompts.

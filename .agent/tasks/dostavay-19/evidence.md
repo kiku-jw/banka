@@ -5,12 +5,12 @@ Temporary task artifact for `kiku-jw/dostavay#19`.
 ## Acceptance results
 
 - AC1 — PASS: `raw/question-audit.md` records a decision for all 15
-  `stage x category` groups: 360 prompts reviewed, 90 rewritten, 270 accepted.
+  `stage x category` groups: 360 prompts reviewed, 91 rewritten, 269 accepted.
 - AC2 — PASS: content tests reject the known presupposition forms and lock the
   revised Esther prompt. The complete human audit applies the same rule to the
   full deck.
 - AC3 — PASS: unit and browser tests prove that the first turn uses the
-  30-card curated `spark` pool, respects enabled topics and seen IDs, and falls
+  20-card curated `spark` pool, respects enabled topics and seen IDs, and falls
   back to the full enabled deck after that pool is exhausted.
 - AC4 — PASS: the existing later-turn pacing implementation remains in place;
   no public card field or numeric depth ladder was added.
@@ -23,10 +23,8 @@ Temporary task artifact for `kiku-jw/dostavay#19`.
   opening draw (`spark-personal-8`), next turn, timer-off presentation,
   disabled Bible/service topics (`spark-stories-4`), fallback topic chooser,
   and 390px overflow (`scrollWidth = clientWidth = 390`).
-- AC8 — PASS: commit `ecd7d5db1f0767f4285b012b8fa0e42ee6e3bc4d`
-  was published from `main`. GitHub Pages run `30689958321` completed both
-  build and deploy successfully, and the live page returned HTTP 200 with the
-  new welcome, setup, and timer-off strings in its deployed asset.
+- AC8 — PENDING: the 20-card player-review follow-up has passed locally and is
+  awaiting publication through the existing Pages workflow.
 
 ## Fresh commands
 
@@ -34,17 +32,12 @@ Temporary task artifact for `kiku-jw/dostavay#19`.
 npm run check
   8 test files passed; 53 tests passed; TypeScript and Vite build passed
 
-npm run test:e2e
+PLAYWRIGHT_PORT=4189 npm run test:e2e
   61 passed; 1 skipped; desktop and mobile
 
 git diff --check
   clean
 
-GitHub Pages run 30689958321
-  build success; browser-flow gate success; deploy success
-
-curl https://kiku-jw.github.io/dostavay/
-  HTTP 200; deployed asset contains the final product copy
 ```
 
 ## Manual smoke artifacts
