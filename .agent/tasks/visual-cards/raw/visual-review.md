@@ -1,6 +1,6 @@
 # Visual review
 
-Verified on 2026-07-23 from the local contact sheet at `/tmp/dostavay-visual-cards-contact-sheet.png`.
+Verified on 2026-07-23 from the local contact sheet at `/tmp/banka-visual-cards-contact-sheet.png`.
 
 | Asset | Result | Notes |
 | --- | --- | --- |

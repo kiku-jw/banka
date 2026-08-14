@@ -1,7 +1,7 @@
-# dostavay#19 acceptance spec
+# banka#19 acceptance spec
 
 Class: temporary task artifact. Canonical task state lives in GitHub Issue
-`kiku-jw/dostavay#19`. Delete or cold-store this bundle after final PASS.
+`kiku-jw/banka#19`. Delete or cold-store this bundle after final PASS.
 
 ## Goal
 

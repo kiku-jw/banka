@@ -1,16 +1,16 @@
 {
-  "name": "dostavay",
+  "name": "banka",
   "private": true,
   "version": "1.0.0",
   "description": "A host-controlled Russian conversation game built around drawing questions from a jar.",
   "license": "MIT",
-  "homepage": "https://kiku-jw.github.io/dostavay/",
+  "homepage": "https://kiku-jw.github.io/banka/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kiku-jw/dostavay.git"
+    "url": "git+https://github.com/kiku-jw/banka.git"
   },
   "bugs": {
-    "url": "https://github.com/kiku-jw/dostavay/issues"
+    "url": "https://github.com/kiku-jw/banka/issues"
   },
   "keywords": [
     "conversation-game",

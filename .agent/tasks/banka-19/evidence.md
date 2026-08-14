@@ -1,6 +1,6 @@
 # Evidence
 
-Temporary task artifact for `kiku-jw/dostavay#19`.
+Temporary task artifact for `kiku-jw/banka#19`.
 
 ## Acceptance results
 
@@ -44,7 +44,7 @@ git diff --check
 GitHub Pages run 30690781930
   build success; browser-flow gate success; deploy success
 
-curl https://kiku-jw.github.io/dostavay/
+curl https://kiku-jw.github.io/banka/
   HTTP 200; deployed card asset contains the replacement question
 
 ```

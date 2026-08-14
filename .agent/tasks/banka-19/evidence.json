@@ -1,5 +1,5 @@
 {
-  "task": "dostavay-19",
+  "task": "banka-19",
   "phase": "complete",
   "acceptance": [
     { "id": "AC1", "status": "pass", "evidence": "15 groups and 360 prompts audited; 91 rewritten; 269 accepted" },
@@ -12,5 +12,5 @@
     { "id": "AC8", "status": "pass", "evidence": "Pages run 30690781930 succeeded; live card asset contains the replacement question" }
   ],
   "reviewed_sha": "da9cea3bd546d09f1fdc7a4d1fa8201687fac1fa",
-  "deployment_url": "https://kiku-jw.github.io/dostavay/"
+  "deployment_url": "https://kiku-jw.github.io/banka/"
 }

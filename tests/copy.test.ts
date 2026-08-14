@@ -39,7 +39,7 @@ describe("visible interface copy", () => {
     expect(interfaceSource).toContain('href="https://kikuai.dev/"');
     expect(interfaceSource).toContain('href="https://t.me/kiku_ai"');
     expect(interfaceSource).toContain('href="https://github.com/kiku-jw"');
-    expect(interfaceSource).toContain('href="https://github.com/kiku-jw/dostavay"');
+    expect(interfaceSource).toContain('href="https://github.com/kiku-jw/banka"');
     expect(interfaceSource.match(/target="_blank" rel="noopener noreferrer"/gu)).toHaveLength(4);
   });
 });

@@ -339,9 +339,9 @@ function drawForCurrent(
 
 function renderBrand(compact = false): string {
   return `
-    <button class="brand ${compact ? "brand-compact" : ""}" data-action="home" aria-label="Доставай! На главную">
+    <button class="brand ${compact ? "brand-compact" : ""}" data-action="home" aria-label="Banka! На главную">
       <span class="brand-mark" aria-hidden="true"><span></span></span>
-      <span><strong>Доставай!</strong><small>банка вопросов</small></span>
+      <span><strong>Banka!</strong><small>банка вопросов</small></span>
     </button>
   `;
 }
@@ -1451,7 +1451,7 @@ function renderSettings(): void {
           <a href="https://kikuai.dev/" target="_blank" rel="noopener noreferrer"><strong>Сайт</strong><span>kikuai.dev ↗</span></a>
           <a href="https://t.me/kiku_ai" target="_blank" rel="noopener noreferrer"><strong>Telegram</strong><span>@kiku_ai ↗</span></a>
           <a href="https://github.com/kiku-jw" target="_blank" rel="noopener noreferrer"><strong>GitHub</strong><span>@kiku-jw ↗</span></a>
-          <a href="https://github.com/kiku-jw/dostavay" target="_blank" rel="noopener noreferrer"><strong>Репозиторий</strong><span>dostavay ↗</span></a>
+          <a href="https://github.com/kiku-jw/banka" target="_blank" rel="noopener noreferrer"><strong>Репозиторий</strong><span>banka ↗</span></a>
         </nav>
       </section>
     </section>

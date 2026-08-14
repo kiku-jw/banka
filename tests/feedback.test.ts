@@ -36,7 +36,7 @@ describe("question feedback", () => {
 
   it("fails closed on malformed feedback", () => {
     const storage = new MemoryStorage();
-    storage.setItem("dostavay:card-feedback:v1", JSON.stringify([{ cardId: 12 }]));
+    storage.setItem("banka:card-feedback:v1", JSON.stringify([{ cardId: 12 }]));
     expect(loadCardFeedback(storage)).toEqual([]);
   });
 

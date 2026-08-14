@@ -28,9 +28,9 @@ GitHub Pages run `30494505083` and passed a live browser readback.
   native range/change events, and native audio element. No package, storage
   schema, runtime service, or autoplay entry point changed.
 - **AC7 — PASS.** GitHub Pages run
-  `https://github.com/kiku-jw/dostavay/actions/runs/30494505083` completed with
+  `https://github.com/kiku-jw/banka/actions/runs/30494505083` completed with
   successful build and deploy jobs for the exact implementation revision. A
-  fresh Playwright CLI session opened `https://kiku-jw.github.io/dostavay/`,
+  fresh Playwright CLI session opened `https://kiku-jw.github.io/banka/`,
   observed the 20% default and no Save button, persisted 43% without leaving
   settings, started an active game with music playing, then moved the slider
   from 43% to 20%. The live audio element immediately reported volume `0.2`

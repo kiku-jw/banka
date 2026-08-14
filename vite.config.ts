@@ -1,7 +1,7 @@
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  base: "/dostavay/",
+  base: "/banka/",
   build: {
     target: "es2022",
     rollupOptions: {

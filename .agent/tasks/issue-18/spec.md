@@ -1,6 +1,6 @@
 # Combined spiritual topic
 
-Canonical issue: https://github.com/kiku-jw/dostavay/issues/18
+Canonical issue: https://github.com/kiku-jw/banka/issues/18
 
 ## Original task
 

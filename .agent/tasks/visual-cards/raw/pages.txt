@@ -8,8 +8,8 @@ GitHub Pages live readback
 HTML
 
 - `200 OK`
-- Title: `Доставай! — банка вопросов`
-- Description: `Доставай!: банка вопросов и заданий для компании в Zoom.`
+- Title: `Banka! — банка вопросов`
+- Description: `Banka!: банка вопросов и заданий для компании в Zoom.`
 - Current bundle references:
   - `/teply-krug/assets/index-BTr1t9Kv.js`
   - `/teply-krug/assets/index-DyiPLOB1.css`

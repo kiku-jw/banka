@@ -6,7 +6,7 @@ Replace the abstract "Тёплый круг" presentation with a tactile questio
 
 ## Acceptance criteria
 
-- **AC1:** The player-facing brand no longer says "Тёплый круг". The welcome, setup, gameplay cover, metadata, and repository copy consistently present `Доставай!` as a jar-of-questions game for friends.
+- **AC1:** The player-facing brand no longer says "Тёплый круг". The welcome, setup, gameplay cover, metadata, and repository copy consistently present `Banka!` as a jar-of-questions game for friends.
 - **AC2:** Drawing a question feels physical: the first animated draw in a page visit uses a complete jar-to-unfolded-note sequence no longer than 3.7 seconds; later draws use a sequence no longer than 1.7 seconds.
 - **AC3:** Repeated draws have lightweight visual variation without scoring or random delays. At least one occasional variation changes the presentation while preserving the same timing and question selection.
 - **AC4:** The generated note contains no baked-in question text. The actual question remains accessible HTML and appears only after the draw animation completes or fails safely.

@@ -1,6 +1,6 @@
 # Implementation notes
 
-Temporary task artifact for `kiku-jw/dostavay#19`.
+Temporary task artifact for `kiku-jw/banka#19`.
 
 ## Decisions
 

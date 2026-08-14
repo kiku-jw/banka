@@ -2,7 +2,7 @@
   "taskId": "issue-18",
   "status": "PASS",
   "implementationRevision": "aa022151afa6673de3f78b577ab9b210c0abc454",
-  "pagesRun": "https://github.com/kiku-jw/dostavay/actions/runs/30495934787",
+  "pagesRun": "https://github.com/kiku-jw/banka/actions/runs/30495934787",
   "acceptanceCriteria": [
     {
       "id": "AC1",

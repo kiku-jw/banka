@@ -2,7 +2,7 @@
 
 ## Verdict inputs
 
-- AC1: Runtime, metadata, README, favicon, and visual screenshots use `Доставай!`; a Playwright assertion rejects the old player-facing title.
+- AC1: Runtime, metadata, README, favicon, and visual screenshots use `Banka!`; a Playwright assertion rejects the old player-facing title.
 - AC2: Playwright verifies the 3.605-second intro asset on the first animated draw and the 1.600-second quick asset on later draws. The question does not appear before the media `ended` event.
 - AC3: Playwright verifies alternating direction and the three-paper accent on every fifth animated draw.
 - AC4: The generated note is blank. The question appears as accessible HTML on a cream unfolded-paper surface, with media-error and timeout fallbacks.

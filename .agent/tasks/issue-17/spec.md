@@ -1,6 +1,6 @@
 # Immediate settings
 
-Canonical issue: https://github.com/kiku-jw/dostavay/issues/17
+Canonical issue: https://github.com/kiku-jw/banka/issues/17
 
 ## Original task
 

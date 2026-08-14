@@ -8,7 +8,7 @@ const requestedPort: unknown = typeof runtimeEnvironment === "object" && runtime
   ? Reflect.get(runtimeEnvironment, "PLAYWRIGHT_PORT")
   : null;
 const previewPort = typeof requestedPort === "string" ? requestedPort : "4173";
-const previewUrl = `http://127.0.0.1:${previewPort}/dostavay/`;
+const previewUrl = `http://127.0.0.1:${previewPort}/banka/`;
 
 export default defineConfig({
   testDir: "./tests/e2e",

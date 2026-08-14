@@ -4,7 +4,7 @@ export interface CardFeedback {
   comment: string;
 }
 
-const FEEDBACK_KEY = "dostavay:card-feedback:v1";
+const FEEDBACK_KEY = "banka:card-feedback:v1";
 export const MAX_FEEDBACK_ITEMS = 30;
 export const MAX_FEEDBACK_COMMENT_LENGTH = 500;
 
@@ -64,5 +64,5 @@ export function feedbackMailto(items: CardFeedback[]): string {
     `ID: ${item.cardId}`,
     `Комментарий: ${item.comment.length > 0 ? item.comment : "Без комментария"}`,
   ].join("\n")).join("\n\n");
-  return `mailto:support@kikuai.dev?subject=${encodeURIComponent("Замечания к вопросам игры «Доставай!»")}&body=${encodeURIComponent(body)}`;
+  return `mailto:support@kikuai.dev?subject=${encodeURIComponent("Замечания к вопросам игры «Banka!»")}&body=${encodeURIComponent(body)}`;
 }

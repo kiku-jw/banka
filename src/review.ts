@@ -7,7 +7,7 @@ interface ReviewState {
   comments: Record<string, string>;
 }
 
-const storageKey = "dostavay:question-review:v2";
+const storageKey = "banka:question-review:v2";
 const root = document.querySelector<HTMLElement>("#review-app");
 const liveRegion = document.querySelector<HTMLElement>("#review-status");
 const validCardIds = new Set(builtInCards.map((card) => card.id));
@@ -91,7 +91,7 @@ function formatReport(): string {
     ];
   });
   return [
-    "Странные вопросы из игры «Доставай!»",
+    "Странные вопросы из игры «Banka!»",
     `Отмечено: ${rows.length} из ${builtInCards.length}`,
     "",
     ...rows,
@@ -247,7 +247,7 @@ function downloadReport(): void {
   const url = URL.createObjectURL(new Blob([formatReport()], { type: "text/plain;charset=utf-8" }));
   const link = document.createElement("a");
   link.href = url;
-  link.download = "dostavay-question-review.txt";
+  link.download = "banka-question-review.txt";
   link.click();
   window.setTimeout(() => URL.revokeObjectURL(url), 0);
   announce("Файл с отмеченными вопросами скачан.");
@@ -259,7 +259,7 @@ if (root !== null) {
       <div class="review-header-inner">
         <a class="review-brand" href="./">
           <span class="review-jar" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span><strong>Доставай!</strong><small>проверка вопросов</small></span>
+          <span><strong>Banka!</strong><small>проверка вопросов</small></span>
         </a>
         <span class="review-saved">Сохраняется в этом браузере</span>
       </div>

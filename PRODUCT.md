@@ -13,7 +13,7 @@ backgrounds and levels of ministry experience.
 
 ## Product Purpose
 
-«Доставай!» helps friends relax, laugh, and learn something real about one
+«Banka!» helps friends relax, laugh, and learn something real about one
 another through a jar of conversational questions and small activities. Success
 means the interface disappears into the evening: questions sound natural aloud,
 the host never has to explain the mechanics, and nobody is pressured to provide

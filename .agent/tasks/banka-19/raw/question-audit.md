@@ -1,6 +1,6 @@
 # Question audit
 
-Temporary human editorial evidence for `kiku-jw/dostavay#19`.
+Temporary human editorial evidence for `kiku-jw/banka#19`.
 
 Each section covers all 24 prompts in one `stage x category` group. Prompts
 listed under `Rewrite` fail at least one rule in `../spec.md`; all remaining

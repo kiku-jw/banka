@@ -97,7 +97,7 @@ test("captures the music settings without horizontal overflow", async ({ page },
   await expect(page.getByRole("link", { name: /Сайт kikuai\.dev/ })).toHaveAttribute("href", "https://kikuai.dev/");
   await expect(page.getByRole("link", { name: /Telegram @kiku_ai/ })).toHaveAttribute("href", "https://t.me/kiku_ai");
   await expect(page.getByRole("link", { name: /GitHub @kiku-jw/ })).toHaveAttribute("href", "https://github.com/kiku-jw");
-  await expect(page.getByRole("link", { name: /Репозиторий dostavay/ })).toHaveAttribute("href", "https://github.com/kiku-jw/dostavay");
+  await expect(page.getByRole("link", { name: /Репозиторий banka/ })).toHaveAttribute("href", "https://github.com/kiku-jw/banka");
   const viewportWidth = await page.evaluate(() => window.innerWidth);
   const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(documentWidth).toBe(viewportWidth);

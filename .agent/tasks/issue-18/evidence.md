@@ -24,9 +24,9 @@ GitHub Pages run `30495934787` and passed a live browser readback.
   or initial Bible-first behavior changed. The empty-topic recovery regression
   passes.
 - **AC7 — PASS.** GitHub Pages run
-  `https://github.com/kiku-jw/dostavay/actions/runs/30495934787` completed with
+  `https://github.com/kiku-jw/banka/actions/runs/30495934787` completed with
   successful build and deploy jobs for the exact implementation revision. A
-  fresh Playwright CLI session opened `https://kiku-jw.github.io/dostavay/`,
+  fresh Playwright CLI session opened `https://kiku-jw.github.io/banka/`,
   started a real game, and opened the live chooser. Its snapshot contained
   exactly the four intended topic buttons and no separate Bible/ministry
   buttons. Selecting `О духовном` updated production localStorage to

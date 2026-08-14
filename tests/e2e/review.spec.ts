@@ -25,7 +25,7 @@ test("all questions can be reviewed, saved locally, and exported", async ({ page
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: "Скачать .txt" }).click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toBe("dostavay-question-review.txt");
+  expect(download.suggestedFilename()).toBe("banka-question-review.txt");
   const downloadPath = await download.path();
   expect(downloadPath).not.toBeNull();
 

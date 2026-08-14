@@ -1,5 +1,5 @@
 {
-  "task": "dostavay-19",
+  "task": "banka-19",
   "verdict": "PASS",
   "reviewed_sha": "da9cea3bd546d09f1fdc7a4d1fa8201687fac1fa",
   "acceptance_passed": 8,
@@ -9,6 +9,6 @@
     "e2e_tests": "61 passed, 1 intentionally skipped",
     "manual_smoke": "desktop and mobile passed",
     "pages_run": "30690781930 succeeded",
-    "live_url": "https://kiku-jw.github.io/dostavay/"
+    "live_url": "https://kiku-jw.github.io/banka/"
   }
 }
