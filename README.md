@@ -2,7 +2,7 @@
   <img src="public/favicon.svg" width="88" height="88" alt="A jar filled with folded notes">
 </p>
 
-<h1 align="center">Доставай!</h1>
+<h1 align="center">Banka!</h1>
 
 <p align="center">
   <strong>A host-controlled question-jar game to play in person or over video.</strong><br>
@@ -10,14 +10,14 @@
 </p>
 
 <p align="center">
-  <a href="https://kiku-jw.github.io/dostavay/"><img alt="Open the game" src="https://img.shields.io/badge/Open_the_game-F6BD67?style=for-the-badge&logo=github&logoColor=17130D"></a>
-  <a href="https://github.com/kiku-jw/dostavay/actions/workflows/pages.yml"><img alt="GitHub Pages" src="https://github.com/kiku-jw/dostavay/actions/workflows/pages.yml/badge.svg"></a>
+  <a href="https://kiku-jw.github.io/banka/"><img alt="Open the game" src="https://img.shields.io/badge/Open_the_game-F6BD67?style=for-the-badge&logo=github&logoColor=17130D"></a>
+  <a href="https://github.com/kiku-jw/banka/actions/workflows/pages.yml"><img alt="GitHub Pages" src="https://github.com/kiku-jw/banka/actions/workflows/pages.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-17243A?style=flat-square"></a>
 </p>
 
 <p align="center">
-  <a href="https://kiku-jw.github.io/dostavay/">
-    <img src="docs/media/welcome.png" alt="The Dostavay game welcome screen" width="100%">
+  <a href="https://kiku-jw.github.io/banka/">
+    <img src="docs/media/welcome.png" alt="The banka game welcome screen" width="100%">
   </a>
 </p>
 
