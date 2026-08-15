@@ -55,3 +55,65 @@ curl https://kiku-jw.github.io/banka/
 - Mobile timer-off turn: `.playwright-cli/page-2026-08-01T07-30-07-544Z.png`
 - Mobile disabled-topic chooser:
   `.playwright-cli/page-2026-08-01T07-30-31-989Z.png`
+
+## 2026-08-16 live-play follow-up
+
+### Acceptance results
+
+- F1 — PASS: cards 19, 25, 32, 68, 91, 115, 124, 130, 173, 177, 252,
+  294, 357, and 358 were replaced in place with concrete questions about
+  money, conflict, trust, boundaries, judgment, and character.
+- F2 — PASS: reviewed leading cards 53, 70, 76, 81, 195, 292, 303, and 317
+  were rewritten without prescribing an answer, spiritual conclusion, or
+  invented Bible problem.
+- F3 — PASS: content tests preserve 360 unique prompts, stable IDs, 24 cards
+  per `stage x category` group, neutral address, and the existing skip path.
+- F4 — PASS: selection avoids the current player's previous category and the
+  active modes from that player's previous two turns when alternatives exist;
+  explicit themes and constrained pools retain a safe fallback.
+- F5 — PASS: the implementation reuses `recentCardIds`; no schema migration,
+  runtime dependency, account, network request, analytics, or answer storage
+  was added. Unit and desktop/mobile browser tests cover the pacing behavior
+  and same-turn redraw history.
+- F6 — PASS: `npm run check` passed 57/57 tests plus TypeScript/Vite build;
+  `npm run test:e2e -- --workers=2` passed 65 scenarios on desktop and mobile
+  with one fixed-viewport case intentionally skipped. Responsive screenshots
+  were inspected without overflow. Pages run `31909263547` passed build,
+  browser, and deploy gates. Live readback returned HTTP 200 for the page and
+  both JavaScript assets, found all 22 replacements, and found none of the 22
+  superseded prompts.
+
+### Fresh commands
+
+```text
+npm run check
+  8 test files passed; 57 tests passed; TypeScript and Vite build passed
+
+npm run test:e2e -- --workers=2
+  65 passed; 1 intentionally skipped; desktop and mobile
+
+git diff --check origin/main...2f7dcb342b605463f722219bb86b7253c48f2cf1
+  clean
+
+npm audit --omit=dev
+  0 vulnerabilities
+
+GitHub Pages run 31909263547
+  build success; browser-flow gate success; deploy success
+
+https://kiku-jw.github.io/banka/
+  HTTP 200; 22 replacements present; 22 superseded prompts absent
+```
+
+### Review receipt and residuals
+
+- A self-contained adversarial review found and fixed two additional leading
+  prompts plus a missing redraw-history regression before the final run. No
+  blocking finding remains.
+- The current Vite-only development tree reports one high `nanoid` advisory
+  and one moderate `postcss` advisory. Production audit is clean, the deployed
+  app has no runtime dependency path, and this follow-up does not process
+  untrusted build input. Dependency refresh remains outside this editorial
+  change.
+- GitHub Actions emits a non-blocking Node 20 deprecation annotation for the
+  current Pages helper actions while forcing them to Node 24. The run passed.

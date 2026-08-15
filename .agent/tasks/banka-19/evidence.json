@@ -2,15 +2,13 @@
   "task": "banka-19",
   "phase": "complete",
   "acceptance": [
-    { "id": "AC1", "status": "pass", "evidence": "15 groups and 360 prompts audited; 91 rewritten; 269 accepted" },
-    { "id": "AC2", "status": "pass", "evidence": "human audit and content regression tests" },
-    { "id": "AC3", "status": "pass", "evidence": "unit and E2E coverage for the balanced 20-card opening pool" },
-    { "id": "AC4", "status": "pass", "evidence": "existing hidden pacing preserved; no numeric depth UI" },
-    { "id": "AC5", "status": "pass", "evidence": "storage and timer-expiry coverage" },
-    { "id": "AC6", "status": "pass", "evidence": "53 unit tests and build; 61 E2E passed with 1 viewport skip" },
-    { "id": "AC7", "status": "pass", "evidence": "headed desktop/mobile smoke and 390px overflow check" },
-    { "id": "AC8", "status": "pass", "evidence": "Pages run 30690781930 succeeded; live card asset contains the replacement question" }
+    { "id": "F1", "status": "pass", "evidence": "14 explicitly rejected cards replaced in place" },
+    { "id": "F2", "status": "pass", "evidence": "8 reviewed leading cards rewritten" },
+    { "id": "F3", "status": "pass", "evidence": "360 unique cards, stable IDs, and group balance preserved" },
+    { "id": "F4", "status": "pass", "evidence": "per-player category and active-mode cooldowns with safe fallback" },
+    { "id": "F5", "status": "pass", "evidence": "existing session history reused; no schema or runtime dependency change" },
+    { "id": "F6", "status": "pass", "evidence": "57 unit tests and build; 65 E2E passed with 1 viewport skip; Pages run 31909263547 and live readback passed" }
   ],
-  "reviewed_sha": "da9cea3bd546d09f1fdc7a4d1fa8201687fac1fa",
+  "reviewed_sha": "2f7dcb342b605463f722219bb86b7253c48f2cf1",
   "deployment_url": "https://kiku-jw.github.io/banka/"
 }

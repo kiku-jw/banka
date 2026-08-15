@@ -1,14 +1,15 @@
 {
   "task": "banka-19",
   "verdict": "PASS",
-  "reviewed_sha": "da9cea3bd546d09f1fdc7a4d1fa8201687fac1fa",
-  "acceptance_passed": 8,
+  "reviewed_sha": "2f7dcb342b605463f722219bb86b7253c48f2cf1",
+  "acceptance_passed": 6,
   "acceptance_failed": 0,
   "verification": {
-    "unit_tests": "53 passed",
-    "e2e_tests": "61 passed, 1 intentionally skipped",
-    "manual_smoke": "desktop and mobile passed",
-    "pages_run": "30690781930 succeeded",
+    "unit_tests": "57 passed",
+    "e2e_tests": "65 passed, 1 intentionally skipped",
+    "manual_smoke": "responsive desktop and mobile passed",
+    "pages_run": "31909263547 succeeded",
+    "live_content": "22 replacements present; 22 superseded prompts absent",
     "live_url": "https://kiku-jw.github.io/banka/"
   }
 }
