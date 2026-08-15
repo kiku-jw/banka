@@ -80,3 +80,28 @@ answer lightly and honestly without inventing evidence.
 4. Add storage and E2E assertions for timer-off defaults.
 5. Run unit tests, TypeScript build, full Playwright desktop/mobile suite, and
    manual browser smoke.
+
+## 2026-08-15 live-play follow-up
+
+Source: Nick's real-session editorial feedback and the observed same-player
+pantomime streak. GitHub Issue #19 remains canonical; this section mirrors its
+reopened acceptance surface.
+
+### Follow-up acceptance
+
+- F1: Replace cards 19, 25, 32, 68, 91, 115, 124, 130, 173, 177, 252, 294,
+  357, and 358 in place with candid, game-like questions about thinking,
+  conflict, money, boundaries, and character.
+- F2: Rewrite reviewed leading cards 53, 70, 76, 81, 195, 292, 303, and 317 so
+  they do not prescribe an answer, spiritual conclusion, or invented Bible
+  problem.
+- F3: Preserve 360 unique prompts, stable IDs, group balance, neutral address,
+  and the existing skip path.
+- F4: Prefer cards outside the current player's previous category and outside
+  the active modes seen on that player's previous two turns. Fall back safely
+  when an explicit topic or constrained pool has no alternative.
+- F5: Reuse existing session history without a schema migration or new
+  dependency. Unit and browser tests must prove the personal pacing behavior.
+- F6: Run `npm run check`, `npm run test:e2e`, `git diff --check`, responsive
+  smoke, Pages deployment, and live readback before returning the Issue to
+  complete.

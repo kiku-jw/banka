@@ -42,3 +42,35 @@ Temporary task artifact for `kiku-jw/banka#19`.
   review when an opening card changes, which is preferable to inferring safety
   from category or text heuristics.
 - Additional hint images remain gated on live play evidence.
+
+## 2026-08-15 live-play follow-up
+
+### Lazy-senior receipt
+
+- Lower rung: adapt the existing round-robin `recentCardIds` history and draw
+  pacing rather than add player profiles, a scheduler, or a storage field.
+- GitHub prior art: skipped because this is a repo-local selection regression
+  with all required primitives already present.
+- New code is limited to extracting two previous cards for the current player
+  and applying category/active-format cooldowns with a safe fallback.
+
+### Editorial decisions
+
+- Keep all stable card IDs and replace the idea, not merely the wording.
+- Use concrete scenarios around money, disagreement, trust, boundaries, and
+  uncertainty instead of abstract self-analysis.
+- Turn two rejected pantomimes into spoken role-play prompts while preserving
+  their existing `perform` mode.
+- Replace the eight reviewed leading prompts without prescribing spiritual
+  evidence or a Bible character's lesson.
+
+### Pacing decision
+
+- Keep two complete player rounds in `recentCardIds`; the field remains the
+  same validated string array, so no schema migration is needed.
+- Derive the current player's history by stepping backward by player count.
+- Prioritize personal pacing over global pacing: avoid the last personal
+  category and any non-answer mode from the previous two personal turns when
+  alternatives exist.
+- A same-player replacement overwrites the current turn's recent-history slot
+  so category changes and redraws do not corrupt the round-robin stride.

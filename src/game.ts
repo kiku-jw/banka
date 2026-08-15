@@ -97,6 +97,37 @@ function followsSmoothly(card: Card, previous: Card | null, category?: CategoryF
     && !repeatsOpening;
 }
 
+function followsPlayerPacing(
+  card: Card,
+  previousPlayerCards: Card[],
+  category?: CategoryFilter,
+): boolean {
+  const previous = previousPlayerCards[0] ?? null;
+  const repeatsCategory = category === undefined
+    && previous !== null
+    && card.category === previous.category;
+  const repeatsActiveMode = card.mode !== "answer"
+    && previousPlayerCards.some((previousCard) => previousCard.mode === card.mode);
+  return !repeatsCategory && !repeatsActiveMode;
+}
+
+export function previousCardIdsForCurrentPlayer(
+  recentCardIds: readonly string[],
+  playerCount: number,
+): string[] {
+  if (playerCount < 1) {
+    return [];
+  }
+  const result: string[] = [];
+  for (let offset = playerCount; offset <= recentCardIds.length && result.length < 2; offset += playerCount) {
+    const cardId = recentCardIds.at(-offset);
+    if (cardId !== undefined) {
+      result.push(cardId);
+    }
+  }
+  return result;
+}
+
 export function drawCard(
   cards: Card[],
   round: number,
@@ -105,6 +136,7 @@ export function drawCard(
   category?: CategoryFilter,
   excludedCardIds: string[] = [],
   previousCardId: string | null = null,
+  previousPlayerCardIds: readonly string[] = [],
 ): DrawResult {
   const stages = allowedStages(round);
   const eligible = cards.filter((card) =>
@@ -124,8 +156,14 @@ export function drawCard(
   }
 
   const previous = cards.find((card) => card.id === previousCardId) ?? null;
-  const smoothlyPaced = available.filter((card) => followsSmoothly(card, previous, category));
-  const pacedPool = smoothlyPaced.length > 0 ? smoothlyPaced : available;
+  const previousPlayerCards = previousPlayerCardIds.flatMap((cardId) => {
+    const matched = cards.find((card) => card.id === cardId);
+    return matched === undefined ? [] : [matched];
+  });
+  const personallyPaced = available.filter((card) => followsPlayerPacing(card, previousPlayerCards, category));
+  const personalPool = personallyPaced.length > 0 ? personallyPaced : available;
+  const smoothlyPaced = personalPool.filter((card) => followsSmoothly(card, previous, category));
+  const pacedPool = smoothlyPaced.length > 0 ? smoothlyPaced : personalPool;
   const selected = pacedPool[Math.floor(random() * pacedPool.length)] ?? null;
   if (selected === null) {
     return { card: null, recycled, seenCardIds: nextSeen };

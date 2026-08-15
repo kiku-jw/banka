@@ -9,6 +9,7 @@ import {
   createPlayers,
   drawCard,
   estimatedMinutesForTurns,
+  previousCardIdsForCurrentPlayer,
   SESSION_MODES,
   sessionModeDescriptions,
   sessionModeNames,
@@ -306,12 +307,20 @@ function drawForCurrent(
   category?: Category | readonly Category[],
   excludedCardIds: string[] = [],
   cardPool?: Card[],
+  replaceCurrentCard = false,
 ): Card | null {
   const session = data.session;
   if (session === null) {
     return null;
   }
   const previousCardId = session.recentCardIds.at(-1) ?? null;
+  const pacingHistory = replaceCurrentCard
+    ? session.recentCardIds.slice(0, -1)
+    : session.recentCardIds;
+  const previousPlayerCardIds = previousCardIdsForCurrentPlayer(
+    pacingHistory,
+    session.players.length,
+  );
   const result = drawCard(
     cardPool ?? enabledCards(),
     session.round,
@@ -320,12 +329,17 @@ function drawForCurrent(
     category,
     excludedCardIds,
     previousCardId,
+    previousPlayerCardIds,
   );
   data.preferences.seenCardIds = result.seenCardIds;
   session.currentCardId = result.card?.id ?? null;
   session.partnerPlayerId = null;
   if (result.card !== null) {
-    session.recentCardIds = [...session.recentCardIds, result.card.id].slice(-4);
+    const priorHistory = replaceCurrentCard
+      ? session.recentCardIds.slice(0, -1)
+      : session.recentCardIds;
+    const historyLimit = Math.max(4, session.players.length * 2);
+    session.recentCardIds = [...priorHistory, result.card.id].slice(-historyLimit);
   }
   cancelJarReveal();
   cardRevealed = false;
@@ -977,7 +991,7 @@ function renderGame(): void {
   });
   root.querySelector<HTMLElement>("[data-action='replace-card']")?.addEventListener("click", () => {
     const oldCard = data.session?.currentCardId ?? null;
-    const replacement = drawForCurrent(undefined, oldCard === null ? [] : [oldCard]);
+    const replacement = drawForCurrent(undefined, oldCard === null ? [] : [oldCard], undefined, true);
     if (replacement !== null) {
       playSound("glass");
       beginJarReveal(player.name, replacement.text);
@@ -1078,7 +1092,7 @@ function openCategoryDialog(): void {
   const chooseCategory = (category: Category | readonly Category[]): void => {
     const previousCardId = data.session?.currentCardId ?? null;
     const wasRevealed = cardRevealed;
-    const selected = drawForCurrent(category);
+    const selected = drawForCurrent(category, [], undefined, true);
     const player = currentPlayer();
     dialog?.close();
     if (selected !== null && player !== null) {

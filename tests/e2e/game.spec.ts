@@ -110,6 +110,126 @@ test("the first question comes from the curated opening pool and the timer is op
   await expect(page.getByRole("button", { name: "Старт", exact: true })).toHaveCount(0);
 });
 
+test("a player with two recent pantomimes receives an available answer card", async ({ page }) => {
+  await page.addInitScript(() => {
+    Math.random = () => 0;
+    const stages = ["spark", "closer", "together"];
+    const categories = ["personal", "stories", "service", "bible", "creative"];
+    const disabledBuiltInCardIds = stages.flatMap((stage) =>
+      categories.flatMap((category) =>
+        Array.from({ length: 24 }, (_, index) => `${stage}-${category}-${index + 1}`),
+      ),
+    );
+    const history = ["custom-a-perform-1", "custom-b-answer-1", "custom-a-perform-2", "custom-b-answer-2"];
+    const customCards = [
+      { id: history[0], stage: "spark", category: "creative", mode: "perform", text: "Покажи первую сцену.", timerSeconds: 75, source: "custom" },
+      { id: history[1], stage: "spark", category: "stories", mode: "answer", text: "Расскажи первую историю.", timerSeconds: 75, source: "custom" },
+      { id: history[2], stage: "spark", category: "bible", mode: "perform", text: "Покажи вторую сцену.", timerSeconds: 75, source: "custom" },
+      { id: history[3], stage: "spark", category: "service", mode: "answer", text: "Расскажи вторую историю.", timerSeconds: 75, source: "custom" },
+      { id: "custom-perform-next", stage: "spark", category: "creative", mode: "perform", text: "Покажи ещё одну сцену.", timerSeconds: 75, source: "custom" },
+      { id: "custom-answer-next", stage: "spark", category: "personal", mode: "answer", text: "Как ты принимаешь важное решение?", timerSeconds: 75, source: "custom" },
+    ];
+    localStorage.setItem("teply-krug:v1", JSON.stringify({
+      version: 4,
+      preferences: {
+        timerSeconds: 0,
+        soundEnabled: false,
+        musicEnabled: false,
+        musicVolume: 20,
+        motionEnabled: false,
+        bibleQuestionsEnabled: true,
+        ministryQuestionsEnabled: true,
+        savedNames: ["Аня", "Борис"],
+        seenCardIds: history,
+        disabledBuiltInCardIds,
+      },
+      session: {
+        players: [
+          { id: "player-a", name: "Аня" },
+          { id: "player-b", name: "Борис" },
+        ],
+        currentPlayerIndex: 0,
+        round: 3,
+        currentCardId: null,
+        partnerPlayerId: null,
+        mode: "open",
+        turnsCompleted: 4,
+        targetTurns: null,
+        recentCardIds: history,
+      },
+      customCards,
+    }));
+  });
+
+  await page.goto("./");
+  await page.getByRole("button", { name: "Продолжить" }).click();
+  await expect(page.getByRole("heading", { name: "Аня" })).toBeVisible();
+
+  const currentCardId = await page.evaluate(() => {
+    const raw = localStorage.getItem("teply-krug:v1");
+    const stored: unknown = raw === null ? null : JSON.parse(raw);
+    const session = typeof stored === "object" && stored !== null
+      ? Reflect.get(stored, "session")
+      : null;
+    return typeof session === "object" && session !== null
+      ? Reflect.get(session, "currentCardId")
+      : null;
+  });
+  expect(currentCardId).toBe("custom-answer-next");
+
+  await reveal(page);
+  await expect(page.locator(".question-card p")).toHaveText("Как ты принимаешь важное решение?");
+
+  await openFallbacks(page);
+  await page.getByRole("button", { name: /Другой вопрос/ }).click();
+  await expect(page.locator(".question-card p")).toHaveText("Покажи ещё одну сцену.");
+  const replacementState = await page.evaluate(() => {
+    const raw = localStorage.getItem("teply-krug:v1");
+    const stored: unknown = raw === null ? null : JSON.parse(raw);
+    const session = typeof stored === "object" && stored !== null
+      ? Reflect.get(stored, "session")
+      : null;
+    return typeof session === "object" && session !== null
+      ? {
+          currentCardId: Reflect.get(session, "currentCardId"),
+          recentCardIds: Reflect.get(session, "recentCardIds"),
+        }
+      : null;
+  });
+  expect(replacementState).toEqual({
+    currentCardId: "custom-perform-next",
+    recentCardIds: ["custom-b-answer-1", "custom-a-perform-2", "custom-b-answer-2", "custom-perform-next"],
+  });
+});
+
+test("the longest reviewed prompt remains playable without overflow", async ({ page }) => {
+  await startGame(page, 2, false, "open");
+  await page.evaluate(() => {
+    const raw = localStorage.getItem("teply-krug:v1");
+    const stored: unknown = raw === null ? null : JSON.parse(raw);
+    const session = typeof stored === "object" && stored !== null
+      ? Reflect.get(stored, "session")
+      : null;
+    if (typeof session === "object" && session !== null) {
+      Reflect.set(session, "currentCardId", "together-personal-12");
+      Reflect.set(session, "round", 3);
+      Reflect.set(session, "recentCardIds", ["together-personal-12"]);
+      localStorage.setItem("teply-krug:v1", JSON.stringify(stored));
+    }
+  });
+
+  await page.reload();
+  await page.getByRole("button", { name: "Продолжить" }).click();
+  await reveal(page);
+  await expect(page.locator(".question-card p")).toHaveText(
+    "Представьте, что у компании есть общий бюджет на выходные. Решите вместе, на что потратить его в первую очередь и от чего отказаться.",
+  );
+  await expect(page.getByRole("button", { name: "ДАЛЬШЕ", exact: true })).toBeInViewport();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(
+    await page.evaluate(() => window.innerWidth),
+  );
+});
+
 test("the host can turn Bible and ministry questions off independently", async ({ page }) => {
   await page.goto("./");
   await page.getByRole("button", { name: "Настройки" }).click();

@@ -7,6 +7,7 @@ import {
   drawCard,
   estimatedMinutesForTurns,
   isDeepCard,
+  previousCardIdsForCurrentPlayer,
   targetTurnsForMode,
 } from "../src/game";
 import type { Card } from "../src/types";
@@ -110,6 +111,59 @@ describe("game model", () => {
     ];
     const result = drawCard(pool, 3, ["previous"], () => 0, undefined, [], "previous");
     expect(result.card?.id).toBe("answer");
+  });
+
+  it("finds the current player's previous two cards in round-robin history", () => {
+    const history = ["a-1", "b-1", "c-1", "a-2", "b-2", "c-2"];
+
+    expect(previousCardIdsForCurrentPlayer(history, 3)).toEqual(["a-2", "a-1"]);
+    expect(previousCardIdsForCurrentPlayer(history.slice(0, 2), 3)).toEqual([]);
+    expect(previousCardIdsForCurrentPlayer(history, 0)).toEqual([]);
+  });
+
+  it("avoids a player's recent category and active formats when alternatives exist", () => {
+    const previousGlobal = card("global", "spark", "service", "answer", "Какой разговор сегодня запомнился?");
+    const previousPlayer = card("player-1", "spark", "personal", "perform", "Покажи знакомую ситуацию.");
+    const olderPlayer = card("player-2", "spark", "bible", "perform", "Изобрази библейского персонажа.");
+    const pool: Card[] = [
+      previousGlobal,
+      previousPlayer,
+      olderPlayer,
+      card("same-category", "spark", "personal", "answer", "Как ты принимаешь трудное решение?"),
+      card("same-active-mode", "spark", "stories", "perform", "Покажи неожиданную реакцию."),
+      card("varied", "spark", "stories", "answer", "Что помогает тебе изменить мнение о человеке?"),
+    ];
+
+    const result = drawCard(
+      pool,
+      1,
+      ["global", "player-1", "player-2"],
+      () => 0,
+      undefined,
+      [],
+      "global",
+      ["player-1", "player-2"],
+    );
+
+    expect(result.card?.id).toBe("varied");
+  });
+
+  it("falls back safely when a constrained pool cannot honor personal pacing", () => {
+    const previous = card("previous", "spark", "creative", "perform", "Покажи знакомую ситуацию.");
+    const onlyChoice = card("only", "spark", "creative", "perform", "Покажи неожиданную реакцию.");
+
+    const result = drawCard(
+      [previous, onlyChoice],
+      1,
+      ["previous"],
+      () => 0,
+      "creative",
+      [],
+      "previous",
+      ["previous"],
+    );
+
+    expect(result.card?.id).toBe("only");
   });
 
   it("plans whole rounds around the requested duration", () => {
