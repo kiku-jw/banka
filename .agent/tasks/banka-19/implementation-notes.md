@@ -108,3 +108,52 @@ Temporary task artifact for `kiku-jw/banka#19`.
   stage and mode. The longest new prompt is 161 characters, below the existing
   responsive long-card case. Residual quality risk is subjective live-play
   chemistry, which the skip path and Issue reopen route preserve.
+
+## 2026-08-16 host-read wording pass
+
+### Host delivery contract
+
+- The host reads the card verbatim to the room for the current player.
+- The current player should understand the response or action without the host
+  assigning roles or paraphrasing the prompt.
+- A `group` or `perform` slot may still use a direct personal question when a
+  forced partner mechanic would make the spoken delivery less natural.
+- Another player is named only when the interaction adds something to the card;
+  any required roles stay explicit and fit in one short instruction.
+
+### Editorial decisions
+
+- Reword only cards 4, 10, 18, 32, 45, 50, 53, 54, 70, 128, 130, 131, 137,
+  147, 173, 182, 225, 292, 294, 303, 342, 354, 359, and 360.
+- Replace facilitator language, abstract phrasing, and specific-memory demands
+  with one-breath questions, quick choices, or simple actions.
+- Replace card 173's entire situation rather than repair it. The new question
+  asks which kind of person is hardest to speak with in ministry.
+- Keep cards 292, 294, and 303 as direct questions to the current player; their
+  previous partner-selection mechanics created unclear pronouns without adding
+  useful play.
+- Card 10 uses neutral `Что ты замечаешь сначала...` instead of the initially
+  approved `...первым...`; the content test correctly identified the latter as
+  gendered address.
+
+### Scope decision
+
+- Keep every existing ID, stage, category, mode, timer, selection rule, and
+  skip path. This pass changes content strings and their exact regression
+  fixtures only.
+
+### Adversarial editorial review
+
+- Claim reviewed: all 24 changed cards must work when read verbatim by the host
+  while preserving neutral address and the existing deck contract.
+- Valid finding: the approved card 10 draft used gendered `первым`. The final
+  `сначала` is neutral and sounds more natural than the intermediate `раньше`.
+- Valid finding: card 303 put its context before the question word. Moving
+  `чем тебе труднее пожертвовать` to the front made the spoken question easier
+  to follow without changing its choices.
+- The final cards were inspected with their stable IDs and modes. The three
+  direct ministry questions retain `group` pacing metadata, but no mode label
+  is shown on the live card and no partner is assigned automatically, so the
+  current player receives an unambiguous direct question.
+- No blocking finding remains. Live-play chemistry is still subjective; the
+  existing skip and feedback paths remain the practical safety valve.

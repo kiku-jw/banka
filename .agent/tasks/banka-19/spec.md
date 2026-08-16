@@ -127,3 +127,27 @@ editorial pass.
   and first-round pressure.
 - P6: Publish only after local checks, full desktop/mobile browser coverage,
   Pages deployment, and live content readback pass.
+
+## 2026-08-16 host-read wording pass
+
+Source: Nick's read-aloud review after the playful-delivery pass. The host
+reads every card verbatim to the room for the current player, so a prompt must
+work without improvised clarification.
+
+### Acceptance
+
+- H1: Rewrite cards 4, 10, 18, 32, 45, 50, 53, 54, 70, 128, 130, 131, 137,
+  147, 173, 182, 225, 292, 294, 303, 342, 354, 359, and 360 in place with the
+  agreed shorter wording.
+- H2: The host can read every changed card verbatim, and the current player
+  immediately knows whether to answer or act.
+- H3: Use a direct question when involving another player adds no value. When
+  another player or the whole room is involved, name the roles in one short,
+  unambiguous instruction.
+- H4: Keep the candid subjects and playful delivery without workshop language,
+  memory-dependent entry requirements, or a conspicuously correct answer.
+- H5: Preserve stable IDs, stages, categories, modes, 360-card uniqueness,
+  group balance, neutral address, skip behavior, and personal pacing.
+- H6: Exact content regressions lock every final string and reject the replaced
+  wording. Publish only after local checks, full desktop/mobile Playwright
+  coverage, Pages deployment, and live asset readback pass.
