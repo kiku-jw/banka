@@ -105,3 +105,25 @@ reopened acceptance surface.
 - F6: Run `npm run check`, `npm run test:e2e`, `git diff --check`, responsive
   smoke, Pages deployment, and live readback before returning the Issue to
   complete.
+
+## 2026-08-16 playful-delivery pass
+
+Nick accepted the deeper themes but asked for a less formal, more playful
+delivery. Cards 32, 53, 70, 173, 177, 292, 294, and 303 are the bounded second
+editorial pass.
+
+### Acceptance
+
+- P1: Replace abstract moral prompts, interview questions, and organized
+  discussion instructions with concrete mini-situations, meaningful choices,
+  predictions, or spoken actions.
+- P2: Keep every option socially plausible; the card must not advertise one
+  correct or more spiritual answer.
+- P3: Preserve stable IDs, stages, categories, modes, 360-card uniqueness,
+  group balance, neutral address, and the existing skip path.
+- P4: Exact content regressions reject the intermediate drafts and lock the
+  final wording at the same IDs.
+- P5: Review the cards in their surrounding stage and mode, including length
+  and first-round pressure.
+- P6: Publish only after local checks, full desktop/mobile browser coverage,
+  Pages deployment, and live content readback pass.

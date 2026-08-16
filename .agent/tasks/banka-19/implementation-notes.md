@@ -74,3 +74,37 @@ Temporary task artifact for `kiku-jw/banka#19`.
   alternatives exist.
 - A same-player replacement overwrites the current turn's recent-history slot
   so category changes and redraws do not corrupt the round-robin stride.
+
+## 2026-08-16 playful-delivery pass
+
+### Editorial decision
+
+- Keep the themes and stable slots; only the delivery changes.
+- Use a concrete social situation, a choice between plausible reactions, a
+  prediction about another player, or a one-line role-play.
+- Avoid `обсудите`, abstract boundaries, generic coping questions, and wording
+  that resembles ministry training.
+- Keep the two candid later-stage cards about restored trust and a difficult
+  Bible account. Their pressure is intentional, they appear after the opening
+  stage, and the player can always skip.
+
+### Scope decision
+
+- Reword only cards 32, 53, 70, 173, 177, 292, 294, and 303.
+- Do not add tone metadata or another pacing system for a bounded editorial
+  correction. Existing stage, category, mode, and personal-format pacing stay
+  unchanged.
+
+### Adversarial editorial review
+
+- Claim reviewed: all eight prompts should feel like friendly challenges while
+  keeping every offered reaction plausible and preserving the original deck
+  contract.
+- Valid finding: card 32 initially offered an unexplained refusal as the
+  conspicuously worse option. It now offers three defensible money choices.
+- Valid finding: card 53 initially opened with an unnatural imperative. It now
+  frames the unfamiliar ministry setting as a concrete hypothetical.
+- No blocking finding remains after reviewing the final text in its surrounding
+  stage and mode. The longest new prompt is 161 characters, below the existing
+  responsive long-card case. Residual quality risk is subjective live-play
+  chemistry, which the skip path and Issue reopen route preserve.
