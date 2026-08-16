@@ -2,13 +2,14 @@
   "task": "banka-19",
   "phase": "complete",
   "acceptance": [
-    { "id": "P1", "status": "pass", "evidence": "8 interview-style drafts replaced with concrete choices, predictions, and role-play" },
-    { "id": "P2", "status": "pass", "evidence": "all offered reactions remain plausible without a prescribed answer" },
-    { "id": "P3", "status": "pass", "evidence": "360 unique cards, stable IDs, group balance, and neutral address preserved" },
-    { "id": "P4", "status": "pass", "evidence": "exact fixture locks 8 final texts and rejects 8 intermediate drafts" },
-    { "id": "P5", "status": "pass", "evidence": "adversarial editorial review fixed 2 findings; no blocker remains" },
-    { "id": "P6", "status": "pass", "evidence": "58 unit tests and build; 65 E2E passed with 1 viewport skip; Pages run 31932908523 and live readback passed" }
+    { "id": "H1", "status": "pass", "evidence": "24 agreed prompts rewritten in their stable card slots" },
+    { "id": "H2", "status": "pass", "evidence": "all changed cards can be read verbatim by the host" },
+    { "id": "H3", "status": "pass", "evidence": "group roles are explicit where useful; forced partner mechanics removed elsewhere" },
+    { "id": "H4", "status": "pass", "evidence": "spoken Russian, simple actions, and plausible choices without required memories or prescribed answers" },
+    { "id": "H5", "status": "pass", "evidence": "360 unique cards, stable IDs, group balance, neutral address, skip behavior, and pacing preserved" },
+    { "id": "H6", "status": "pass", "evidence": "59 unit tests and build; 65 E2E passed with 1 viewport skip; Pages run 31962815453 and all live assets passed" }
   ],
-  "reviewed_sha": "03042d9ab0a28309202e7f7eed70dd9e6991211c",
+  "reviewed_sha": "331e869c0ec68984da5a8503fd89b44f36fa600d",
+  "deployment_run": 31962815453,
   "deployment_url": "https://kiku-jw.github.io/banka/"
 }

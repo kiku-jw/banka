@@ -171,3 +171,62 @@ https://kiku-jw.github.io/banka/
 - Whether the pressure and humor land naturally remains a live-play judgment.
   Players retain the visible skip path, and Issue #19 remains the route for
   reporting exact card numbers after the next real evening.
+
+## 2026-08-16 host-read wording pass
+
+### Acceptance results
+
+- H1 — PASS: cards 4, 10, 18, 32, 45, 50, 53, 54, 70, 128, 130, 131, 137,
+  147, 173, 182, 225, 292, 294, 303, 342, 354, 359, and 360 were rewritten in
+  place with the final reviewed wording.
+- H2 — PASS: every changed card is a complete host-readable question or action.
+  No changed card requires the host to invent context or resolve a pronoun.
+- H3 — PASS: cards 292, 294, and 303 now address the current player directly;
+  cards 225, 342, and 359 explicitly name the people who act. No forced partner
+  mechanic remains where it adds no play value.
+- H4 — PASS: the changed cards use ordinary spoken Russian, short choices, and
+  simple actions without a required memory or advertised correct answer.
+- H5 — PASS: content tests preserve exactly 360 unique prompts, stable IDs, 24
+  cards per stage/category group, neutral address, readable length, and the
+  existing skip and pacing behavior. No stage, category, mode, runtime code,
+  dependency, storage, or UI changed.
+- H6 — PASS: the exact 24-card fixture rejects the preceding wording and three
+  superseded final drafts. `npm run check` passed 59 tests plus TypeScript/Vite
+  build; `npm run test:e2e -- --workers=2` passed 65 desktop/mobile scenarios
+  with one fixed-viewport case intentionally skipped. Pages run `31962815453`
+  passed build, browser, and deploy gates. Live readback returned HTTP 200 for
+  both entry pages, scanned all three referenced JavaScript assets, found all
+  24 final prompts, and found none of 27 rejected or superseded prompts.
+
+### Fresh commands
+
+```text
+npm run check
+  8 test files passed; 59 tests passed; TypeScript and Vite build passed
+
+npm run test:e2e -- --workers=2
+  65 passed; 1 intentionally skipped; desktop and mobile
+
+git diff --check
+  clean
+
+npm audit --omit=dev
+  0 vulnerabilities
+
+GitHub Pages run 31962815453
+  build success; browser-flow gate success; deploy success
+
+https://kiku-jw.github.io/banka/
+https://kiku-jw.github.io/banka/review.html
+  HTTP 200; 3 referenced JavaScript assets scanned; 24 final prompts present;
+  27 rejected or superseded prompts absent
+```
+
+### Review receipt and residual
+
+- The adversarial pass found two actionable wording issues: gendered `первым`
+  in card 10 and unnatural question order in card 303. Both were corrected
+  before the final local and Pages gates; no blocking finding remains.
+- The remaining risk is subjective live-play rhythm. The visible skip and local
+  feedback paths remain available, and Issue #19 can be reopened with exact
+  card numbers after another real session.
