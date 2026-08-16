@@ -2,13 +2,13 @@
   "task": "banka-19",
   "phase": "complete",
   "acceptance": [
-    { "id": "F1", "status": "pass", "evidence": "14 explicitly rejected cards replaced in place" },
-    { "id": "F2", "status": "pass", "evidence": "8 reviewed leading cards rewritten" },
-    { "id": "F3", "status": "pass", "evidence": "360 unique cards, stable IDs, and group balance preserved" },
-    { "id": "F4", "status": "pass", "evidence": "per-player category and active-mode cooldowns with safe fallback" },
-    { "id": "F5", "status": "pass", "evidence": "existing session history reused; no schema or runtime dependency change" },
-    { "id": "F6", "status": "pass", "evidence": "57 unit tests and build; 65 E2E passed with 1 viewport skip; Pages run 31909263547 and live readback passed" }
+    { "id": "P1", "status": "pass", "evidence": "8 interview-style drafts replaced with concrete choices, predictions, and role-play" },
+    { "id": "P2", "status": "pass", "evidence": "all offered reactions remain plausible without a prescribed answer" },
+    { "id": "P3", "status": "pass", "evidence": "360 unique cards, stable IDs, group balance, and neutral address preserved" },
+    { "id": "P4", "status": "pass", "evidence": "exact fixture locks 8 final texts and rejects 8 intermediate drafts" },
+    { "id": "P5", "status": "pass", "evidence": "adversarial editorial review fixed 2 findings; no blocker remains" },
+    { "id": "P6", "status": "pass", "evidence": "58 unit tests and build; 65 E2E passed with 1 viewport skip; Pages run 31932908523 and live readback passed" }
   ],
-  "reviewed_sha": "2f7dcb342b605463f722219bb86b7253c48f2cf1",
+  "reviewed_sha": "03042d9ab0a28309202e7f7eed70dd9e6991211c",
   "deployment_url": "https://kiku-jw.github.io/banka/"
 }

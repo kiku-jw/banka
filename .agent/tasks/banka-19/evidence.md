@@ -117,3 +117,57 @@ https://kiku-jw.github.io/banka/
   change.
 - GitHub Actions emits a non-blocking Node 20 deprecation annotation for the
   current Pages helper actions while forcing them to Node 24. The run passed.
+
+## 2026-08-16 playful-delivery pass
+
+### Acceptance results
+
+- P1 — PASS: cards 32, 53, 70, 173, 177, 292, 294, and 303 now use concrete
+  money, flexibility, conversation, prediction, and role-play situations
+  instead of abstract interview or discussion wording.
+- P2 — PASS: the final choices remain socially plausible without advertising
+  one correct or more spiritual response. The adversarial pass replaced one
+  conspicuously worse money option before verification.
+- P3 — PASS: content tests preserve 360 unique cards, stable IDs, stage and
+  category balance, neutral address, readable length, and text-only delivery.
+  No stage, category, mode, schema, dependency, UI, or skip behavior changed.
+- P4 — PASS: the exact content fixture locks all eight final texts at their
+  existing IDs and rejects all eight intermediate drafts.
+- P5 — PASS: a skeptical review checked the cards in their surrounding stage
+  and mode. It fixed the loaded option at card 32 and an unnatural opening at
+  card 53. No blocking finding remains; the longest new prompt is 161
+  characters, below the existing responsive long-card case.
+- P6 — PASS: `npm run check` passed 58/58 tests plus TypeScript/Vite build;
+  `npm run test:e2e -- --workers=2` passed 65 desktop/mobile scenarios with one
+  fixed-viewport case intentionally skipped. Pages run `31932908523` passed
+  build, browser, and deploy gates. Live readback returned HTTP 200 for the page
+  and both JavaScript assets, found all eight final prompts, and found none of
+  the eight intermediate drafts.
+
+### Fresh commands
+
+```text
+npm run check
+  8 test files passed; 58 tests passed; TypeScript and Vite build passed
+
+npm run test:e2e -- --workers=2
+  65 passed; 1 intentionally skipped; desktop and mobile
+
+git diff --check
+  clean
+
+npm audit --omit=dev
+  0 vulnerabilities
+
+GitHub Pages run 31932908523
+  build success; browser-flow gate success; deploy success
+
+https://kiku-jw.github.io/banka/
+  HTTP 200; 8 final prompts present; 8 intermediate drafts absent
+```
+
+### Residual
+
+- Whether the pressure and humor land naturally remains a live-play judgment.
+  Players retain the visible skip path, and Issue #19 remains the route for
+  reporting exact card numbers after the next real evening.
