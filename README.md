@@ -11,6 +11,7 @@
 
 <p align="center">
   <a href="https://kiku-jw.github.io/banka/"><img alt="Open the game" src="https://img.shields.io/badge/Open_the_game-F6BD67?style=for-the-badge&logo=github&logoColor=17130D"></a>
+  <a href="https://apps.apple.com/app/id6803824561"><img alt="Universal iPhone edition" src="https://img.shields.io/badge/Say_More!_for_iPhone-000000?style=for-the-badge&logo=apple&logoColor=white"></a>
   <a href="https://github.com/kiku-jw/banka/actions/workflows/pages.yml"><img alt="GitHub Pages" src="https://github.com/kiku-jw/banka/actions/workflows/pages.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-17243A?style=flat-square"></a>
 </p>
@@ -25,6 +26,11 @@ The game and its 360 hand-written prompts are in Russian. They are designed for
 a friendly group with different backgrounds and levels of ministry experience.
 The jar includes questions about the Bible, ministry, and personal spiritual
 experience. Any question can be skipped without an explanation.
+
+Looking for a universal deck without Bible, ministry, or spiritual topics?
+[Say More! for iPhone](https://apps.apple.com/app/id6803824561) is the separate,
+free English/Russian/Ukrainian edition for friends and families. It is not the
+same deck: Banka remains the spiritual browser edition described below.
 
 ## How a session works
 

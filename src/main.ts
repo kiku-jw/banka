@@ -428,6 +428,10 @@ function renderWelcome(): void {
           <button class="button button-primary button-large" data-action="new-game">Собрать компанию</button>
           ${canContinue ? '<button class="button button-secondary button-large" data-action="continue">Продолжить</button>' : ""}
         </div>
+        <p class="edition-link">
+          Нужна игра без библейских и духовных тем?
+          <a href="https://apps.apple.com/app/id6803824561" target="_blank" rel="noopener noreferrer">Say More! для iPhone, бесплатно ↗</a>
+        </p>
       </div>
       <div class="welcome-scene" aria-label="Банка с записками">
         <div class="jar-halo" aria-hidden="true"></div>
@@ -1462,6 +1466,7 @@ function renderSettings(): void {
           <p>Другие проекты и способы связаться.</p>
         </div>
         <nav aria-label="Ссылки автора">
+          <a href="https://apps.apple.com/app/id6803824561" target="_blank" rel="noopener noreferrer"><strong>iPhone</strong><span>Say More! ↗</span></a>
           <a href="https://kikuai.dev/" target="_blank" rel="noopener noreferrer"><strong>Сайт</strong><span>kikuai.dev ↗</span></a>
           <a href="https://t.me/kiku_ai" target="_blank" rel="noopener noreferrer"><strong>Telegram</strong><span>@kiku_ai ↗</span></a>
           <a href="https://github.com/kiku-jw" target="_blank" rel="noopener noreferrer"><strong>GitHub</strong><span>@kiku-jw ↗</span></a>

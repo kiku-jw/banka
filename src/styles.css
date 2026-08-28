@@ -421,6 +421,23 @@ strong {
   color: var(--amber-soft);
 }
 
+.edition-link {
+  max-width: 620px;
+  margin-top: 16px;
+  color: var(--faint);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.edition-link a {
+  color: var(--amber-soft);
+  font-weight: 620;
+}
+
+.edition-link a:hover {
+  color: #ffe8c0;
+}
+
 .welcome-facts {
   grid-area: facts;
   margin-top: 0;

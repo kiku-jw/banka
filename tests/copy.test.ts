@@ -35,11 +35,12 @@ describe("visible interface copy", () => {
     expect(readmeSource).not.toMatch(/hidden depth|invisible stages|difficulty levels/iu);
   });
 
-  it("links to the author's public pages from the host menu", () => {
+  it("links to the iPhone edition and the author's public pages", () => {
+    expect(interfaceSource).toContain('href="https://apps.apple.com/app/id6803824561"');
     expect(interfaceSource).toContain('href="https://kikuai.dev/"');
     expect(interfaceSource).toContain('href="https://t.me/kiku_ai"');
     expect(interfaceSource).toContain('href="https://github.com/kiku-jw"');
     expect(interfaceSource).toContain('href="https://github.com/kiku-jw/banka"');
-    expect(interfaceSource.match(/target="_blank" rel="noopener noreferrer"/gu)).toHaveLength(4);
+    expect(interfaceSource.match(/target="_blank" rel="noopener noreferrer"/gu)).toHaveLength(6);
   });
 });

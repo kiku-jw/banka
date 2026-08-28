@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 test("captures the welcome composition", async ({ page }, testInfo) => {
   await page.goto("./");
   await expect(page.getByRole("heading", { name: "Что сегодня попадётся?" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Say More! для iPhone/u })).toHaveAttribute("href", "https://apps.apple.com/app/id6803824561");
   const viewportWidth = await page.evaluate(() => window.innerWidth);
   const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(documentWidth).toBe(viewportWidth);
@@ -94,6 +95,7 @@ test("captures the music settings without horizontal overflow", async ({ page },
   await expect(page.getByRole("checkbox", { name: /^Служение/u })).toBeChecked();
   await expect(page.getByLabel("Фоновая музыка")).toBeChecked();
   await expect(page.getByLabel("Громкость музыки")).toHaveValue("20");
+  await expect(page.getByRole("link", { name: /iPhone Say More!/u })).toHaveAttribute("href", "https://apps.apple.com/app/id6803824561");
   await expect(page.getByRole("link", { name: /Сайт kikuai\.dev/ })).toHaveAttribute("href", "https://kikuai.dev/");
   await expect(page.getByRole("link", { name: /Telegram @kiku_ai/ })).toHaveAttribute("href", "https://t.me/kiku_ai");
   await expect(page.getByRole("link", { name: /GitHub @kiku-jw/ })).toHaveAttribute("href", "https://github.com/kiku-jw");
