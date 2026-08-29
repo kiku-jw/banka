@@ -36,6 +36,7 @@ describe("visible interface copy", () => {
   });
 
   it("links to the iPhone edition and the author's public pages", () => {
+    expect(indexSource).toContain('name="apple-itunes-app" content="app-id=6803824561"');
     expect(interfaceSource).toContain('href="https://apps.apple.com/app/id6803824561"');
     expect(interfaceSource).toContain('href="https://kikuai.dev/"');
     expect(interfaceSource).toContain('href="https://t.me/kiku_ai"');
