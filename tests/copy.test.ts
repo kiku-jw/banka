@@ -4,6 +4,7 @@ import indexSource from "../index.html?raw";
 import interfaceSource from "../src/main.ts?raw";
 import readmeSource from "../README.md?raw";
 import editorialGuideSource from "../docs/editorial-guide.md?raw";
+import llmsSource from "../public/llms.txt?raw";
 
 describe("visible interface copy", () => {
   it("stays free of the known generated and gendered phrases", () => {
@@ -23,14 +24,20 @@ describe("visible interface copy", () => {
     expect(readmeSource).not.toMatch(/small Zoom groups|shared Zoom screen|Zoom-compatibility/iu);
     expect(editorialGuideSource).not.toMatch(/Zoom evening/iu);
     expect(indexSource).not.toMatch(/компании в Zoom/iu);
-    expect(indexSource).toContain("для игры вместе или по видеосвязи");
+    expect(indexSource).toContain("для компании или видеосвязи");
   });
 
   it("states the content and privacy rules without hidden-depth marketing", () => {
     expect(interfaceSource).toContain("В игре есть вопросы о Библии, служении и личном духовном опыте.");
     expect(interfaceSource).toContain("Любой вопрос можно пропустить без объяснений.");
     expect(interfaceSource).toContain("Игра их не записывает, не анализирует и никому не отправляет.");
-    expect(indexSource).toContain("вопросы о Библии, служении и личном духовном опыте");
+    expect(indexSource).toMatch(/вопрос(?:ы|ами) о Библии, служении и личном духовном опыте/iu);
+    expect(indexSource).toContain('"@type": ["SoftwareApplication", "WebApplication"]');
+    expect(indexSource).toContain('"price": 0');
+    expect(indexSource).toContain('href="https://kiku-jw.github.io/banka/llms.txt"');
+    expect(llmsSource).toContain("Canonical URL: https://kiku-jw.github.io/banka/");
+    expect(llmsSource).toContain("Banka! is the spiritual browser edition.");
+    expect(llmsSource).toContain("The two products do not share the same deck.");
     expect(interfaceSource).not.toMatch(/скрыт\w* глубин|невидим\w* этап/iu);
     expect(readmeSource).not.toMatch(/hidden depth|invisible stages|difficulty levels/iu);
   });

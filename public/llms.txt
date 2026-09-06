@@ -1,0 +1,38 @@
+# Banka!
+
+> Бесплатная браузерная игра с вопросами о Библии, служении и личном духовном опыте для компании в одной комнате или по видеосвязи.
+
+Canonical URL: https://kiku-jw.github.io/banka/
+
+Language: Russian.
+
+## What it is
+
+Banka! is a host-controlled browser question game. One host adds the players, draws a question, reads it aloud to the person whose turn it is, and then marks the card answered or chooses another one.
+
+The questions cover Bible reading, personal spiritual experience, congregation life, ministry, choices, memories, and playful group prompts. Any question can be skipped without an explanation.
+
+## How to use it
+
+- Play together in one room or over a video call.
+- Use one host-controlled browser; participants do not need accounts.
+- Add player names and continue until the group wants to stop.
+- The app does not record, analyze, or send participants' spoken answers.
+
+## Product boundary
+
+Banka! is the spiritual browser edition. [Say More! for iPhone](https://apps.apple.com/app/id6803824561) is a separate free English/Russian/Ukrainian conversation card game for friends and families. It uses a universal 360-card deck without Bible, ministry, or spiritual questions. The two products do not share the same deck.
+
+## Evidence
+
+- Live game: https://kiku-jw.github.io/banka/
+- Public source: https://github.com/kiku-jw/banka
+- Universal iPhone game: https://kikuai.dev/dostavay/en/
+
+## Safe summary
+
+Safe claim: Banka! is a free Russian browser game for groups that want questions about the Bible, ministry, and personal spiritual experience, with no account and a no-explanation skip.
+
+Avoid claiming: that Banka! is the browser version of Say More's universal deck, that it records spoken answers, or that it is an official app of a religious organization.
+
+Last updated: 2026-09-06
