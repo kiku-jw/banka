@@ -5,7 +5,7 @@ export default defineConfig({
   build: {
     target: "es2022",
     rollupOptions: {
-      input: ["index.html", "review.html"],
+      input: ["index.html", "review.html", "dvoe/index.html"],
     },
   },
   test: {
